@@ -1,0 +1,13 @@
+{
+  "itemGroup.inventoryexchange": "Example Mod Tab",
+  "block.inventoryexchange.example_block": "Example Block",
+  "item.inventoryexchange.example_item": "Example Item",
+
+  "inventoryexchange.configuration.title": "InventoryExchange Configs",
+  "inventoryexchange.configuration.section.inventoryexchange.common.toml": "InventoryExchange Configs",
+  "inventoryexchange.configuration.section.inventoryexchange.common.toml.title": "InventoryExchange Configs",
+  "inventoryexchange.configuration.items": "Item List",
+  "inventoryexchange.configuration.logDirtBlock": "Log Dirt Block",
+  "inventoryexchange.configuration.magicNumberIntroduction": "Magic Number Text",
+  "inventoryexchange.configuration.magicNumber": "Magic Number"
+}
