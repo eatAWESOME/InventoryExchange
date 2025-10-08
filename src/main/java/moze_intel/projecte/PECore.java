@@ -108,7 +108,7 @@ import org.slf4j.Logger;
 @Mod(InventoryExchange.MODID)
 public class PECore {
 
-	public static final String MODID = "inventoryexchange";
+	public static final String MODID = InventoryExchange.MODID;
 	public static final String PEID = "projecte";
 	public static final String MODNAME = "InventoryExchange";
 	public static final GameProfile FAKEPLAYER_GAMEPROFILE = new GameProfile(UUID.fromString("590e39c7-9fb6-471b-a4c2-c0e539b2423d"), "[" + MODNAME + "]");

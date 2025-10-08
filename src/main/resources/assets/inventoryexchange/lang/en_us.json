@@ -1,5 +1,5 @@
 {
-  "itemGroup.inventoryexchange": "Example Mod Tab",
+  "itemGroup.inventoryexchange": "InventoryExchange",
   "block.inventoryexchange.example_block": "Example Block",
   "item.inventoryexchange.example_item": "Example Item",
 
@@ -9,5 +9,8 @@
   "inventoryexchange.configuration.items": "Item List",
   "inventoryexchange.configuration.logDirtBlock": "Log Dirt Block",
   "inventoryexchange.configuration.magicNumberIntroduction": "Magic Number Text",
-  "inventoryexchange.configuration.magicNumber": "Magic Number"
+  "inventoryexchange.configuration.magicNumber": "Magic Number",
+
+  "key.inventoryexchange.transmutation": "Transmutation",
+  "misc.inventoryexchange.mod_name": "InventoryExchange"
 }
