@@ -1,6 +1,7 @@
 package eatawesome.inventoryexchange.network;
 
 import eatawesome.inventoryexchange.network.packets.IInventoryExchangePacket;
+import eatawesome.inventoryexchange.network.packets.to_client.abilityemc.AbilityEMCSyncPKT;
 import eatawesome.inventoryexchange.network.packets.to_server.KeyPressPKT;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
@@ -21,11 +22,16 @@ public final class PacketHandler {
 		modEventBus.addListener(RegisterPayloadHandlersEvent.class, event -> {
 			PayloadRegistrar registrar = event.registrar(version.toString());
 			registerClientToServer(new PacketRegistrar(registrar, true));
+			registerServerToClient(new PacketRegistrar(registrar, false));
 		});
 	}
 
 	private void registerClientToServer(PacketRegistrar registrar) {
 		registrar.play(KeyPressPKT.TYPE, KeyPressPKT.STREAM_CODEC);
+	}
+	
+	private void registerServerToClient(PacketRegistrar registrar) {
+		registrar.play(AbilityEMCSyncPKT.TYPE, AbilityEMCSyncPKT.STREAM_CODEC);
 	}
 
 

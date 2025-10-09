@@ -4,11 +4,16 @@ import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
 
+import eatawesome.inventoryexchange.capabilities.InventoryExchangeCapabilities;
+import eatawesome.inventoryexchange.gameObjs.registries.InventoryExchangeAttachmentTypes;
+import eatawesome.inventoryexchange.impl.capability.AbilityEMCImpl;
 import eatawesome.inventoryexchange.network.PacketHandler;
+import moze_intel.projecte.config.ProjectEConfig;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
@@ -23,6 +28,8 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.fml.loading.FMLEnvironment;
+import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredHolder;
@@ -36,6 +43,14 @@ public class InventoryExchange {
     
     public static ResourceLocation rl(String path) {
 		return ResourceLocation.fromNamespaceAndPath(MODID, path);
+	}
+    
+    public static void debugLog(String msg, Object... args) {
+		if (!FMLEnvironment.production || ProjectEConfig.common.debugLogging.get()) {
+			LOGGER.info(msg, args);
+		} else {
+			LOGGER.debug(msg, args);
+		}
 	}
     
 
@@ -62,7 +77,9 @@ public class InventoryExchange {
     	instance = this;
     	
         modEventBus.addListener(this::commonSetup);
+		modEventBus.addListener(this::registerCapabilities);
 
+		InventoryExchangeAttachmentTypes.ATTACHMENT_TYPES.register(modEventBus);
         BLOCKS.register(modEventBus);
         ITEMS.register(modEventBus);
         CREATIVE_MODE_TABS.register(modEventBus);
@@ -76,6 +93,10 @@ public class InventoryExchange {
 
 	public static PacketHandler packetHandler() {
 		return instance.packetHandler;
+	}
+
+	public void registerCapabilities(RegisterCapabilitiesEvent event) {
+		event.registerEntity(InventoryExchangeCapabilities.ABILITY_EMC_CAPABILITY, EntityType.PLAYER, (player, context) -> new AbilityEMCImpl(player));
 	}
 
     private void commonSetup(FMLCommonSetupEvent event) {
