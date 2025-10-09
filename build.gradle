@@ -162,7 +162,6 @@ java {
         languageVersion.set(JavaLanguageVersion.of(21))
         vendor.set(JvmVendorSpec.JETBRAINS)
     }
-    withSourcesJar()
 }
 
 neoForge {
@@ -383,21 +382,6 @@ tasks.named('jar', Jar) {
     finalizedBy(shadowJar)
 }
 
-tasks.named('sourcesJar', Jar) {
-    dependsOn(classes, apiClasses)
-    duplicatesStrategy = DuplicatesStrategy.FAIL
-    //Note: Already contains main source set's sources by default
-    from(sourceSets.api.allJava)
-    manifest.attributes(getManifestAttributes())
-}
-
-def apiJar = tasks.register('apiJar', Jar) {
-    duplicatesStrategy = DuplicatesStrategy.FAIL
-    archiveClassifier.set("api")
-    from(sourceSets.api.output)
-    manifest.attributes(getManifestAttributes())
-}
-
 def shadowJar = tasks.named('shadowJar', ShadowJar) {
     //Note: We use the include duplicate strategy instead of FAIL as minimize causes
     // the things to get "added" twice but it is filtered separately by the shadow
@@ -433,9 +417,7 @@ tasks.withType(Javadoc).configureEach({
 })
 
 artifacts {
-    archives(apiJar)
     archives(shadowJar)
-    archives(sourcesJar)
 }
 
 publishing {
@@ -445,7 +427,7 @@ publishing {
             publication.groupId = project.group
             publication.version = project.version
             publication.artifactId = 'InventoryExchange'
-            publication.artifacts = [apiJar, shadowJar, sourcesJar]
+            publication.artifacts = [shadowJar]
             publication.pom {
                 name.set('InventoryExchange')
                 packaging = 'jar'
