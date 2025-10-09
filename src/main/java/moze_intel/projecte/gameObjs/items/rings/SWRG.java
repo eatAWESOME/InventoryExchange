@@ -133,7 +133,7 @@ public class SWRG extends ItemPE implements IPedestalItem, IProjectileShooter, I
 	@Override
 	public <PEDESTAL extends BlockEntity & IDMPedestal> boolean updateInPedestal(@NotNull ItemStack stack, @NotNull Level level, @NotNull BlockPos pos,
 			@NotNull PEDESTAL pedestal) {
-		if (!level.isClientSide && ProjectEConfig.server.cooldown.pedestal.swrg.get() != -1) {
+		if (!level.isClientSide) {// && ProjectEConfig.server.cooldown.pedestal.swrg.get() != -1) {
 			if (pedestal.getActivityCooldown() <= 0) {
 				for (Mob living : level.getEntitiesOfClass(Mob.class, pedestal.getEffectBounds(),
 						ent -> !ent.isSpectator() && (!(ent instanceof TamableAnimal tamableAnimal) || !tamableAnimal.isTame()))) {
@@ -143,7 +143,7 @@ public class SWRG extends ItemPE implements IPedestalItem, IProjectileShooter, I
 						level.addFreshEntity(lightning);
 					}
 				}
-				pedestal.setActivityCooldown(level, pos, ProjectEConfig.server.cooldown.pedestal.swrg.get());
+				//pedestal.setActivityCooldown(level, pos, ProjectEConfig.server.cooldown.pedestal.swrg.get());
 			} else {
 				pedestal.decrementActivityCooldown(level, pos);
 			}
@@ -155,10 +155,12 @@ public class SWRG extends ItemPE implements IPedestalItem, IProjectileShooter, I
 	@Override
 	public List<Component> getPedestalDescription(float tickRate) {
 		List<Component> list = new ArrayList<>();
+		/*
 		if (ProjectEConfig.server.cooldown.pedestal.swrg.get() != -1) {
 			list.add(PELang.PEDESTAL_SWRG_1.translateColored(ChatFormatting.BLUE));
 			list.add(PELang.PEDESTAL_SWRG_2.translateColored(ChatFormatting.BLUE, MathUtils.tickToSecFormatted(ProjectEConfig.server.cooldown.pedestal.swrg.get(), tickRate)));
 		}
+		*/
 		return list;
 	}
 

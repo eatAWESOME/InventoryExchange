@@ -56,7 +56,6 @@ import net.minecraft.world.item.Rarity;
 public class PEItems {
 
 	public static final ItemDeferredRegister ITEMS = new ItemDeferredRegister(PECore.PEID);
-
 	public static final ItemRegistryObject<PhilosophersStone> PHILOSOPHERS_STONE = ITEMS.registerNoStack("philosophers_stone", PhilosophersStone::new);
 	public static final ItemRegistryObject<RepairTalisman> REPAIR_TALISMAN = ITEMS.registerNoStack("repair_talisman", RepairTalisman::new);
 	public static final ItemRegistryObject<Item> LOW_COVALENCE_DUST = ITEMS.register("low_covalence_dust");
@@ -152,8 +151,11 @@ public class PEItems {
 	public static final ItemRegistryObject<DestructionCatalyst> DESTRUCTION_CATALYST = ITEMS.registerNoStack("destruction_catalyst", DestructionCatalyst::new);
 	public static final ItemRegistryObject<HyperkineticLens> HYPERKINETIC_LENS = ITEMS.registerNoStackFireImmune("hyperkinetic_lens", HyperkineticLens::new);
 	public static final ItemRegistryObject<CataliticLens> CATALYTIC_LENS = ITEMS.registerNoStackFireImmune("catalytic_lens", CataliticLens::new);
-
-	public static final ItemRegistryObject<Tome> TOME_OF_KNOWLEDGE = ITEMS.registerNoStack("tome", properties -> new Tome(properties.rarity(Rarity.EPIC)));
+    
+	public static final ItemDeferredRegister TOME_REGISTER = new ItemDeferredRegister(PECore.PEID);
+	public static final ItemRegistryObject<Tome> TOME_OF_KNOWLEDGE = TOME_REGISTER.registerNoStack("tome", properties -> new Tome(properties.rarity(Rarity.EPIC)));
+	
+	//public static final ItemRegistryObject<Tome> TOME_OF_KNOWLEDGE = ITEMS.registerNoStack("tome", properties -> new Tome(properties.rarity(Rarity.EPIC)));
 	public static final ItemRegistryObject<TransmutationTablet> TRANSMUTATION_TABLET = ITEMS.registerNoStackFireImmune("transmutation_tablet", TransmutationTablet::new);
 
 	private static ItemRegistryObject<AlchemicalBag> registerBag(DyeColor color) {

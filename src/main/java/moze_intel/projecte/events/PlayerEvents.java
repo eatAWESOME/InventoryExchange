@@ -35,7 +35,7 @@ import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemHandlerHelper;
 
-@EventBusSubscriber(modid = PECore.PEID)
+@EventBusSubscriber(modid = PECore.MODID)
 public class PlayerEvents {
 
 	// On death or return from end, sync to the client

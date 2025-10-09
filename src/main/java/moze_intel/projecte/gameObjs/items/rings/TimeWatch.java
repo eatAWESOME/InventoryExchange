@@ -65,7 +65,7 @@ public class TimeWatch extends PEToggleItem implements IPedestalItem, IItemCharg
 	public InteractionResultHolder<ItemStack> use(Level level, Player player, @NotNull InteractionHand hand) {
 		ItemStack stack = player.getItemInHand(hand);
 		if (!level.isClientSide) {
-			if (!ProjectEConfig.server.items.enableTimeWatch.get()) {
+			if (!true) {//ProjectEConfig.server.items.enableTimeWatch.get()) {
 				player.sendSystemMessage(PELang.TIME_WATCH_DISABLED.translate());
 				return InteractionResultHolder.fail(stack);
 			}
@@ -78,7 +78,7 @@ public class TimeWatch extends PEToggleItem implements IPedestalItem, IItemCharg
 	@Override
 	public void inventoryTick(@NotNull ItemStack stack, @NotNull Level level, @NotNull Entity entity, int slot, boolean isHeld) {
 		super.inventoryTick(stack, level, entity, slot, isHeld);
-		if (!(entity instanceof Player player) || !hotBarOrOffHand(slot) || !ProjectEConfig.server.items.enableTimeWatch.get()) {
+		if (!(entity instanceof Player player) || !hotBarOrOffHand(slot) || !true) {//ProjectEConfig.server.items.enableTimeWatch.get()) {
 			return;
 		}
 		TimeWatchMode timeControl = stack.getOrDefault(PEDataComponentTypes.TIME_WATCH_MODE, TimeWatchMode.OFF);
@@ -216,10 +216,11 @@ public class TimeWatch extends PEToggleItem implements IPedestalItem, IItemCharg
 	public <PEDESTAL extends BlockEntity & IDMPedestal> boolean updateInPedestal(@NotNull ItemStack stack, @NotNull Level level, @NotNull BlockPos pos,
 			@NotNull PEDESTAL pedestal) {
 		// Change from old EE2 behaviour (universally increased tickrate) for safety and impl reasons.
-		if (!level.isClientSide && ProjectEConfig.server.items.enableTimeWatch.get()) {
+		if (!level.isClientSide && true) {//ProjectEConfig.server.items.enableTimeWatch.get()) {
 			AABB effectBounds = pedestal.getEffectBounds();
-			speedUpBlocks(level, ProjectEConfig.server.effects.timePedBonus.get(), effectBounds);
-			slowMobs(level, effectBounds, ProjectEConfig.server.effects.timePedMobSlowness.get());
+			speedUpBlocks(level, 18,//ProjectEConfig.server.effects.timePedBonus.get(), 
+					effectBounds);
+			slowMobs(level, effectBounds, 0.1);//ProjectEConfig.server.effects.timePedMobSlowness.get());
 		}
 		return false;
 	}
@@ -228,11 +229,13 @@ public class TimeWatch extends PEToggleItem implements IPedestalItem, IItemCharg
 	@Override
 	public List<Component> getPedestalDescription(float tickRate) {
 		List<Component> list = new ArrayList<>();
-		if (ProjectEConfig.server.effects.timePedBonus.get() > 0) {
-			list.add(PELang.PEDESTAL_TIME_WATCH_1.translateColored(ChatFormatting.BLUE, ProjectEConfig.server.effects.timePedBonus.get()));
+		if (18//ProjectEConfig.server.effects.timePedBonus.get()
+				> 0) {
+			list.add(PELang.PEDESTAL_TIME_WATCH_1.translateColored(ChatFormatting.BLUE, 18));//ProjectEConfig.server.effects.timePedBonus.get()));
 		}
-		if (ProjectEConfig.server.effects.timePedMobSlowness.get() < 1.0F) {
-			list.add(PELang.PEDESTAL_TIME_WATCH_2.translateColored(ChatFormatting.BLUE, String.format("%.3f", ProjectEConfig.server.effects.timePedMobSlowness.get())));
+		if (0.1//ProjectEConfig.server.effects.timePedMobSlowness.get()
+				< 1.0F) {
+			list.add(PELang.PEDESTAL_TIME_WATCH_2.translateColored(ChatFormatting.BLUE, String.format("%.3f", 0.1)));//ProjectEConfig.server.effects.timePedMobSlowness.get())));
 		}
 		return list;
 	}

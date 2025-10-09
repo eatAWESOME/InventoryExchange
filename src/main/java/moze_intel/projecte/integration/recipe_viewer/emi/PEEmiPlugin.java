@@ -43,21 +43,23 @@ public class PEEmiPlugin implements EmiPlugin {
 	public void register(EmiRegistry registry) {
 		registry.addCategory(WorldTransmuteEmiRecipe.CATEGORY);
 		for (WorldTransmuteEntry recipe : RecipeViewerHelper.getAllTransmutations()) {
-			registry.addRecipe(new WorldTransmuteEmiRecipe(recipe));
+			//registry.addRecipe(new WorldTransmuteEmiRecipe(recipe));
 		}
 		registry.addCategory(CollectorEmiRecipe.CATEGORY);
 		for (FuelUpgradeRecipe recipe : RecipeViewerHelper.getFuelUpgrades()) {
-			registry.addRecipe(new CollectorEmiRecipe(recipe));
+			//registry.addRecipe(new CollectorEmiRecipe(recipe));
 		}
 
 		//Workstations for vanilla categories
+		/*
 		registry.addWorkstation(VanillaEmiRecipeCategories.CRAFTING, EmiStack.of(PEItems.PHILOSOPHERS_STONE));
 		registry.addWorkstation(VanillaEmiRecipeCategories.SMELTING, EmiIngredient.of(PETags.Items.MATTER_FURNACES));
 		registry.addWorkstation(CollectorEmiRecipe.CATEGORY, EmiIngredient.of(PETags.Items.COLLECTORS));
 		registry.addWorkstation(WorldTransmuteEmiRecipe.CATEGORY, EmiStack.of(PEItems.PHILOSOPHERS_STONE));
+		*/
 
-		registerItemSubtypes(registry, PEItems.ITEMS.getEntries());
-		registerItemSubtypes(registry, PEBlocks.BLOCKS.getSecondaryEntries());
+		//registerItemSubtypes(registry, PEItems.ITEMS.getEntries());
+		//registerItemSubtypes(registry, PEBlocks.BLOCKS.getSecondaryEntries());
 	}
 
 	public static void registerItemSubtypes(EmiRegistry registry, Collection<? extends Holder<? extends ItemLike>> itemProviders) {

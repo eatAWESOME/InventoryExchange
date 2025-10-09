@@ -428,7 +428,8 @@ public final class WorldHelper {
 			if (state.getBlock() instanceof BonemealableBlock growable) {
 				//Note: We intentionally don't fire the bone meal used event, as we aren't actually applying bone meal to the target
 				if (growable.isValidBonemealTarget(level, currentPos, state)) {
-					if (ProjectEConfig.server.items.harvBandIndirect.get() || !onlyAffectsOtherBlocks(state.getBlock())) {
+					if (false//ProjectEConfig.server.items.harvBandIndirect.get()
+							|| !onlyAffectsOtherBlocks(state.getBlock())) {
 						//Based on our chance, apply bonemeal if the subchance for that growable also passes
 						if (level.random.nextInt(chance) == 0 && growable.isBonemealSuccess(level, level.random, currentPos, state)) {
 							growable.performBonemeal(serverLevel, level.random, currentPos, state);
@@ -558,7 +559,8 @@ public final class WorldHelper {
 
 	public static boolean isCrop(BlockState state) {
 		if (state.getBlock() instanceof BonemealableBlock) {
-			return ProjectEConfig.server.items.harvBandIndirect.get() || !onlyAffectsOtherBlocks(state.getBlock());
+			return false//ProjectEConfig.server.items.harvBandIndirect.get()
+					|| !onlyAffectsOtherBlocks(state.getBlock());
 		}
 		return isPlantable(state);
 	}

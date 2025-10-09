@@ -69,14 +69,14 @@ public class Zero extends PEToggleItem implements IPedestalItem, IItemCharge, IB
 	@Override
 	public <PEDESTAL extends BlockEntity & IDMPedestal> boolean updateInPedestal(@NotNull ItemStack stack, @NotNull Level level, @NotNull BlockPos pos,
 			@NotNull PEDESTAL pedestal) {
-		if (!level.isClientSide && ProjectEConfig.server.cooldown.pedestal.zero.get() != -1) {
+		if (!level.isClientSide) {// && ProjectEConfig.server.cooldown.pedestal.zero.get() != -1) {
 			if (pedestal.getActivityCooldown() == 0) {
 				AABB aabb = pedestal.getEffectBounds();
 				WorldHelper.freezeInBoundingBox(level, aabb, null, false);
 				for (Entity ent : level.getEntitiesOfClass(Entity.class, aabb, e -> !e.isSpectator() && e.isOnFire())) {
 					ent.clearFire();
 				}
-				pedestal.setActivityCooldown(level, pos, ProjectEConfig.server.cooldown.pedestal.zero.get());
+				//pedestal.setActivityCooldown(level, pos, ProjectEConfig.server.cooldown.pedestal.zero.get());
 			} else {
 				pedestal.decrementActivityCooldown(level, pos);
 			}
@@ -89,11 +89,13 @@ public class Zero extends PEToggleItem implements IPedestalItem, IItemCharge, IB
 	public List<Component> getPedestalDescription(float tickRate) {
 		//Only used on the client
 		List<Component> list = new ArrayList<>();
+		/*
 		if (ProjectEConfig.server.cooldown.pedestal.zero.get() != -1) {
 			list.add(PELang.PEDESTAL_ZERO_1.translateColored(ChatFormatting.BLUE));
 			list.add(PELang.PEDESTAL_ZERO_2.translateColored(ChatFormatting.BLUE));
 			list.add(PELang.PEDESTAL_ZERO_3.translateColored(ChatFormatting.BLUE, MathUtils.tickToSecFormatted(ProjectEConfig.server.cooldown.pedestal.zero.get(), tickRate)));
 		}
+		*/
 		return list;
 	}
 

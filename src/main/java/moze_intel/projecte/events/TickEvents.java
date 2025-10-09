@@ -21,7 +21,7 @@ import net.neoforged.neoforge.capabilities.Capabilities.ItemHandler;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import net.neoforged.neoforge.items.IItemHandler;
 
-@EventBusSubscriber(modid = PECore.PEID)
+@EventBusSubscriber(modid = PECore.MODID)
 public class TickEvents {
 
 	@SubscribeEvent

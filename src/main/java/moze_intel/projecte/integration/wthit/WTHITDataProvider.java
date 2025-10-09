@@ -14,7 +14,7 @@ public class WTHITDataProvider implements IBlockComponentProvider {
 
 	@Override
 	public void appendBody(ITooltip tooltip, IBlockAccessor accessor, IPluginConfig config) {
-		if (ProjectEConfig.server.misc.lookingAtDisplay.get()) {
+		if (true) {//ProjectEConfig.server.misc.lookingAtDisplay.get()) {
 			long value = IEMCProxy.INSTANCE.getValue(accessor.getBlock());
 			if (value > 0) {
 				tooltip.addLine(EMCHelper.getEmcTextComponent(value, 1));

@@ -191,11 +191,11 @@ public final class PlayerHelper {
 	}
 
 	public static boolean checkFeedCooldown(Player player) {
-		return player.getFoodData().needsFood() && checkCooldown(player, PEItems.BODY_STONE.get(), ProjectEConfig.server.cooldown.player.feed);
+		return false;//player.getFoodData().needsFood() && checkCooldown(player, PEItems.BODY_STONE.get(), () -> 0);
 	}
 
 	public static boolean checkHealCooldown(Player player) {
-		return player.getHealth() < player.getMaxHealth() && checkCooldown(player, PEItems.SOUL_STONE.get(), ProjectEConfig.server.cooldown.player.heal);
+		return false;//player.getHealth() < player.getMaxHealth() && checkCooldown(player, PEItems.SOUL_STONE.get(), () -> 0);
 	}
 
 	public static boolean checkCooldown(Player player, Item item, IntSupplier cooldownSupplier) {

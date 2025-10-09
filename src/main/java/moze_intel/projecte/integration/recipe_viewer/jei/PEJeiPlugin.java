@@ -90,66 +90,74 @@ public class PEJeiPlugin implements IModPlugin {
 
 	public static void registerItemSubtypes(ISubtypeRegistration registry, Collection<? extends Holder<? extends ItemLike>> itemProviders) {
 		for (Holder<? extends ItemLike> itemProvider : itemProviders) {
-			registry.registerSubtypeInterpreter(itemProvider.value().asItem(), PROJECTE_INTERPRETER);
+			//registry.registerSubtypeInterpreter(itemProvider.value().asItem(), PROJECTE_INTERPRETER);
 		}
 	}
 
 	@Override
 	public void registerItemSubtypes(@NotNull ISubtypeRegistration registry) {
 		if (shouldLoad()) {
-			registerItemSubtypes(registry, PEItems.ITEMS.getEntries());
-			registerItemSubtypes(registry, PEBlocks.BLOCKS.getSecondaryEntries());
+			//registerItemSubtypes(registry, PEItems.ITEMS.getEntries());
+			//registerItemSubtypes(registry, PEBlocks.BLOCKS.getSecondaryEntries());
 		}
 	}
 
 	@Override
 	public void registerCategories(@NotNull IRecipeCategoryRegistration registry) {
 		if (shouldLoad()) {
+			/*
 			registry.addRecipeCategories(new WorldTransmuteRecipeCategory(registry.getJeiHelpers().getGuiHelper()));
 			registry.addRecipeCategories(new CollectorRecipeCategory(registry.getJeiHelpers().getGuiHelper()));
+			*/
 		}
 	}
 
 	@Override
 	public void registerRecipeTransferHandlers(@NotNull IRecipeTransferRegistration registration) {
 		if (shouldLoad()) {
-			registration.addRecipeTransferHandler(PhilosStoneContainer.class, MenuType.CRAFTING, RecipeTypes.CRAFTING, 1, 9, 10, 36);
+			//registration.addRecipeTransferHandler(PhilosStoneContainer.class, MenuType.CRAFTING, RecipeTypes.CRAFTING, 1, 9, 10, 36);
 		}
 	}
 
 	@Override
 	public void registerRecipeCatalysts(@NotNull IRecipeCatalystRegistration registry) {
 		if (shouldLoad()) {
+			/*
 			registry.addRecipeCatalyst(PEItems.PHILOSOPHERS_STONE.asStack(), RecipeTypes.CRAFTING, WorldTransmuteRecipeCategory.RECIPE_TYPE);
 			registry.addRecipeCatalyst(new ItemStack(PEBlocks.COLLECTOR), CollectorRecipeCategory.RECIPE_TYPE);
 			registry.addRecipeCatalyst(new ItemStack(PEBlocks.COLLECTOR_MK2), CollectorRecipeCategory.RECIPE_TYPE);
 			registry.addRecipeCatalyst(new ItemStack(PEBlocks.COLLECTOR_MK3), CollectorRecipeCategory.RECIPE_TYPE);
 			registry.addRecipeCatalyst(new ItemStack(PEBlocks.DARK_MATTER_FURNACE), RecipeTypes.SMELTING, RecipeTypes.FUELING);
 			registry.addRecipeCatalyst(new ItemStack(PEBlocks.RED_MATTER_FURNACE), RecipeTypes.SMELTING, RecipeTypes.FUELING);
+			*/
 		}
 	}
 
 	@Override
 	public void registerGuiHandlers(@NotNull IGuiHandlerRegistration registry) {
 		if (shouldLoad()) {
+			/*
 			registry.addRecipeClickArea(GUIDMFurnace.class, 73, 34, 25, 16, RecipeTypes.SMELTING, RecipeTypes.FUELING);
 			registry.addRecipeClickArea(GUIRMFurnace.class, 88, 35, 25, 17, RecipeTypes.SMELTING, RecipeTypes.FUELING);
 			registry.addRecipeClickArea(AbstractCollectorScreen.MK1.class, 138, 31, 10, 24, CollectorRecipeCategory.RECIPE_TYPE);
 			registry.addRecipeClickArea(AbstractCollectorScreen.MK2.class, 138 + 16, 31, 10, 24, CollectorRecipeCategory.RECIPE_TYPE);
 			registry.addRecipeClickArea(AbstractCollectorScreen.MK3.class, 138 + 34, 31, 10, 24, CollectorRecipeCategory.RECIPE_TYPE);
+			*/
 		}
 	}
 
 	@Override
 	public void registerIngredientAliases(@NotNull IIngredientAliasRegistration registration) {
-		new ProjectEAliasMapping().addAliases(new JEIAliasHelper(registration));
+		//new ProjectEAliasMapping().addAliases(new JEIAliasHelper(registration));
 	}
 
 	@Override
 	public void registerRecipes(@NotNull IRecipeRegistration registry) {
 		if (shouldLoad()) {
+			/*
 			registry.addRecipes(WorldTransmuteRecipeCategory.RECIPE_TYPE, List.copyOf(RecipeViewerHelper.getAllTransmutations()));
 			registry.addRecipes(CollectorRecipeCategory.RECIPE_TYPE, RecipeViewerHelper.getFuelUpgrades());
+			*/
 		}
 	}
 }

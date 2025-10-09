@@ -53,14 +53,14 @@ public class SoulStone extends PEToggleItem implements IPedestalItem, ICapabilit
 	@Override
 	public <PEDESTAL extends BlockEntity & IDMPedestal> boolean updateInPedestal(@NotNull ItemStack stack, @NotNull Level level, @NotNull BlockPos pos,
 			@NotNull PEDESTAL pedestal) {
-		if (!level.isClientSide && ProjectEConfig.server.cooldown.pedestal.soul.get() != -1) {
+		if (!level.isClientSide) {// && ProjectEConfig.server.cooldown.pedestal.soul.get() != -1) {
 			if (pedestal.getActivityCooldown() == 0) {
 				for (ServerPlayer player : level.getEntitiesOfClass(ServerPlayer.class, pedestal.getEffectBounds(),
 						ent -> !ent.isSpectator() && ent.getHealth() < ent.getMaxHealth())) {
 					level.playSound(null, player.getX(), player.getY(), player.getZ(), PESoundEvents.HEAL.get(), SoundSource.BLOCKS, 1.0F, 1.0F);
 					player.heal(1.0F); // 1/2 heart
 				}
-				pedestal.setActivityCooldown(level, pos, ProjectEConfig.server.cooldown.pedestal.soul.get());
+				//pedestal.setActivityCooldown(level, pos, ProjectEConfig.server.cooldown.pedestal.soul.get());
 			} else {
 				pedestal.decrementActivityCooldown(level, pos);
 			}
@@ -72,10 +72,12 @@ public class SoulStone extends PEToggleItem implements IPedestalItem, ICapabilit
 	@Override
 	public List<Component> getPedestalDescription(float tickRate) {
 		List<Component> list = new ArrayList<>();
+		/*
 		if (ProjectEConfig.server.cooldown.pedestal.soul.get() != -1) {
 			list.add(PELang.PEDESTAL_SOUL_STONE_1.translateColored(ChatFormatting.BLUE));
 			list.add(PELang.PEDESTAL_SOUL_STONE_2.translateColored(ChatFormatting.BLUE, MathUtils.tickToSecFormatted(ProjectEConfig.server.cooldown.pedestal.soul.get(), tickRate)));
 		}
+		*/
 		return list;
 	}
 

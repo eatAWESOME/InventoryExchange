@@ -12,17 +12,17 @@ public class CommonConfig extends BasePEConfig {
 	private final ModConfigSpec configSpec;
 
 	public final CachedBooleanValue debugLogging;
-	public final CachedBooleanValue craftableTome;
-	public final CachedBooleanValue fullKleinStars;
+	//public final CachedBooleanValue craftableTome;
+	//public final CachedBooleanValue fullKleinStars;
 
 	CommonConfig() {
 		ModConfigSpec.Builder builder = new ModConfigSpec.Builder();
 		debugLogging = CachedBooleanValue.wrap(this, PEConfigTranslations.COMMON_DEBUG_LOGGING.applyToBuilder(builder).define("debugLogging", false));
 
-		PEConfigTranslations.COMMON_CRAFTING.applyToBuilder(builder).push("crafting");
-		craftableTome = CachedBooleanValue.wrap(this, PEConfigTranslations.COMMON_CRAFTING_TOME.applyToBuilder(builder).define("craftableTome", false));
-		fullKleinStars = CachedBooleanValue.wrap(this, PEConfigTranslations.COMMON_CRAFTING_FULL_KLEIN.applyToBuilder(builder).define("fullKleinStars", false));
-		builder.pop();
+		//PEConfigTranslations.COMMON_CRAFTING.applyToBuilder(builder).push("crafting");
+		//craftableTome = CachedBooleanValue.wrap(this, PEConfigTranslations.COMMON_CRAFTING_TOME.applyToBuilder(builder).define("craftableTome", false));
+		//fullKleinStars = CachedBooleanValue.wrap(this, PEConfigTranslations.COMMON_CRAFTING_FULL_KLEIN.applyToBuilder(builder).define("fullKleinStars", false));
+		//builder.pop();
 		configSpec = builder.build();
 	}
 

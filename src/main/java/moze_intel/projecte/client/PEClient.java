@@ -71,9 +71,9 @@ public class PEClient {
 		container.registerExtensionPoint(IConfigScreenFactory.class, ConfigurationScreen::new);
 		modEventBus.addListener(this::registerScreens);
 		modEventBus.addListener(this::clientSetup);
-		modEventBus.addListener(this::registerKeybindings);
-		modEventBus.addListener(this::registerOverlays);
-		modEventBus.addListener(this::registerRenderers);
+		//modEventBus.addListener(this::registerKeybindings);
+		//modEventBus.addListener(this::registerOverlays);
+		//modEventBus.addListener(this::registerRenderers);
 		modEventBus.addListener(this::addLayers);
 
 		NeoForge.EVENT_BUS.addListener(this::onEntityJoinWorld);
@@ -129,6 +129,7 @@ public class PEClient {
 			});
 		}
 
+		/*
 		evt.enqueueWork(() -> {
 			//Property Overrides
 			addPropertyOverrides(ACTIVE_OVERRIDE, (stack, level, entity, seed) -> stack.getOrDefault(PEDataComponentTypes.ACTIVE, false) ? 1F : 0F,
@@ -140,6 +141,7 @@ public class PEClient {
 			addPropertyOverrides(MODE_OVERRIDE, (stack, level, entity, seed) ->
 					stack.getOrDefault(PEDataComponentTypes.SWRG_MODE, PEItems.ARCANA_RING.asItem().getDefaultMode()).ordinal(), PEItems.SWIFTWOLF_RENDING_GALE);
 		});
+		*/
 	}
 
 	private void registerKeybindings(RegisterKeyMappingsEvent event) {

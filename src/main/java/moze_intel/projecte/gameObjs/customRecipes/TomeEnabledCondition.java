@@ -15,7 +15,7 @@ public class TomeEnabledCondition implements ICondition {
 
 	@Override
 	public boolean test(@NotNull IContext context) {
-		return ProjectEConfig.common.craftableTome.get();
+		return false;//ProjectEConfig.common.craftableTome.get();
 	}
 
 	@NotNull

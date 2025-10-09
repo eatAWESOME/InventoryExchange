@@ -155,9 +155,9 @@ public final class EMCHelper {
 		if (originalValue == 0) {
 			return 0;
 		}
-		long emc = Mth.lfloor(originalValue * ProjectEConfig.server.difficulty.covalenceLoss.get());
+		long emc = Mth.lfloor(originalValue);// * ProjectEConfig.server.difficulty.covalenceLoss.get());
 		if (emc < 1) {
-			if (ProjectEConfig.server.difficulty.covalenceLossRounding.get()) {
+			if (true) {//ProjectEConfig.server.difficulty.covalenceLossRounding.get()) {
 				emc = 1;
 			} else {
 				emc = 0;
@@ -167,7 +167,7 @@ public final class EMCHelper {
 	}
 
 	public static Component getEmcTextComponent(long emc, int stackSize) {
-		if (ProjectEConfig.server.difficulty.covalenceLoss.get() == 1.0) {
+		if (true) {//ProjectEConfig.server.difficulty.covalenceLoss.get() == 1.0) {
 			ILangEntry prefix;
 			String value;
 			if (stackSize > 1) {

@@ -9,7 +9,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ComputeFovModifierEvent;
 
-@EventBusSubscriber(modid = PECore.PEID, value = Dist.CLIENT)
+@EventBusSubscriber(modid = PECore.MODID, value = Dist.CLIENT)
 public class PlayerRender {
 
 	@SubscribeEvent

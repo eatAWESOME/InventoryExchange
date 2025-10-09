@@ -1,10 +1,10 @@
 package moze_intel.projecte.config;
 
 import moze_intel.projecte.config.value.CachedBooleanValue;
-import moze_intel.projecte.config.value.CachedDoubleValue;
-import moze_intel.projecte.config.value.CachedFloatValue;
-import moze_intel.projecte.config.value.CachedIntValue;
-import net.minecraft.SharedConstants;
+//import moze_intel.projecte.config.value.CachedDoubleValue;
+//import moze_intel.projecte.config.value.CachedFloatValue;
+//import moze_intel.projecte.config.value.CachedIntValue;
+//import net.minecraft.SharedConstants;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.neoforge.common.ModConfigSpec;
 
@@ -15,19 +15,19 @@ public final class ServerConfig extends BasePEConfig {
 
 	private final ModConfigSpec configSpec;
 
-	public final Difficulty difficulty;
+	//public final Difficulty difficulty;
 	public final Items items;
-	public final Effects effects;
-	public final Misc misc;
-	public final Cooldown cooldown;
+	//public final Effects effects;
+	//public final Misc misc;
+	//public final Cooldown cooldown;
 
 	ServerConfig() {
 		ModConfigSpec.Builder builder = new ModConfigSpec.Builder();
-		cooldown = new Cooldown(this, builder);
-		difficulty = new Difficulty(this, builder);
-		effects = new Effects(this, builder);
+		//cooldown = new Cooldown(this, builder);
+		//difficulty = new Difficulty(this, builder);
+		//effects = new Effects(this, builder);
 		items = new Items(this, builder);
-		misc = new Misc(this, builder);
+		//misc = new Misc(this, builder);
 		configSpec = builder.build();
 	}
 
@@ -51,6 +51,7 @@ public final class ServerConfig extends BasePEConfig {
 		return ModConfig.Type.SERVER;
 	}
 
+	/*
 	public static class Cooldown {
 
 		public final Pedestal pedestal;
@@ -168,31 +169,33 @@ public final class ServerConfig extends BasePEConfig {
 			builder.pop();
 		}
 	}
+	*/
 
 	public static class Items {
 
 		public final CachedBooleanValue pickaxeAoeVeinMining;
-		public final CachedBooleanValue harvBandIndirect;
+		//public final CachedBooleanValue harvBandIndirect;
 		public final CachedBooleanValue disableAllRadiusMining;
-		public final CachedBooleanValue enableTimeWatch;
-		public final CachedBooleanValue opEvertide;
+		//public final CachedBooleanValue enableTimeWatch;
+		//public final CachedBooleanValue opEvertide;
 
 		private Items(IPEConfig config, ModConfigSpec.Builder builder) {
 			PEConfigTranslations.SERVER_ITEMS.applyToBuilder(builder).push("items");
 			pickaxeAoeVeinMining = CachedBooleanValue.wrap(config, PEConfigTranslations.SERVER_ITEMS_PICKAXE_AOE_VEIN_MINING.applyToBuilder(builder)
 					.define("pickaxeAoeVeinMining", false));
-			harvBandIndirect = CachedBooleanValue.wrap(config, PEConfigTranslations.SERVER_ITEMS_HARVEST_BAND_INDIRECT.applyToBuilder(builder)
-					.define("harvBandIndirect", false));
+			//harvBandIndirect = CachedBooleanValue.wrap(config, PEConfigTranslations.SERVER_ITEMS_HARVEST_BAND_INDIRECT.applyToBuilder(builder)
+			//		.define("harvBandIndirect", false));
 			disableAllRadiusMining = CachedBooleanValue.wrap(config, PEConfigTranslations.SERVER_ITEMS_DISABLE_ALL_RADIUS_MINING.applyToBuilder(builder)
 					.define("disableAllRadiusMining", false));
-			enableTimeWatch = CachedBooleanValue.wrap(config, PEConfigTranslations.SERVER_ITEMS_TIME_WATCH.applyToBuilder(builder)
-					.define("enableTimeWatch", true));
-			opEvertide = CachedBooleanValue.wrap(config, PEConfigTranslations.SERVER_ITEMS_OP_EVERTIDE.applyToBuilder(builder)
-					.define("opEvertide", false));
+			//enableTimeWatch = CachedBooleanValue.wrap(config, PEConfigTranslations.SERVER_ITEMS_TIME_WATCH.applyToBuilder(builder)
+			//		.define("enableTimeWatch", true));
+			//opEvertide = CachedBooleanValue.wrap(config, PEConfigTranslations.SERVER_ITEMS_OP_EVERTIDE.applyToBuilder(builder)
+			//		.define("opEvertide", false));
 			builder.pop();
 		}
 	}
 
+	/*
 	public static class Misc {
 
 		public final CachedBooleanValue unsafeKeyBinds;
@@ -207,4 +210,5 @@ public final class ServerConfig extends BasePEConfig {
 			builder.pop();
 		}
 	}
+	*/
 }

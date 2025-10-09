@@ -21,7 +21,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
 
-@EventBusSubscriber(modid = PECore.PEID, value = Dist.CLIENT)
+@EventBusSubscriber(modid = PECore.MODID, value = Dist.CLIENT)
 public class ToolTipEvent {
 
 	@SubscribeEvent
@@ -31,6 +31,7 @@ public class ToolTipEvent {
 			return;
 		}
 		List<Component> tooltip = event.getToolTip();
+		/*
 		if (ProjectEConfig.client.pedestalToolTips.get()) {
 			IPedestalItem pedestalItem = current.getCapability(PECapabilities.PEDESTAL_ITEM_CAPABILITY);
 			if (pedestalItem != null) {
@@ -43,6 +44,7 @@ public class ToolTipEvent {
 				}
 			}
 		}
+		*/
 
 		if (ProjectEConfig.client.tagToolTips.get()) {
 			current.getTags().forEach(tag -> tooltip.add(Component.literal("#" + tag.location())));
@@ -55,6 +57,7 @@ public class ToolTipEvent {
 				if (current.getCount() > 1) {
 					tooltip.add(EMCHelper.getEmcTextComponent(value, current.getCount()));
 				}
+				/*
 				Player player = event.getEntity();
 				if (player != null && (!ProjectEConfig.client.shiftLearnedToolTips.get() || Screen.hasShiftDown())) {
 					IKnowledgeProvider knowledgeProvider = player.getCapability(PECapabilities.KNOWLEDGE_CAPABILITY);
@@ -64,7 +67,8 @@ public class ToolTipEvent {
 						tooltip.add(PELang.EMC_NO_KNOWLEDGE.translateColored(ChatFormatting.RED));
 					}
 				}
-			}
+				*/
+			} 
 		}
 
 		long value = current.getOrDefault(PEDataComponentTypes.STORED_EMC, 0L);

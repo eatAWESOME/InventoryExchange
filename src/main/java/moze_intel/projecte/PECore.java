@@ -16,6 +16,8 @@ import moze_intel.projecte.config.ProjectEConfig;
 import moze_intel.projecte.emc.EMCMappingHandler;
 import moze_intel.projecte.emc.FuelMapper;
 import moze_intel.projecte.gameObjs.items.IHasConditionalAttributes;
+import moze_intel.projecte.gameObjs.items.Tome;
+import moze_intel.projecte.gameObjs.registration.impl.ItemRegistryObject;
 import moze_intel.projecte.gameObjs.registries.PEArmorMaterials;
 import moze_intel.projecte.gameObjs.registries.PEAttachmentTypes;
 import moze_intel.projecte.gameObjs.registries.PEBlockEntityTypes;
@@ -68,6 +70,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
@@ -146,19 +149,20 @@ public class PECore {
 		modEventBus.addListener(this::registerRegistries);
 		modEventBus.addListener(this::modifyRegistries);
 		PEAttachmentTypes.ATTACHMENT_TYPES.register(modEventBus);
-		PEArmorMaterials.ARMOR_MATERIALS.register(modEventBus);
-		PEBlockEntityTypes.BLOCK_ENTITY_TYPES.register(modEventBus);
-		PEBlocks.BLOCKS.register(modEventBus);
-		PEBlockTypes.BLOCK_TYPES.register(modEventBus);
+		//PEArmorMaterials.ARMOR_MATERIALS.register(modEventBus);
+		//PEBlockEntityTypes.BLOCK_ENTITY_TYPES.register(modEventBus);
+		//PEBlocks.BLOCKS.register(modEventBus);
+		//PEBlockTypes.BLOCK_TYPES.register(modEventBus);
 		PEContainerTypes.CONTAINER_TYPES.register(modEventBus);
-		PECreativeTabs.CREATIVE_TABS.register(modEventBus);
+		//PECreativeTabs.CREATIVE_TABS.register(modEventBus);
 		PEDataComponentTypes.DATA_COMPONENT_TYPES.register(modEventBus);
-		PEEntityTypes.ENTITY_TYPES.register(modEventBus);
-		PEItems.ITEMS.register(modEventBus);
+		//PEEntityTypes.ENTITY_TYPES.register(modEventBus);
+		//PEItems.ITEMS.register(modEventBus);
+		PEItems.TOME_REGISTER.register(modEventBus);
 		PENormalizedSimpleStacks.NSS_SERIALIZERS.register(modEventBus);
-		PERecipeConditions.CONDITION_CODECS.register(modEventBus);
-		PERecipeSerializers.RECIPE_SERIALIZERS.register(modEventBus);
-		PESoundEvents.SOUND_EVENTS.register(modEventBus);
+		//PERecipeConditions.CONDITION_CODECS.register(modEventBus);
+		//PERecipeSerializers.RECIPE_SERIALIZERS.register(modEventBus);
+		//PESoundEvents.SOUND_EVENTS.register(modEventBus);
 		NeoForge.EVENT_BUS.addListener(this::addReloadListeners);
 		NeoForge.EVENT_BUS.addListener(this::dataPackSync);
 		NeoForge.EVENT_BUS.addListener(this::registerCommands);
@@ -191,6 +195,7 @@ public class PECore {
 		new ThreadCheckUpdate().start();
 		EMCMappingHandler.loadMappers();
 
+		/*
 		event.enqueueWork(() -> {
 			//Dispenser Behavior
 			registerDispenseBehavior(new ShearsDispenseItemBehavior(), PEItems.DARK_MATTER_SHEARS, PEItems.RED_MATTER_SHEARS, PEItems.RED_MATTER_KATAR);
@@ -254,6 +259,7 @@ public class PECore {
 				}
 			});
 		});
+		*/
 	}
 
 	private static void registerDispenseBehavior(DispenseItemBehavior behavior, ItemLike... items) {
@@ -311,7 +317,7 @@ public class PECore {
 				.then(RemoveEmcCMD.register(context))
 				.then(ResetEmcCMD.register(context))
 				.then(SetEmcCMD.register(context))
-				.then(ShowBagCMD.register(context))
+				//.then(ShowBagCMD.register(context))
 				.then(EMCCMD.register(context))
 				.then(KnowledgeCMD.register(context))
 		);

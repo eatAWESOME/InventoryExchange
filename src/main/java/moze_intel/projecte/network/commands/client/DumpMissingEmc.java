@@ -57,7 +57,7 @@ public class DumpMissingEmc {
 		if (switch (holder.value()) {
 			//Assume unbreakable blocks won't have an EMC value by default
 			case BlockItem blockItem when blockItem.getBlock().defaultDestroyTime() == Block.INDESTRUCTIBLE -> true;
-			case Tome tome when !ProjectEConfig.common.craftableTome.get() -> true;
+			case Tome tome when !false -> true;//ProjectEConfig.common.craftableTome.get() -> true;
 			case BundleItem bundleItem when !enabledFeatures.contains(FeatureFlags.BUNDLE) -> true;
 			default -> false;
 		}) {

@@ -42,7 +42,7 @@ import net.neoforged.neoforge.common.data.AdvancementProvider;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 
-@EventBusSubscriber(modid = PECore.PEID, bus = Bus.MOD)
+@EventBusSubscriber(modid = PECore.MODID)//, bus = Bus.MOD)
 public class ProjectEDataGenerator {
 
 	@SubscribeEvent

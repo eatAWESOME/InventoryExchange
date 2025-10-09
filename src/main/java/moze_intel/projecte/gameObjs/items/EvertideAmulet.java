@@ -74,7 +74,7 @@ public class EvertideAmulet extends ItemPE implements IProjectileShooter, IPedes
 				fluidHandler.fill(new FluidStack(Fluids.WATER, FluidType.BUCKET_VOLUME), IFluidHandler.FluidAction.EXECUTE);
 				return InteractionResult.CONSUME;
 			}
-			WorldHelper.placeFluid(player, level, pos, sideHit, Fluids.WATER, !ProjectEConfig.server.items.opEvertide.get());
+			WorldHelper.placeFluid(player, level, pos, sideHit, Fluids.WATER, false);//!ProjectEConfig.server.items.opEvertide.get());
 			level.playSound(null, player.getX(), player.getY(), player.getZ(), PESoundEvents.WATER_MAGIC.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
 		}
 		return InteractionResult.sidedSuccess(level.isClientSide);
@@ -83,7 +83,8 @@ public class EvertideAmulet extends ItemPE implements IProjectileShooter, IPedes
 	@Override
 	public boolean shootProjectile(@NotNull Player player, @NotNull ItemStack stack, InteractionHand hand) {
 		Level level = player.level();
-		if (ProjectEConfig.server.items.opEvertide.get() || !level.dimensionType().ultraWarm()) {
+		if (//ProjectEConfig.server.items.opEvertide.get() || 
+				!level.dimensionType().ultraWarm()) {
 			level.playSound(null, player.getX(), player.getY(), player.getZ(), PESoundEvents.WATER_MAGIC.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
 			EntityWaterProjectile ent = new EntityWaterProjectile(player, level);
 			ent.shootFromRotation(player, player.getXRot(), player.getYRot(), 0, 1.5F, 1);
@@ -105,7 +106,7 @@ public class EvertideAmulet extends ItemPE implements IProjectileShooter, IPedes
 	@Override
 	public <PEDESTAL extends BlockEntity & IDMPedestal> boolean updateInPedestal(@NotNull ItemStack stack, @NotNull Level level, @NotNull BlockPos pos,
 			@NotNull PEDESTAL pedestal) {
-		if (!level.isClientSide && ProjectEConfig.server.cooldown.pedestal.evertide.get() != -1) {
+		if (!level.isClientSide) {// && ProjectEConfig.server.cooldown.pedestal.evertide.get() != -1) {
 			if (pedestal.getActivityCooldown() == 0) {
 				if (level.getLevelData() instanceof ServerLevelData worldInfo) {
 					int i = (300 + level.random.nextInt(600)) * SharedConstants.TICKS_PER_SECOND;
@@ -113,7 +114,7 @@ public class EvertideAmulet extends ItemPE implements IProjectileShooter, IPedes
 					worldInfo.setThunderTime(i);
 					worldInfo.setRaining(true);
 				}
-				pedestal.setActivityCooldown(level, pos, ProjectEConfig.server.cooldown.pedestal.evertide.get());
+				//pedestal.setActivityCooldown(level, pos, ProjectEConfig.server.cooldown.pedestal.evertide.get());
 			} else {
 				pedestal.decrementActivityCooldown(level, pos);
 			}
@@ -125,10 +126,12 @@ public class EvertideAmulet extends ItemPE implements IProjectileShooter, IPedes
 	@Override
 	public List<Component> getPedestalDescription(float tickRate) {
 		List<Component> list = new ArrayList<>();
+		/*
 		if (ProjectEConfig.server.cooldown.pedestal.evertide.get() != -1) {
 			list.add(PELang.PEDESTAL_EVERTIDE_1.translateColored(ChatFormatting.BLUE));
 			list.add(PELang.PEDESTAL_EVERTIDE_2.translateColored(ChatFormatting.BLUE, MathUtils.tickToSecFormatted(ProjectEConfig.server.cooldown.pedestal.evertide.get(), tickRate)));
 		}
+		*/
 		return list;
 	}
 

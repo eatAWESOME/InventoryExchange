@@ -34,7 +34,8 @@ public class InterdictionBlockEntity extends BlockEntity {
 		//Note: The interdiction torch's ticker needs to be run on both sides to ensure it renders properly
 		// when it deflects things like projectiles
 		Vec3 point = pos.getCenter();
-		Predicate<Entity> repelPredicate = ProjectEConfig.server.effects.interdictionMode.get() ? INTERDICTION_REPEL_HOSTILE_PREDICATE : INTERDICTION_REPEL_PREDICATE;
+		Predicate<Entity> repelPredicate = //ProjectEConfig.server.effects.interdictionMode.get() 
+				true ? INTERDICTION_REPEL_HOSTILE_PREDICATE : INTERDICTION_REPEL_PREDICATE;
 		for (Entity ent : level.getEntitiesOfClass(Entity.class, new AABB(pos).inflate(8), repelPredicate)) {
 			WorldHelper.repelEntity(point, ent);
 		}

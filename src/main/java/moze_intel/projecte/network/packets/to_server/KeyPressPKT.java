@@ -27,6 +27,9 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.capabilities.ItemCapability;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
+
+import java.util.function.IntSupplier;
+
 import org.jetbrains.annotations.NotNull;
 
 public record KeyPressPKT(PEKeybind key) implements IPEPacket {
@@ -78,14 +81,14 @@ public record KeyPressPKT(PEKeybind key) implements IPEPacket {
 					} else if (hand == InteractionHand.MAIN_HAND && isSafe(stack) && player.getData(PEAttachmentTypes.GEM_ARMOR_STATE)) {
 						ItemStack chestplate = player.getItemBySlot(EquipmentSlot.CHEST);
 						if (!chestplate.isEmpty() && chestplate.is(PEItems.GEM_CHESTPLATE) &&
-							PlayerHelper.checkCooldown(player, PEItems.GEM_CHESTPLATE.get(), ProjectEConfig.server.cooldown.player.gemChest)) {
+							PlayerHelper.checkCooldown(player, PEItems.GEM_CHESTPLATE.get(), () -> 0)) {//ProjectEConfig.server.cooldown.player.gemChest)) {
 							GemChest.doExplode(player);
 							return;
 						}
 					}
 				}
 				case FIRE_PROJECTILE -> {
-					if (!stack.isEmpty() && PlayerHelper.checkCooldown(player, stack.getItem(), ProjectEConfig.server.cooldown.player.projectile)
+					if (!stack.isEmpty() && PlayerHelper.checkCooldown(player, stack.getItem(), () -> 0)//, ProjectEConfig.server.cooldown.player.projectile)
 						&& tryPerformCapability(player, stack, hand, PECapabilities.PROJECTILE_SHOOTER_ITEM_CAPABILITY, IProjectileShooter::shootProjectile)) {
 						PlayerHelper.swingItem(player, hand);
 					}
@@ -113,7 +116,8 @@ public record KeyPressPKT(PEKeybind key) implements IPEPacket {
 	}
 
 	private static boolean isSafe(ItemStack stack) {
-		return ProjectEConfig.server.misc.unsafeKeyBinds.get() || stack.isEmpty();
+		return //ProjectEConfig.server.misc.unsafeKeyBinds.get() || 
+				stack.isEmpty();
 	}
 
 	@FunctionalInterface

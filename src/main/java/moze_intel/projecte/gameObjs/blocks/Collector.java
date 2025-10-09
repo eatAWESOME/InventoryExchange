@@ -59,7 +59,7 @@ public class Collector extends BlockDirection implements PEEntityBlock<Collector
 	@Override
 	public void appendHoverText(@NotNull ItemStack stack, @NotNull Item.TooltipContext context, @NotNull List<Component> tooltip, @NotNull TooltipFlag flags) {
 		super.appendHoverText(stack, context, tooltip, flags);
-		if (ProjectEConfig.client.statToolTips.get()) {
+		if (false) {//ProjectEConfig.client.statToolTips.get()) {
 			tooltip.add(PELang.EMC_MAX_GEN_RATE.translateColored(ChatFormatting.DARK_PURPLE, ChatFormatting.BLUE, EMCHelper.formatEmc(tier.getGenRate())));
 			tooltip.add(PELang.EMC_MAX_STORAGE.translateColored(ChatFormatting.DARK_PURPLE, ChatFormatting.BLUE, EMCHelper.formatEmc(tier.getStorage())));
 		}

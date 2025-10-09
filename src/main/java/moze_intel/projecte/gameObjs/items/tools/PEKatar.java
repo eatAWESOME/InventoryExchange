@@ -137,7 +137,8 @@ public class PEKatar extends PETool implements IItemMode<KatarMode>, IExtraFunct
 	@Override
 	public boolean doExtraFunction(@NotNull Player player, @NotNull ItemStack stack, InteractionHand hand) {
 		if (player.getAttackStrengthScale(0F) == 1) {
-			ToolHelper.attackAOE(stack, player, getMode(stack) == KatarMode.SLAY_ALL, ProjectEConfig.server.difficulty.katarDeathAura.get(), 0, hand);
+			ToolHelper.attackAOE(stack, player, getMode(stack) == KatarMode.SLAY_ALL, 1000,//ProjectEConfig.server.difficulty.katarDeathAura.get(), 
+					0, hand);
 			PlayerHelper.resetCooldown(player);
 			return true;
 		}

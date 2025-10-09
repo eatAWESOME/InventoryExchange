@@ -60,7 +60,7 @@ public class LifeStone extends PEToggleItem implements IPedestalItem, ICapabilit
 	@Override
 	public <PEDESTAL extends BlockEntity & IDMPedestal> boolean updateInPedestal(@NotNull ItemStack stack, @NotNull Level level, @NotNull BlockPos pos,
 			@NotNull PEDESTAL pedestal) {
-		if (!level.isClientSide && ProjectEConfig.server.cooldown.pedestal.life.get() != -1) {
+		if (!level.isClientSide) {// && ProjectEConfig.server.cooldown.pedestal.life.get() != -1) {
 			if (pedestal.getActivityCooldown() == 0) {
 				for (ServerPlayer player : level.getEntitiesOfClass(ServerPlayer.class, pedestal.getEffectBounds())) {
 					if (player.getHealth() < player.getMaxHealth()) {
@@ -73,7 +73,7 @@ public class LifeStone extends PEToggleItem implements IPedestalItem, ICapabilit
 						player.gameEvent(GameEvent.EAT);
 					}
 				}
-				pedestal.setActivityCooldown(level, pos, ProjectEConfig.server.cooldown.pedestal.life.get());
+				//pedestal.setActivityCooldown(level, pos, ProjectEConfig.server.cooldown.pedestal.life.get());
 			} else {
 				pedestal.decrementActivityCooldown(level, pos);
 			}
@@ -85,10 +85,12 @@ public class LifeStone extends PEToggleItem implements IPedestalItem, ICapabilit
 	@Override
 	public List<Component> getPedestalDescription(float tickRate) {
 		List<Component> list = new ArrayList<>();
+		/*
 		if (ProjectEConfig.server.cooldown.pedestal.life.get() != -1) {
 			list.add(PELang.PEDESTAL_LIFE_STONE_1.translateColored(ChatFormatting.BLUE));
 			list.add(PELang.PEDESTAL_LIFE_STONE_2.translateColored(ChatFormatting.BLUE, MathUtils.tickToSecFormatted(ProjectEConfig.server.cooldown.pedestal.life.get(), tickRate)));
 		}
+		*/
 		return list;
 	}
 

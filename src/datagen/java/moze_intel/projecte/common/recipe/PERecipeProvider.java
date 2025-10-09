@@ -59,6 +59,7 @@ public class PERecipeProvider extends RecipeProvider {
 
 	@Override
 	protected void buildRecipes(@NotNull RecipeOutput recipeOutput) {
+		/*
 		buildRecipesInternal(new RecipeOutput() {
 			@NotNull
 			@Override
@@ -72,6 +73,7 @@ public class PERecipeProvider extends RecipeProvider {
 				existingFileHelper.trackGenerated(recipeId, PackType.SERVER_DATA, ".json", "recipes");
 			}
 		});
+		*/
 	}
 
 	private void buildRecipesInternal(@NotNull RecipeOutput recipeOutput) {

@@ -45,7 +45,7 @@ public class RepairTalisman extends ItemPE implements IAlchBagItem, IAlchChestIt
 	@Override
 	public void inventoryTick(@NotNull ItemStack stack, @NotNull Level level, @NotNull Entity entity, int slot, boolean isHeld) {
 		super.inventoryTick(stack, level, entity, slot, isHeld);
-		if (!level.isClientSide && entity instanceof Player player && PlayerHelper.checkCooldown(player, this, ProjectEConfig.server.cooldown.player.repair)) {
+		if (!level.isClientSide && entity instanceof Player player && PlayerHelper.checkCooldown(player, this, () -> 0)) {
 			repairAllItems(player);
 		}
 	}
@@ -53,10 +53,10 @@ public class RepairTalisman extends ItemPE implements IAlchBagItem, IAlchChestIt
 	@Override
 	public <PEDESTAL extends BlockEntity & IDMPedestal> boolean updateInPedestal(@NotNull ItemStack stack, @NotNull Level level, @NotNull BlockPos pos,
 			@NotNull PEDESTAL pedestal) {
-		if (!level.isClientSide && ProjectEConfig.server.cooldown.pedestal.repair.get() != -1) {
+		if (!level.isClientSide) {// && ProjectEConfig.server.cooldown.pedestal.repair.get() != -1) {
 			if (pedestal.getActivityCooldown() == 0) {
 				level.getEntitiesOfClass(Player.class, pedestal.getEffectBounds()).forEach(RepairTalisman::repairAllItems);
-				pedestal.setActivityCooldown(level, pos, ProjectEConfig.server.cooldown.pedestal.repair.get());
+				//pedestal.setActivityCooldown(level, pos, ProjectEConfig.server.cooldown.pedestal.repair.get());
 			} else {
 				pedestal.decrementActivityCooldown(level, pos);
 			}
@@ -68,10 +68,12 @@ public class RepairTalisman extends ItemPE implements IAlchBagItem, IAlchChestIt
 	@Override
 	public List<Component> getPedestalDescription(float tickRate) {
 		List<Component> list = new ArrayList<>();
+		/*
 		if (ProjectEConfig.server.cooldown.pedestal.repair.get() != -1) {
 			list.add(PELang.PEDESTAL_REPAIR_TALISMAN_1.translateColored(ChatFormatting.BLUE));
 			list.add(PELang.PEDESTAL_REPAIR_TALISMAN_2.translateColored(ChatFormatting.BLUE, MathUtils.tickToSecFormatted(ProjectEConfig.server.cooldown.pedestal.repair.get(), tickRate)));
 		}
+		*/
 		return list;
 	}
 

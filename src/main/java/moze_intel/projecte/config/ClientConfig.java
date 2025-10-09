@@ -13,9 +13,9 @@ public class ClientConfig extends BasePEConfig {
 
 	public final CachedBooleanValue emcToolTips;
 	public final CachedBooleanValue shiftEmcToolTips;
-	public final CachedBooleanValue shiftLearnedToolTips;
-	public final CachedBooleanValue pedestalToolTips;
-	public final CachedBooleanValue statToolTips;
+	//public final CachedBooleanValue shiftLearnedToolTips;
+	//public final CachedBooleanValue pedestalToolTips;
+	//public final CachedBooleanValue statToolTips;
 	public final CachedBooleanValue tagToolTips;
 
 	public final CachedBooleanValue pulsatingOverlay;
@@ -29,11 +29,11 @@ public class ClientConfig extends BasePEConfig {
 		emcToolTips = CachedBooleanValue.wrap(this, PEConfigTranslations.CLIENT_TOOLTIPS_EMC.applyToBuilder(builder).define("emc", true));
 		shiftEmcToolTips = CachedBooleanValue.wrap(this, PEConfigTranslations.CLIENT_TOOLTIPS_EMC_SHIFT.applyToBuilder(builder)
 				.define("shift_emc", false));
-		shiftLearnedToolTips = CachedBooleanValue.wrap(this, PEConfigTranslations.CLIENT_TOOLTIPS_LEARNED_SHIFT.applyToBuilder(builder)
-				.define("shift_learned", true));
-		pedestalToolTips = CachedBooleanValue.wrap(this, PEConfigTranslations.CLIENT_TOOLTIPS_PEDESTAL.applyToBuilder(builder)
-				.define("pedestal", true));
-		statToolTips = CachedBooleanValue.wrap(this, PEConfigTranslations.CLIENT_TOOLTIPS_STATS.applyToBuilder(builder).define("statToolTips", true));
+		//shiftLearnedToolTips = CachedBooleanValue.wrap(this, PEConfigTranslations.CLIENT_TOOLTIPS_LEARNED_SHIFT.applyToBuilder(builder)
+		//		.define("shift_learned", true));
+		//pedestalToolTips = CachedBooleanValue.wrap(this, PEConfigTranslations.CLIENT_TOOLTIPS_PEDESTAL.applyToBuilder(builder)
+		//		.define("pedestal", true));
+		//statToolTips = CachedBooleanValue.wrap(this, PEConfigTranslations.CLIENT_TOOLTIPS_STATS.applyToBuilder(builder).define("statToolTips", true));
 		tagToolTips = CachedBooleanValue.wrap(this, PEConfigTranslations.CLIENT_TOOLTIPS_TAGS.applyToBuilder(builder).define("tag", false));
 		builder.pop();
 

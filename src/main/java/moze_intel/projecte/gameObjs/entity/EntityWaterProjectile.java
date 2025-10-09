@@ -80,7 +80,7 @@ public class EntityWaterProjectile extends NoGravityThrowableProjectile {
 	protected void onHitBlock(@NotNull BlockHitResult result) {
 		super.onHitBlock(result);
 		if (!level().isClientSide && getOwner() instanceof Player player) {
-			WorldHelper.placeFluid(player, level(), result.getBlockPos(), result.getDirection(), Fluids.WATER, !ProjectEConfig.server.items.opEvertide.get());
+			WorldHelper.placeFluid(player, level(), result.getBlockPos(), result.getDirection(), Fluids.WATER, !false);//ProjectEConfig.server.items.opEvertide.get());
 		}
 	}
 

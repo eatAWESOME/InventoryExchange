@@ -15,7 +15,7 @@ public class FullKleinStarsCondition implements ICondition {
 
 	@Override
 	public boolean test(@NotNull IContext context) {
-		return ProjectEConfig.common.fullKleinStars.get();
+		return false;//ProjectEConfig.common.fullKleinStars.get();
 	}
 
 	@NotNull
