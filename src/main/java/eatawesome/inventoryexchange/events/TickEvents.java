@@ -29,37 +29,50 @@ public class TickEvents {
 	public static void playerTick(PlayerTickEvent.Post event) {
 		Player player = event.getEntity();
 		
-		boolean isFlying = player.getAbilities().flying;
-		boolean wasFlying = wasFlyingMap.getOrDefault(player.getUUID(), false);
-
-		InternalAbilities.tick(player);
-		if (isFlying && player instanceof ServerPlayer serverPlayer) {
+		if (player instanceof ServerPlayer serverPlayer) {
+			boolean isFlying = player.getAbilities().flying;
+			boolean wasFlying = wasFlyingMap.getOrDefault(player.getUUID(), false);
+	
+			InternalAbilities.tick(player);
+			
 			IKnowledgeProvider knowledge = player.getCapability(PECapabilities.KNOWLEDGE_CAPABILITY);
 			IAbilityEMCProvider abilityEMC = player.getCapability(InventoryExchangeCapabilities.ABILITY_EMC_CAPABILITY);
-			if (abilityEMC.getEmc().intValue() >= 32) {
-				int emc = abilityEMC.getEmc().intValue() - 32;
-				abilityEMC.setEmc(BigInteger.valueOf(emc));
-				abilityEMC.sync(serverPlayer);
-				PlayerHelper.updateScore(serverPlayer, PlayerHelper.SCOREBOARD_ABILITY_EMC, emc);
-			} else if (knowledge.getEmc().intValue() >= 1) {
-				int emc = abilityEMC.getEmc().intValue() + 100 - 32;
-				abilityEMC.setEmc(BigInteger.valueOf(emc));
-				abilityEMC.sync(serverPlayer);
-				PlayerHelper.updateScore(serverPlayer, PlayerHelper.SCOREBOARD_ABILITY_EMC, emc);
-				int totalEmc = knowledge.getEmc().intValue() - 1;
-				knowledge.setEmc(BigInteger.valueOf(totalEmc));
-				knowledge.syncEmc(serverPlayer);
-				PlayerHelper.updateScore(serverPlayer, PlayerHelper.SCOREBOARD_EMC, totalEmc);
+			
+			if (isFlying) {
+				if (abilityEMC.getEmc().intValue() >= 32) {
+					int emc = abilityEMC.getEmc().intValue() - 32;
+					abilityEMC.setEmc(BigInteger.valueOf(emc));
+					abilityEMC.sync(serverPlayer);
+					PlayerHelper.updateScore(serverPlayer, PlayerHelper.SCOREBOARD_ABILITY_EMC, emc);
+				} else if (knowledge.getEmc().intValue() >= 1) {
+					int emc = abilityEMC.getEmc().intValue() + 100 - 32;
+					abilityEMC.setEmc(BigInteger.valueOf(emc));
+					abilityEMC.sync(serverPlayer);
+					PlayerHelper.updateScore(serverPlayer, PlayerHelper.SCOREBOARD_ABILITY_EMC, emc);
+					int totalEmc = knowledge.getEmc().intValue() - 1;
+					knowledge.setEmc(BigInteger.valueOf(totalEmc));
+					knowledge.syncEmc(serverPlayer);
+					PlayerHelper.updateScore(serverPlayer, PlayerHelper.SCOREBOARD_EMC, totalEmc);
+				}
 			}
-		}
-
-		if (!player.level().isClientSide) {
+			
 			if (isFlying && !wasFlying) {
 				player.level().playSound(null, player.getX(), player.getY(), player.getZ(), PESoundEvents.HEAL.get(), SoundSource.PLAYERS, 0.8F, 1.0F);
 				wasFlyingMap.put(player.getUUID(), isFlying);
 			} else if (wasFlying && !isFlying) {
 				player.level().playSound(null, player.getX(), player.getY(), player.getZ(), PESoundEvents.UNCHARGE.get(), SoundSource.PLAYERS, 0.8F, 1.0F);
 				wasFlyingMap.put(player.getUUID(), isFlying);
+			}
+		
+			if (player.getFoodData().getFoodLevel() <= 16) {
+				if (knowledge.getEmc().intValue() >= 128) {
+					player.getFoodData().eat(4, 2.4F);
+					player.level().playSound(null, player.getX(), player.getY(), player.getZ(), PESoundEvents.CHARGE.get(), SoundSource.PLAYERS, 0.8F, 1.0F);
+					int emc = knowledge.getEmc().intValue() - 128;
+					knowledge.setEmc(BigInteger.valueOf(emc));
+					knowledge.syncEmc(serverPlayer);
+					PlayerHelper.updateScore(serverPlayer, PlayerHelper.SCOREBOARD_EMC, emc);
+				}
 			}
 		}
 	}
