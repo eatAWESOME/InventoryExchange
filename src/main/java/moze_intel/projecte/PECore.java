@@ -162,7 +162,7 @@ public class PECore {
 		PENormalizedSimpleStacks.NSS_SERIALIZERS.register(modEventBus);
 		//PERecipeConditions.CONDITION_CODECS.register(modEventBus);
 		//PERecipeSerializers.RECIPE_SERIALIZERS.register(modEventBus);
-		//PESoundEvents.SOUND_EVENTS.register(modEventBus);
+		PESoundEvents.SOUND_EVENTS.register(modEventBus);
 		NeoForge.EVENT_BUS.addListener(this::addReloadListeners);
 		NeoForge.EVENT_BUS.addListener(this::dataPackSync);
 		NeoForge.EVENT_BUS.addListener(this::registerCommands);

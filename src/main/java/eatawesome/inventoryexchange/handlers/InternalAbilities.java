@@ -2,16 +2,12 @@ package eatawesome.inventoryexchange.handlers;
 
 import com.google.common.base.Predicates;
 
-import java.math.BigInteger;
 import java.util.function.Predicate;
-import moze_intel.projecte.PECore;
 import moze_intel.projecte.api.capabilities.IKnowledgeProvider;
 import moze_intel.projecte.api.capabilities.PECapabilities;
-import moze_intel.projecte.gameObjs.items.ItemPE;
-import moze_intel.projecte.gameObjs.registries.PEItems;
+import eatawesome.inventoryexchange.InventoryExchange;
 import eatawesome.inventoryexchange.capabilities.IAbilityEMCProvider;
 import eatawesome.inventoryexchange.capabilities.InventoryExchangeCapabilities;
-import eatawesome.inventoryexchange.utils.PlayerHelper;
 import net.minecraft.core.Holder;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -23,17 +19,13 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.material.FluidState;
-import net.minecraft.world.scores.Objective;
-import net.minecraft.world.scores.ScoreAccess;
-import net.minecraft.world.scores.ScoreHolder;
-import net.minecraft.world.scores.Scoreboard;
 import net.neoforged.neoforge.common.NeoForgeMod;
 
 public class InternalAbilities {
 
-	private static final AttributeModifier FLIGHT = new AttributeModifier(PECore.rl("flight"), 1, Operation.ADD_VALUE);
-	private static final AttributeModifier WATER_SPEED_BOOST = new AttributeModifier(PECore.rl("water_speed_boost"), 0.15, Operation.ADD_VALUE);
-	private static final AttributeModifier LAVA_SPEED_BOOST = new AttributeModifier(PECore.rl("lava_speed_boost"), 0.15, Operation.ADD_VALUE);
+	private static final AttributeModifier FLIGHT = new AttributeModifier(InventoryExchange.rl("flight"), 1, Operation.ADD_VALUE);
+	private static final AttributeModifier WATER_SPEED_BOOST = new AttributeModifier(InventoryExchange.rl("water_speed_boost"), 0.15, Operation.ADD_VALUE);
+	private static final AttributeModifier LAVA_SPEED_BOOST = new AttributeModifier(InventoryExchange.rl("lava_speed_boost"), 0.15, Operation.ADD_VALUE);
 
 	public static void tick(Player player) {
 		Predicate<Player> applyWaterSpeed = Predicates.alwaysFalse();
