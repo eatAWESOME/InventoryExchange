@@ -192,7 +192,7 @@ public class PECore {
 	}
 
 	private void commonSetup(FMLCommonSetupEvent event) {
-		new ThreadCheckUpdate().start();
+		//new ThreadCheckUpdate().start();
 		EMCMappingHandler.loadMappers();
 
 		/*
