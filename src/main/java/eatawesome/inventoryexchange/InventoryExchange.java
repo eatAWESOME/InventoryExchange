@@ -6,6 +6,7 @@ import com.mojang.logging.LogUtils;
 
 import eatawesome.inventoryexchange.capabilities.InventoryExchangeCapabilities;
 import eatawesome.inventoryexchange.gameObjs.registries.InventoryExchangeAttachmentTypes;
+import eatawesome.inventoryexchange.gameObjs.registries.InventoryExchangeContainerTypes;
 import eatawesome.inventoryexchange.impl.capability.AbilityEMCImpl;
 import eatawesome.inventoryexchange.network.PacketHandler;
 import moze_intel.projecte.config.ProjectEConfig;
@@ -80,6 +81,7 @@ public class InventoryExchange {
 		modEventBus.addListener(this::registerCapabilities);
 
 		InventoryExchangeAttachmentTypes.ATTACHMENT_TYPES.register(modEventBus);
+		InventoryExchangeContainerTypes.CONTAINER_TYPES.register(modEventBus);
         BLOCKS.register(modEventBus);
         ITEMS.register(modEventBus);
         CREATIVE_MODE_TABS.register(modEventBus);

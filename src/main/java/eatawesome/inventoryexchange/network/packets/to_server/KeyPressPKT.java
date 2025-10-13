@@ -2,7 +2,9 @@ package eatawesome.inventoryexchange.network.packets.to_server;
 
 import io.netty.buffer.ByteBuf;
 import eatawesome.inventoryexchange.InventoryExchange;
+import eatawesome.inventoryexchange.gameObjs.container.InfiniteContainer;
 import eatawesome.inventoryexchange.network.packets.IInventoryExchangePacket;
+import eatawesome.inventoryexchange.utils.InfiniteContainerHelper;
 import eatawesome.inventoryexchange.utils.InventoryExchangeKeybind;
 import moze_intel.projecte.gameObjs.container.TransmutationContainer;
 import net.minecraft.network.chat.Component;
@@ -12,6 +14,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.MenuProvider;
+import net.minecraft.world.SimpleContainer;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import org.jetbrains.annotations.NotNull;
 
@@ -45,6 +48,22 @@ public record KeyPressPKT(InventoryExchangeKeybind key) implements IInventoryExc
 						return Component.literal("Transmutation");
 					}
 				}, buf -> buf.writeBoolean(false)); // note: false = no hand context
+			}
+		    return;
+		} else if (key == InventoryExchangeKeybind.INFINITE_CONTAINER) {
+			if (!player.level().isClientSide) {
+				player.openMenu(new MenuProvider() {
+                    @Override
+                    public AbstractContainerMenu createMenu(int windowId, Inventory inv, Player player) {
+                        SimpleContainer infiniteInventory = InfiniteContainerHelper.getInventory(player);
+                        return new InfiniteContainer(windowId, inv, infiniteInventory);
+                    }
+
+                    @Override
+                    public Component getDisplayName() {
+                        return Component.translatable("container.inventoryexchange.infinite");
+                    }
+                }, buf -> {});
 			}
 		    return;
 		}

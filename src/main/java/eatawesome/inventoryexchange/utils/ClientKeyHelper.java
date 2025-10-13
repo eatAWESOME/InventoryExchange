@@ -20,6 +20,7 @@ public class ClientKeyHelper {
 	public static void registerKeyBindings(RegisterKeyMappingsEvent event) {
 		ImmutableBiMap.Builder<InventoryExchangeKeybind, KeyMapping> builder = ImmutableBiMap.builder();
 		addKeyBinding(event, builder, InventoryExchangeKeybind.TRANSMUTATION, KeyModifier.NONE, GLFW.GLFW_KEY_U);
+		addKeyBinding(event, builder, InventoryExchangeKeybind.INFINITE_CONTAINER, KeyModifier.NONE, GLFW.GLFW_KEY_KP_4);
 		toMC = builder.build();
 	}
 
@@ -32,7 +33,6 @@ public class ClientKeyHelper {
 	public static Component getKeyName(InventoryExchangeKeybind k) {
 		KeyMapping keyMapping = toMC.get(k);
 		if (keyMapping == null) {
-			//Fallback to the translation key of the key's function
 			return TextComponentUtil.build(k);
 		}
 		return keyMapping.getTranslatedKeyMessage();

@@ -11,6 +11,7 @@
   "inventoryexchange.configuration.magicNumberIntroduction": "Magic Number Text",
   "inventoryexchange.configuration.magicNumber": "Magic Number",
 
+  "key.inventoryexchange.infinite_container": "Infinite Inventory",
   "key.inventoryexchange.transmutation": "Transmutation",
   "misc.inventoryexchange.mod_name": "InventoryExchange"
 }

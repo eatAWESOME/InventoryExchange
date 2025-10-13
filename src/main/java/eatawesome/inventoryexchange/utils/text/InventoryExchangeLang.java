@@ -7,6 +7,7 @@ import net.minecraft.Util;
 public enum InventoryExchangeLang implements ILangEntry {
 	// Keys
 	TRANSMUTATION("key", "transmutation"),
+	INFINITE_CONTAINER("key", "infinite_container"),
 	
 	// Misc
 	INVENTORYEXCHANGE("misc", "mod_name");

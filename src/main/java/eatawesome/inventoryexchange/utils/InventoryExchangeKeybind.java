@@ -12,7 +12,8 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.util.ByIdMap;
 
 public enum InventoryExchangeKeybind implements IHasEnumNameTranslationKey {
-	TRANSMUTATION;
+	TRANSMUTATION,
+	INFINITE_CONTAINER;
 
 	public static final IntFunction<InventoryExchangeKeybind> BY_ID = ByIdMap.continuous(InventoryExchangeKeybind::ordinal, values(), ByIdMap.OutOfBoundsStrategy.WRAP);
 	public static final StreamCodec<ByteBuf, InventoryExchangeKeybind> STREAM_CODEC = ByteBufCodecs.idMapper(BY_ID, InventoryExchangeKeybind::ordinal);
