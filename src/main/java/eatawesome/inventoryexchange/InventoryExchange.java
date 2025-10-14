@@ -19,6 +19,7 @@ import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
+import net.neoforged.neoforge.common.NeoForge;
 
 @Mod(InventoryExchange.MODID)
 public class InventoryExchange {
@@ -66,6 +67,7 @@ public class InventoryExchange {
 
 	private void commonSetup(FMLCommonSetupEvent event) {
         InventoryExchangeConfig.load();
-        debugLog("Infinite container max rows (config) = {}", InventoryExchangeConfig.getMaxInfiniteContainerRows());
+        debugLog("Debug logging enabled = {}", InventoryExchangeConfig.isDebugLoggingEnabled());
+        debugLog("Infinite container max rows = {}", InventoryExchangeConfig.getMaxInfiniteContainerRows());
     }
 }

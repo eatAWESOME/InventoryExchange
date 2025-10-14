@@ -1,4 +1,8 @@
 {
+  "config.inventoryexchange.infinite_container_max_rows": "Infinite Container Max Rows",
+  "config.inventoryexchange.infinite_container_max_rows.desc": "Maximum number of rows for the infinite container. Minimum 10.",
+  "config.inventoryexchange.enable_debug_logs": "Enable Debug Logs",
+  "config.inventoryexchange.enable_debug_logs.desc": "If true, enables debug logs.",
   "container.inventoryexchange.infinite_container": "Infinite Inventory",
   "container.inventoryexchange.transmutation": "Transmutation",
   "key.inventoryexchange.crafting": "Open Crafting",
