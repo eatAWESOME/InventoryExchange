@@ -8,12 +8,6 @@ import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.IItemHandlerModifiable;
 
-/**
- * Slot that proxies a dynamic handler index computed from the menu's rowOffset.
- * On the client, avoid writing to the handler during network slot updates to prevent
- * "invisible before replaced" flicker. We keep a clientStack cache for display.
- * On the server, we forward reads/writes to the handler.
- */
 public class ScrollingSlotItemHandler extends Slot {
 
     private final InfiniteContainer menu;
@@ -43,9 +37,9 @@ public class ScrollingSlotItemHandler extends Slot {
 
     private static ItemStack copyWithCount(ItemStack stack, int count) {
         if (stack.isEmpty()) return ItemStack.EMPTY;
-        ItemStack copy = stack.copy();
-        copy.setCount(count);
-        return copy;
+        ItemStack c = stack.copy();
+        c.setCount(count);
+        return c;
     }
 
     @Override
@@ -108,17 +102,17 @@ public class ScrollingSlotItemHandler extends Slot {
         }
         int idx = realIndex();
         if (!inBounds(idx) || amount <= 0) return ItemStack.EMPTY;
-        ItemStack current = handler.getStackInSlot(idx);
-        if (current.isEmpty()) return ItemStack.EMPTY;
-        int toRemove = Math.min(amount, current.getCount());
-        ItemStack extracted = copyWithCount(current, toRemove);
+        ItemStack cur = handler.getStackInSlot(idx);
+        if (cur.isEmpty()) return ItemStack.EMPTY;
+        int toRemove = Math.min(amount, cur.getCount());
+        ItemStack res = copyWithCount(cur, toRemove);
         if (handler instanceof IItemHandlerModifiable mod) {
-            ItemStack newStack = current.copy();
+            ItemStack newStack = cur.copy();
             newStack.shrink(toRemove);
             mod.setStackInSlot(idx, newStack);
             setChanged();
         }
-        return extracted;
+        return res;
     }
 
     @Override
@@ -131,10 +125,6 @@ public class ScrollingSlotItemHandler extends Slot {
         this.container.setChanged();
     }
 
-    /**
-     * Minimal container used only to carry a client-side stack cache for rendering.
-     * On the server, all reads/writes go to the handler directly; we don't use this container's storage.
-     */
     private static class OneSlotContainer implements Container {
         private ItemStack clientStack = ItemStack.EMPTY;
 
@@ -152,9 +142,9 @@ public class ScrollingSlotItemHandler extends Slot {
             return res;
         }
         @Override public ItemStack removeItemNoUpdate(int slot) {
-            ItemStack cur = clientStack;
+            ItemStack prev = clientStack;
             clientStack = ItemStack.EMPTY;
-            return cur;
+            return prev;
         }
         @Override public void setItem(int slot, ItemStack stack) { clientStack = stack; }
         @Override public void setChanged() {}

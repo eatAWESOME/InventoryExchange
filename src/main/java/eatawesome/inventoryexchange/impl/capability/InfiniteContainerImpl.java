@@ -41,18 +41,18 @@ public class InfiniteContainerImpl implements IInfiniteContainerProvider {
         return this.player.getData(InventoryExchangeAttachmentTypes.INFINITE_CONTAINER);
     }
 
-    public static final int SIZE = 15 * 13;
+    public static final int SIZE = 500 * 13;
 
     public static final Codec<InfiniteContainerAttachment> CODEC =
-            InventoryExchangeCodecHelper.MUTABLE_HANDLER_CODEC.xmap(
-                    InfiniteContainerAttachment::new,
-                    attachment -> attachment.inventory
-            );
+        InventoryExchangeCodecHelper.MUTABLE_HANDLER_CODEC.xmap(
+            InfiniteContainerAttachment::new,
+            attachment -> attachment.inventory
+        );
 
     public static final StreamCodec<RegistryFriendlyByteBuf, ItemStackHandler> HANDLER_STREAM_CODEC =
-            eatawesome.inventoryexchange.network.InventoryExchangeStreamCodecs.handlerStreamCodec(SIZE);
+        eatawesome.inventoryexchange.network.InventoryExchangeStreamCodecs.handlerStreamCodec(SIZE);
     public static final StreamCodec<RegistryFriendlyByteBuf, InfiniteContainerAttachment> STREAM_CODEC =
-            HANDLER_STREAM_CODEC.map(InfiniteContainerAttachment::new, attachment -> attachment.inventory);
+        HANDLER_STREAM_CODEC.map(InfiniteContainerAttachment::new, attachment -> attachment.inventory);
 
     @NotNull
     @Override

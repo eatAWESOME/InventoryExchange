@@ -11,25 +11,27 @@ import net.neoforged.neoforge.items.IItemHandlerModifiable;
 import net.neoforged.neoforge.items.ItemStackHandler;
 
 public class InfiniteContainer extends AbstractContainerMenu {
-    // Grid dimensions
-    public static final int COLS = 13;
-    public static final int TOTAL_ROWS = 15;
-    public static final int VISIBLE_ROWS = 8;
-    public static final int SLOT_COUNT = COLS * TOTAL_ROWS;
 
-    // Chest grid origin (relative to GUI area)
+    public static final int COLS = 13;
+    public static final int MAX_ROWS = 500;
+    public static final int VISIBLE_ROWS = 8;
+    public static final int SLOT_COUNT = COLS * MAX_ROWS;
+
+    // Layout
     public static final int CHEST_START_X = 12;
     public static final int CHEST_START_Y = 5;
     public static final int SLOT_SPACING = 18;
 
-    // Player inventory origin
     public static final int PLAYER_INV_START_X = 48;
     public static final int PLAYER_INV_START_Y = 152;
 
     private final IItemHandlerModifiable handler;
+    private final boolean serverSide;
 
-    // Current scroll offset in rows
+    // Scroll state
     private int rowOffset = 0;
+
+    private int clientPotentialRows = 10;
 
     public InfiniteContainer(int id, Inventory playerInventory) {
         this(id, playerInventory, new ItemStackHandler(SLOT_COUNT));
@@ -38,8 +40,9 @@ public class InfiniteContainer extends AbstractContainerMenu {
     public InfiniteContainer(int id, Inventory playerInventory, IItemHandlerModifiable handler) {
         super(InventoryExchangeContainerTypes.INFINITE_CONTAINER.get(), id);
         this.handler = handler;
+        this.serverSide = !playerInventory.player.level().isClientSide;
 
-        // Sync rowOffset (server -> client) using a DataSlot
+        // DataSlot 1: row offset
         this.addDataSlot(new DataSlot() {
             @Override
             public int get() {
@@ -52,9 +55,24 @@ public class InfiniteContainer extends AbstractContainerMenu {
             }
         });
 
+        // DataSlot 2: potential rows (server calculates; client stores)
+        this.addDataSlot(new DataSlot() {
+            @Override
+            public int get() {
+                return serverSide ? computePotentialRowsServer() : clientPotentialRows;
+            }
+
+            @Override
+            public void set(int value) {
+                // Client side: update cached potential rows & keep scroll in range
+                clientPotentialRows = Math.max(10, Math.min(MAX_ROWS, value));
+                rowOffset = clampRowOffset(rowOffset);
+            }
+        });
+
         final boolean clientSide = playerInventory.player.level().isClientSide;
 
-        // Add only the visible window of chest slots
+        // Visible window slots
         for (int visibleRow = 0; visibleRow < VISIBLE_ROWS; visibleRow++) {
             for (int col = 0; col < COLS; col++) {
                 int x = CHEST_START_X + col * SLOT_SPACING;
@@ -85,25 +103,45 @@ public class InfiniteContainer extends AbstractContainerMenu {
         }
     }
 
+    private int computePotentialRowsServer() {
+        // Scan from end for highest non-empty slot
+        int highest = -1;
+        int totalSlots = handler.getSlots();
+        for (int i = totalSlots - 1; i >= 0; i--) {
+            if (!handler.getStackInSlot(i).isEmpty()) {
+                highest = i;
+                break;
+            }
+        }
+        int highestRow = highest < 0 ? -1 : highest / COLS;
+        int proposed = highestRow + 1 + 2; // rows in use + 2 extra
+        if (proposed < 10) proposed = 10;
+        if (proposed > MAX_ROWS) proposed = MAX_ROWS;
+        return proposed;
+    }
+
+    private int effectivePotentialRows() {
+        return serverSide ? computePotentialRowsServer() : clientPotentialRows;
+    }
+
+    public int getClientPotentialRows() {
+        return clientPotentialRows;
+    }
+
     public int getMaxRowOffset() {
-        return Math.max(0, TOTAL_ROWS - VISIBLE_ROWS);
+        return Math.max(0, effectivePotentialRows() - VISIBLE_ROWS);
     }
 
     public int clampRowOffset(int value) {
         if (value < 0) return 0;
         int max = getMaxRowOffset();
-        if (value > max) return max;
-        return value;
+        return value > max ? max : value;
     }
 
     public int getRowOffset() {
         return rowOffset;
     }
 
-    /**
-     * Updates the current row offset on this side (client or server).
-     * Call broadcastChanges() from the server after modifying, so clients receive slot contents updates.
-     */
     public void setRowOffset(int value) {
         this.rowOffset = clampRowOffset(value);
     }
@@ -113,11 +151,6 @@ public class InfiniteContainer extends AbstractContainerMenu {
         return true;
     }
 
-    /**
-     * Shift-click behavior:
-     * - From chest (visible window) -> to player inventory and hotbar
-     * - From player inventory/hotbar -> insert across the entire handler (all 195 slots), not only visible ones
-     */
     @Override
     public ItemStack quickMoveStack(Player player, int index) {
         final int chestVisibleSlots = VISIBLE_ROWS * COLS;
@@ -139,14 +172,12 @@ public class InfiniteContainer extends AbstractContainerMenu {
         ItemStack original = stackInSlot.copy();
 
         if (index < chestVisibleSlots) {
-            // From chest visible window -> player inventory first, then hotbar
             if (!this.moveItemStackTo(stackInSlot, playerInvStart, playerInvEnd, false)) {
                 if (!this.moveItemStackTo(stackInSlot, hotbarStart, hotbarEnd, false)) {
                     return ItemStack.EMPTY;
                 }
             }
         } else {
-            // From player -> insert into entire backing handler
             if (!insertIntoHandler(handler, stackInSlot)) {
                 return ItemStack.EMPTY;
             }
@@ -161,17 +192,12 @@ public class InfiniteContainer extends AbstractContainerMenu {
         return original;
     }
 
-    /**
-     * Insert stack into the entire handler range:
-     * - Merge pass over matching stacks (respect slot limits)
-     * - Fill pass over empty slots (respect isItemValid and limits)
-     */
     private static boolean insertIntoHandler(IItemHandlerModifiable handler, ItemStack stack) {
         if (stack.isEmpty()) return false;
         boolean changed = false;
         int slots = handler.getSlots();
 
-        // Merge into existing stacks
+        // Merge pass
         for (int i = 0; i < slots && !stack.isEmpty(); i++) {
             ItemStack cur = handler.getStackInSlot(i);
             if (cur.isEmpty()) continue;
@@ -180,29 +206,29 @@ public class InfiniteContainer extends AbstractContainerMenu {
             int limit = Math.min(cur.getMaxStackSize(), handler.getSlotLimit(i));
             if (cur.getCount() >= limit) continue;
 
-            int canAdd = Math.min(limit - cur.getCount(), stack.getCount());
-            if (canAdd <= 0) continue;
+            int add = Math.min(limit - cur.getCount(), stack.getCount());
+            if (add <= 0) continue;
 
-            ItemStack newStack = cur.copy();
-            newStack.grow(canAdd);
-            handler.setStackInSlot(i, newStack);
-            stack.shrink(canAdd);
+            ItemStack merged = cur.copy();
+            merged.grow(add);
+            handler.setStackInSlot(i, merged);
+            stack.shrink(add);
             changed = true;
         }
 
-        // Fill empty slots
+        // Fill pass
         for (int i = 0; i < slots && !stack.isEmpty(); i++) {
             ItemStack cur = handler.getStackInSlot(i);
             if (!cur.isEmpty()) continue;
             if (!handler.isItemValid(i, stack)) continue;
 
-            int toMove = Math.min(stack.getCount(), Math.min(stack.getMaxStackSize(), handler.getSlotLimit(i)));
-            if (toMove <= 0) continue;
+            int placeCount = Math.min(stack.getCount(), Math.min(stack.getMaxStackSize(), handler.getSlotLimit(i)));
+            if (placeCount <= 0) continue;
 
             ItemStack place = stack.copy();
-            place.setCount(toMove);
+            place.setCount(placeCount);
             handler.setStackInSlot(i, place);
-            stack.shrink(toMove);
+            stack.shrink(placeCount);
             changed = true;
         }
         return changed;
