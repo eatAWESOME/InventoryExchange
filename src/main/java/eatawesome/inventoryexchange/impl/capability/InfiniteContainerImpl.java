@@ -2,6 +2,7 @@ package eatawesome.inventoryexchange.impl.capability;
 
 import com.mojang.serialization.Codec;
 import eatawesome.inventoryexchange.capabilities.IInfiniteContainerProvider;
+import eatawesome.inventoryexchange.config.InventoryExchangeConfig;
 import eatawesome.inventoryexchange.gameObjs.registries.InventoryExchangeAttachmentTypes;
 import eatawesome.inventoryexchange.impl.codec.InventoryExchangeCodecHelper;
 import eatawesome.inventoryexchange.network.packets.to_client.infinite_container.InfiniteContainerSyncPKT;
@@ -41,18 +42,23 @@ public class InfiniteContainerImpl implements IInfiniteContainerProvider {
         return this.player.getData(InventoryExchangeAttachmentTypes.INFINITE_CONTAINER);
     }
 
-    public static final int SIZE = 500 * 13;
+    private static int currentSize() {
+        return InventoryExchangeConfig.getMaxInfiniteContainerRows() * 13;
+    }
 
     public static final Codec<InfiniteContainerAttachment> CODEC =
         InventoryExchangeCodecHelper.MUTABLE_HANDLER_CODEC.xmap(
             InfiniteContainerAttachment::new,
-            attachment -> attachment.inventory
+            att -> att.inventory
         );
 
-    public static final StreamCodec<RegistryFriendlyByteBuf, ItemStackHandler> HANDLER_STREAM_CODEC =
-        eatawesome.inventoryexchange.network.InventoryExchangeStreamCodecs.handlerStreamCodec(SIZE);
-    public static final StreamCodec<RegistryFriendlyByteBuf, InfiniteContainerAttachment> STREAM_CODEC =
-        HANDLER_STREAM_CODEC.map(InfiniteContainerAttachment::new, attachment -> attachment.inventory);
+    public static StreamCodec<RegistryFriendlyByteBuf, ItemStackHandler> handlerStreamCodec() {
+        return eatawesome.inventoryexchange.network.InventoryExchangeStreamCodecs.handlerStreamCodec(currentSize());
+    }
+
+    public static StreamCodec<RegistryFriendlyByteBuf, InfiniteContainerAttachment> streamCodec() {
+        return handlerStreamCodec().map(InfiniteContainerAttachment::new, att -> att.inventory);
+    }
 
     @NotNull
     @Override
@@ -69,15 +75,16 @@ public class InfiniteContainerImpl implements IInfiniteContainerProvider {
         public final ItemStackHandler inventory;
 
         public InfiniteContainerAttachment() {
-            this.inventory = new ItemStackHandler(SIZE);
+            this.inventory = new ItemStackHandler(currentSize());
         }
 
         public InfiniteContainerAttachment(ItemStackHandler handler) {
-            if (handler == null || handler.getSlots() == SIZE) {
-                this.inventory = handler == null ? new ItemStackHandler(SIZE) : handler;
+            int expected = currentSize();
+            if (handler == null || handler.getSlots() == expected) {
+                this.inventory = handler == null ? new ItemStackHandler(expected) : handler;
             } else {
-                ItemStackHandler resized = new ItemStackHandler(SIZE);
-                int copy = Math.min(handler.getSlots(), SIZE);
+                ItemStackHandler resized = new ItemStackHandler(expected);
+                int copy = Math.min(handler.getSlots(), expected);
                 for (int i = 0; i < copy; i++) {
                     resized.setStackInSlot(i, handler.getStackInSlot(i).copy());
                 }
@@ -87,7 +94,8 @@ public class InfiniteContainerImpl implements IInfiniteContainerProvider {
 
         @Nullable
         public InfiniteContainerAttachment copy(IAttachmentHolder holder, HolderLookup.Provider registries) {
-            ItemStackHandler copyHandler = InventoryExchangeAttachmentTypes.copyHandler(this.inventory, ItemStackHandler::new);
+            ItemStackHandler copyHandler =
+                InventoryExchangeAttachmentTypes.copyHandler(this.inventory, ItemStackHandler::new);
             return new InfiniteContainerAttachment(copyHandler);
         }
     }

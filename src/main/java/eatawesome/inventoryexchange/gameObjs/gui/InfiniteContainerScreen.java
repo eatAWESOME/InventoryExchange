@@ -12,6 +12,9 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.neoforged.neoforge.network.PacketDistributor;
 
+/**
+ * GUI for InfiniteContainer. Scrollbar handle scales with currently “potential” rows.
+ */
 public class InfiniteContainerScreen extends AbstractContainerScreen<InfiniteContainer> {
 
     private static final ResourceLocation TEXTURE =
@@ -19,6 +22,7 @@ public class InfiniteContainerScreen extends AbstractContainerScreen<InfiniteCon
 
     private int localRowOffset;
 
+    // Scrollbar specifications
     private static final int SCROLLBAR_WIDTH = 6;
     private static final int SCROLLBAR_RIGHT_MARGIN = 4;
 
@@ -28,8 +32,9 @@ public class InfiniteContainerScreen extends AbstractContainerScreen<InfiniteCon
 
     public InfiniteContainerScreen(InfiniteContainer menu, Inventory playerInv, Component title) {
         super(menu, playerInv, title);
-        this.imageWidth = Math.max(256, InfiniteContainer.CHEST_START_X + InfiniteContainer.COLS * InfiniteContainer.SLOT_SPACING + 8);
-        this.imageHeight = 256;
+        this.imageWidth = Math.max(256,
+            InfiniteContainer.CHEST_START_X + InfiniteContainer.COLS * InfiniteContainer.SLOT_SPACING + 8);
+        this.imageHeight = 256; // adjust if your texture differs
         this.localRowOffset = menu.getRowOffset();
     }
 
@@ -38,12 +43,17 @@ public class InfiniteContainerScreen extends AbstractContainerScreen<InfiniteCon
         super.init();
         this.scrollbarX = this.imageWidth - SCROLLBAR_RIGHT_MARGIN - SCROLLBAR_WIDTH;
         this.scrollbarTopY = InfiniteContainer.CHEST_START_Y;
-        this.scrollbarBottomY = InfiniteContainer.CHEST_START_Y + (InfiniteContainer.VISIBLE_ROWS * InfiniteContainer.SLOT_SPACING) - 2;
+        this.scrollbarBottomY = InfiniteContainer.CHEST_START_Y +
+            (InfiniteContainer.VISIBLE_ROWS * InfiniteContainer.SLOT_SPACING) - 2;
         clampLocalOffset();
     }
 
     private int potentialRows() {
-        return Math.max(10, Math.min(InfiniteContainer.MAX_ROWS, this.menu.getClientPotentialRows()));
+        int rows = menu.getClientPotentialRows();
+        if (rows < 10) rows = 10;
+        int configured = InfiniteContainer.configMaxRows();
+        if (rows > configured) rows = configured;
+        return rows;
     }
 
     private int maxOffset() {
@@ -83,9 +93,11 @@ public class InfiniteContainerScreen extends AbstractContainerScreen<InfiniteCon
     public boolean mouseScrolled(double mouseX, double mouseY, double deltaX, double deltaY) {
         boolean overGrid =
             mouseX >= this.leftPos + InfiniteContainer.CHEST_START_X &&
-            mouseX < this.leftPos + InfiniteContainer.CHEST_START_X + InfiniteContainer.COLS * InfiniteContainer.SLOT_SPACING &&
+            mouseX < this.leftPos + InfiniteContainer.CHEST_START_X +
+                InfiniteContainer.COLS * InfiniteContainer.SLOT_SPACING &&
             mouseY >= this.topPos + InfiniteContainer.CHEST_START_Y &&
-            mouseY < this.topPos + InfiniteContainer.CHEST_START_Y + InfiniteContainer.VISIBLE_ROWS * InfiniteContainer.SLOT_SPACING;
+            mouseY < this.topPos + InfiniteContainer.CHEST_START_Y +
+                InfiniteContainer.VISIBLE_ROWS * InfiniteContainer.SLOT_SPACING;
 
         if (overScrollbar(mouseX, mouseY) || overGrid) {
             int step = deltaY > 0 ? -1 : 1;
@@ -115,11 +127,12 @@ public class InfiniteContainerScreen extends AbstractContainerScreen<InfiniteCon
         // Scrollbar
         int trackX = this.leftPos + scrollbarX;
         int trackY = this.topPos + scrollbarTopY;
-        int trackH = (scrollbarBottomY - scrollbarTopY);
+        int trackH = scrollbarBottomY - scrollbarTopY;
 
         int rows = potentialRows();
-        // Scale handle height
-        int handleH = Math.max(10, Math.min(trackH, Math.round(trackH * (InfiniteContainer.VISIBLE_ROWS / (float) rows))));
+        // Scale handle: proportion = visibleRows / potentialRows
+        int handleH = Math.max(10,
+            Math.min(trackH, Math.round(trackH * (InfiniteContainer.VISIBLE_ROWS / (float) rows))));
         int handleY = trackY + Math.round((trackH - handleH) * scrollFraction());
 
         // Track
@@ -130,6 +143,7 @@ public class InfiniteContainerScreen extends AbstractContainerScreen<InfiniteCon
 
     @Override
     protected void renderLabels(GuiGraphics gui, int mouseX, int mouseY) {
+        // Suppressed
     }
 
     @Override

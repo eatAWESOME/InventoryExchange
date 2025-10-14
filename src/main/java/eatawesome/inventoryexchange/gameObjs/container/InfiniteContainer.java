@@ -1,5 +1,6 @@
 package eatawesome.inventoryexchange.gameObjs.container;
 
+import eatawesome.inventoryexchange.config.InventoryExchangeConfig;
 import eatawesome.inventoryexchange.gameObjs.registries.InventoryExchangeContainerTypes;
 import eatawesome.inventoryexchange.handlers.ScrollingSlotItemHandler;
 import net.minecraft.world.entity.player.Inventory;
@@ -13,9 +14,7 @@ import net.neoforged.neoforge.items.ItemStackHandler;
 public class InfiniteContainer extends AbstractContainerMenu {
 
     public static final int COLS = 13;
-    public static final int MAX_ROWS = 500;
     public static final int VISIBLE_ROWS = 8;
-    public static final int SLOT_COUNT = COLS * MAX_ROWS;
 
     // Layout
     public static final int CHEST_START_X = 12;
@@ -28,13 +27,11 @@ public class InfiniteContainer extends AbstractContainerMenu {
     private final IItemHandlerModifiable handler;
     private final boolean serverSide;
 
-    // Scroll state
     private int rowOffset = 0;
-
     private int clientPotentialRows = 10;
 
     public InfiniteContainer(int id, Inventory playerInventory) {
-        this(id, playerInventory, new ItemStackHandler(SLOT_COUNT));
+        this(id, playerInventory, new ItemStackHandler(totalSlotCount()));
     }
 
     public InfiniteContainer(int id, Inventory playerInventory, IItemHandlerModifiable handler) {
@@ -42,36 +39,32 @@ public class InfiniteContainer extends AbstractContainerMenu {
         this.handler = handler;
         this.serverSide = !playerInventory.player.level().isClientSide;
 
-        // DataSlot 1: row offset
+        // row offset sync
         this.addDataSlot(new DataSlot() {
             @Override
             public int get() {
                 return rowOffset;
             }
-
             @Override
             public void set(int value) {
                 rowOffset = clampRowOffset(value);
             }
         });
 
-        // DataSlot 2: potential rows (server calculates; client stores)
+        // potential rows sync
         this.addDataSlot(new DataSlot() {
             @Override
             public int get() {
                 return serverSide ? computePotentialRowsServer() : clientPotentialRows;
             }
-
             @Override
             public void set(int value) {
-                // Client side: update cached potential rows & keep scroll in range
-                clientPotentialRows = Math.max(10, Math.min(MAX_ROWS, value));
+                clientPotentialRows = Math.max(10, Math.min(configMaxRows(), value));
                 rowOffset = clampRowOffset(rowOffset);
             }
         });
 
-        final boolean clientSide = playerInventory.player.level().isClientSide;
-
+        boolean clientSide = playerInventory.player.level().isClientSide;
         // Visible window slots
         for (int visibleRow = 0; visibleRow < VISIBLE_ROWS; visibleRow++) {
             for (int col = 0; col < COLS; col++) {
@@ -103,20 +96,28 @@ public class InfiniteContainer extends AbstractContainerMenu {
         }
     }
 
+    public static int configMaxRows() {
+        return InventoryExchangeConfig.getMaxInfiniteContainerRows();
+    }
+
+    public static int totalSlotCount() {
+        return configMaxRows() * COLS;
+    }
+
     private int computePotentialRowsServer() {
-        // Scan from end for highest non-empty slot
         int highest = -1;
-        int totalSlots = handler.getSlots();
-        for (int i = totalSlots - 1; i >= 0; i--) {
+        int slots = handler.getSlots();
+        for (int i = slots - 1; i >= 0; i--) {
             if (!handler.getStackInSlot(i).isEmpty()) {
                 highest = i;
                 break;
             }
         }
         int highestRow = highest < 0 ? -1 : highest / COLS;
-        int proposed = highestRow + 1 + 2; // rows in use + 2 extra
+        int proposed = highestRow + 1 + 2; // used rows + 2
         if (proposed < 10) proposed = 10;
-        if (proposed > MAX_ROWS) proposed = MAX_ROWS;
+        int max = configMaxRows();
+        if (proposed > max) proposed = max;
         return proposed;
     }
 
@@ -160,13 +161,9 @@ public class InfiniteContainer extends AbstractContainerMenu {
         final int hotbarEnd = hotbarStart + 9;
 
         ItemStack empty = ItemStack.EMPTY;
-        if (index < 0 || index >= this.slots.size()) {
-            return empty;
-        }
+        if (index < 0 || index >= this.slots.size()) return empty;
         net.minecraft.world.inventory.Slot slot = this.slots.get(index);
-        if (!slot.hasItem()) {
-            return empty;
-        }
+        if (!slot.hasItem()) return empty;
 
         ItemStack stackInSlot = slot.getItem();
         ItemStack original = stackInSlot.copy();
@@ -197,7 +194,7 @@ public class InfiniteContainer extends AbstractContainerMenu {
         boolean changed = false;
         int slots = handler.getSlots();
 
-        // Merge pass
+        // Merge
         for (int i = 0; i < slots && !stack.isEmpty(); i++) {
             ItemStack cur = handler.getStackInSlot(i);
             if (cur.isEmpty()) continue;
@@ -216,7 +213,7 @@ public class InfiniteContainer extends AbstractContainerMenu {
             changed = true;
         }
 
-        // Fill pass
+        // Fill
         for (int i = 0; i < slots && !stack.isEmpty(); i++) {
             ItemStack cur = handler.getStackInSlot(i);
             if (!cur.isEmpty()) continue;
