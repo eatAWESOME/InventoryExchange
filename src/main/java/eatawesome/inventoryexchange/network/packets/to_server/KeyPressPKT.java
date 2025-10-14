@@ -3,6 +3,7 @@ package eatawesome.inventoryexchange.network.packets.to_server;
 import io.netty.buffer.ByteBuf;
 import eatawesome.inventoryexchange.InventoryExchange;
 import eatawesome.inventoryexchange.gameObjs.container.InfiniteContainer;
+import eatawesome.inventoryexchange.gameObjs.container.PortableCraftingMenu;
 import eatawesome.inventoryexchange.network.packets.IInventoryExchangePacket;
 import eatawesome.inventoryexchange.utils.InfiniteContainerHelper;
 import eatawesome.inventoryexchange.utils.InventoryExchangeKeybind;
@@ -36,22 +37,7 @@ public record KeyPressPKT(InventoryExchangeKeybind key) implements IInventoryExc
 		if (player.isSpectator()) {
 			return;
 		}
-		if (key == InventoryExchangeKeybind.TRANSMUTATION) {
-			if (!player.level().isClientSide) {
-				player.openMenu(new MenuProvider() {
-					@Override
-					public AbstractContainerMenu createMenu(int windowId, Inventory inv, Player player) {
-						return new TransmutationContainer(windowId, inv);
-					}
-
-					@Override
-					public Component getDisplayName() {
-						return Component.literal("Transmutation");
-					}
-				}, buf -> buf.writeBoolean(false));
-			}
-		    return;
-		} else if (key == InventoryExchangeKeybind.INFINITE_CONTAINER) {
+		if (key == InventoryExchangeKeybind.INFINITE_CONTAINER) {
 			if (!player.level().isClientSide) {
 				player.openMenu(new MenuProvider() {
                     @Override
@@ -62,9 +48,39 @@ public record KeyPressPKT(InventoryExchangeKeybind key) implements IInventoryExc
 
                     @Override
                     public Component getDisplayName() {
-                        return Component.translatable("container.inventoryexchange.infinite");
+                        return Component.translatable("container.inventoryexchange.infinite_container");
                     }
                 }, buf -> {});
+			}
+		    return;
+		} else if (key == InventoryExchangeKeybind.TRANSMUTATION) {
+			if (!player.level().isClientSide) {
+				player.openMenu(new MenuProvider() {
+					@Override
+					public AbstractContainerMenu createMenu(int windowId, Inventory inv, Player player) {
+						return new TransmutationContainer(windowId, inv);
+					}
+
+					@Override
+					public Component getDisplayName() {
+						return Component.translatable("container.inventoryexchange.transmutation");
+					}
+				}, buf -> buf.writeBoolean(false));
+			}
+		    return;
+		} else if (key == InventoryExchangeKeybind.CRAFTING) {
+			if (!player.level().isClientSide) {
+				player.openMenu(new net.minecraft.world.MenuProvider() {
+		            @Override
+		            public net.minecraft.world.inventory.AbstractContainerMenu createMenu(int windowId, Inventory inv, Player p) {
+		                return new PortableCraftingMenu(windowId, inv);
+		            }
+		            
+		            @Override
+		            public net.minecraft.network.chat.Component getDisplayName() {
+		                return net.minecraft.network.chat.Component.translatable("container.crafting");
+		            }
+		        });
 			}
 		    return;
 		}

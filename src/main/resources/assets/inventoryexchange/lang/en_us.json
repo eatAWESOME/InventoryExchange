@@ -1,17 +1,8 @@
 {
-  "itemGroup.inventoryexchange": "InventoryExchange",
-  "block.inventoryexchange.example_block": "Example Block",
-  "item.inventoryexchange.example_item": "Example Item",
-
-  "inventoryexchange.configuration.title": "InventoryExchange Configs",
-  "inventoryexchange.configuration.section.inventoryexchange.common.toml": "InventoryExchange Configs",
-  "inventoryexchange.configuration.section.inventoryexchange.common.toml.title": "InventoryExchange Configs",
-  "inventoryexchange.configuration.items": "Item List",
-  "inventoryexchange.configuration.logDirtBlock": "Log Dirt Block",
-  "inventoryexchange.configuration.magicNumberIntroduction": "Magic Number Text",
-  "inventoryexchange.configuration.magicNumber": "Magic Number",
-
-  "key.inventoryexchange.infinite_container": "Infinite Inventory",
-  "key.inventoryexchange.transmutation": "Transmutation",
+  "container.inventoryexchange.infinite_container": "Infinite Inventory",
+  "container.inventoryexchange.transmutation": "Transmutation",
+  "key.inventoryexchange.crafting": "Open Crafting",
+  "key.inventoryexchange.infinite_container": "Open Infinite Inventory",
+  "key.inventoryexchange.transmutation": "Open Transmutation",
   "misc.inventoryexchange.mod_name": "InventoryExchange"
 }
