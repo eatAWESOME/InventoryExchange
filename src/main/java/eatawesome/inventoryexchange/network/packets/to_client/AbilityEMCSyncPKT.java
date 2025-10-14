@@ -1,4 +1,4 @@
-package eatawesome.inventoryexchange.network.packets.to_client.abilityemc;
+package eatawesome.inventoryexchange.network.packets.to_client;
 
 import io.netty.buffer.ByteBuf;
 import java.math.BigInteger;

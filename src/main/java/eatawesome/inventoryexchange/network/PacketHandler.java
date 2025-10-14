@@ -1,7 +1,8 @@
 package eatawesome.inventoryexchange.network;
 
 import eatawesome.inventoryexchange.network.packets.IInventoryExchangePacket;
-import eatawesome.inventoryexchange.network.packets.to_client.abilityemc.AbilityEMCSyncPKT;
+import eatawesome.inventoryexchange.network.packets.to_client.AbilityEMCSyncPKT;
+import eatawesome.inventoryexchange.network.packets.to_server.InfiniteContainerScrollPKT;
 import eatawesome.inventoryexchange.network.packets.to_server.KeyPressPKT;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
@@ -28,6 +29,7 @@ public final class PacketHandler {
 
 	private void registerClientToServer(PacketRegistrar registrar) {
 		registrar.play(KeyPressPKT.TYPE, KeyPressPKT.STREAM_CODEC);
+		registrar.play(InfiniteContainerScrollPKT.TYPE, InfiniteContainerScrollPKT.STREAM_CODEC);
 	}
 	
 	private void registerServerToClient(PacketRegistrar registrar) {

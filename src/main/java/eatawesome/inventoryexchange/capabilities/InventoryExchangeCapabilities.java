@@ -17,5 +17,12 @@ public class InventoryExchangeCapabilities {
 	/**
 	 * The capability object for IAbilityEMCProvider
 	 */
-	public static final EntityCapability<IAbilityEMCProvider, Void> ABILITY_EMC_CAPABILITY = EntityCapability.createVoid(rl("ability_emc"), IAbilityEMCProvider.class);
+	public static final EntityCapability<IAbilityEMCProvider, Void> ABILITY_EMC_CAPABILITY =
+		EntityCapability.createVoid(rl("ability_emc"), IAbilityEMCProvider.class);
+
+	/**
+	 * The capability object for IInfiniteContainerProvider
+	 */
+	public static final EntityCapability<IInfiniteContainerProvider, Void> INFINITE_CONTAINER_CAPABILITY =
+		EntityCapability.createVoid(rl("infinite_container"), IInfiniteContainerProvider.class);
 }

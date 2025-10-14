@@ -15,6 +15,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.SimpleContainer;
+import net.neoforged.neoforge.items.IItemHandlerModifiable;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import org.jetbrains.annotations.NotNull;
 
@@ -47,7 +48,7 @@ public record KeyPressPKT(InventoryExchangeKeybind key) implements IInventoryExc
 					public Component getDisplayName() {
 						return Component.literal("Transmutation");
 					}
-				}, buf -> buf.writeBoolean(false)); // note: false = no hand context
+				}, buf -> buf.writeBoolean(false));
 			}
 		    return;
 		} else if (key == InventoryExchangeKeybind.INFINITE_CONTAINER) {
@@ -55,7 +56,7 @@ public record KeyPressPKT(InventoryExchangeKeybind key) implements IInventoryExc
 				player.openMenu(new MenuProvider() {
                     @Override
                     public AbstractContainerMenu createMenu(int windowId, Inventory inv, Player player) {
-                        SimpleContainer infiniteInventory = InfiniteContainerHelper.getInventory(player);
+                        IItemHandlerModifiable infiniteInventory = InfiniteContainerHelper.getInventory(player);
                         return new InfiniteContainer(windowId, inv, infiniteInventory);
                     }
 

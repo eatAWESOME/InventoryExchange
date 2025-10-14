@@ -19,8 +19,8 @@ public class ClientKeyHelper {
 
 	public static void registerKeyBindings(RegisterKeyMappingsEvent event) {
 		ImmutableBiMap.Builder<InventoryExchangeKeybind, KeyMapping> builder = ImmutableBiMap.builder();
-		addKeyBinding(event, builder, InventoryExchangeKeybind.TRANSMUTATION, KeyModifier.NONE, GLFW.GLFW_KEY_U);
 		addKeyBinding(event, builder, InventoryExchangeKeybind.INFINITE_CONTAINER, KeyModifier.NONE, GLFW.GLFW_KEY_KP_4);
+		addKeyBinding(event, builder, InventoryExchangeKeybind.TRANSMUTATION, KeyModifier.NONE, GLFW.GLFW_KEY_KP_5);
 		toMC = builder.build();
 	}
 
@@ -51,7 +51,6 @@ public class ClientKeyHelper {
 		@Override
 		public void setDown(boolean value) {
 			super.setDown(value);
-			//Note: We check the state based on isDown instead of value, as the value may be wrong depending on the conflict context
 			boolean state = isDown();
 			if (state != lastState) {
 				if (state) {

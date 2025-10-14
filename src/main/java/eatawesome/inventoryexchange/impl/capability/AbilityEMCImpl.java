@@ -24,7 +24,7 @@ import moze_intel.projecte.api.proxy.IEMCProxy;
 import moze_intel.projecte.emc.EMCMappingHandler;
 import eatawesome.inventoryexchange.impl.codec.InventoryExchangeCodecHelper;
 import eatawesome.inventoryexchange.network.InventoryExchangeStreamCodecs;
-import eatawesome.inventoryexchange.network.packets.to_client.abilityemc.AbilityEMCSyncPKT;
+import eatawesome.inventoryexchange.network.packets.to_client.AbilityEMCSyncPKT;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -58,7 +58,6 @@ public class AbilityEMCImpl implements IAbilityEMCProvider {
 	}
 
 	protected AbilityEMCAttachment attachment() {
-		//Force overriding if player is null
 		Objects.requireNonNull(this.player);
 		return this.player.getData(InventoryExchangeAttachmentTypes.ABILITY_EMC);
 	}
@@ -110,7 +109,6 @@ public class AbilityEMCImpl implements IAbilityEMCProvider {
 
 		@Nullable
 		public AbilityEMCAttachment copy(IAttachmentHolder holder, HolderLookup.Provider registries) {
-			//Note: ItemInfo and BigInteger are both immutable, so we can just add them directly
 			return new AbilityEMCAttachment(emc);
 		}
 	}

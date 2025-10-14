@@ -35,10 +35,6 @@ public class InternalAbilities {
 		if (waterWalkOnType.canWalk() || lavaWalkOnType.canWalk()) {
 			FluidState below = player.level().getFluidState(player.getOnPos());
 			boolean water = waterWalkOnType.canWalk() && below.is(FluidTags.WATER);
-			//Note: Technically we could probably only have lava be true if water is false, but given the
-			// fact vanilla uses tags for logic and technically (although it probably would cause lots of
-			// weirdness, the block we are standing on could be both water and lava, which would mean that
-			// we would want to apply both speed boosts).
 			boolean lava = lavaWalkOnType.canWalk() && below.is(FluidTags.LAVA);
 			if ((water || lava) && player.getInBlockState().isAir()) {
 				if (!player.isShiftKeyDown()) {
@@ -50,7 +46,6 @@ public class InternalAbilities {
 				applyLavaSpeed = lavaWalkOnType.applySpeed(lava);
 			} else if (!player.level().isClientSide) {
 				if (waterWalkOnType.canWalk() && player.isInWater()) {
-					//Things that apply water walking also refresh air supply when in water
 					player.setAirSupply(player.getMaxAirSupply());
 				}
 			}
@@ -62,18 +57,15 @@ public class InternalAbilities {
 		}
 	}
 
-	//Note: The attributes that currently use this cannot be converted to just being attributes on the items, as they can be disabled based on the player state
 	private static void updateAttribute(Player player, Holder<Attribute> attribute, AttributeModifier modifier, Predicate<Player> applyAttribute) {
 		AttributeInstance attributeInstance = player.getAttribute(attribute);
 		if (attributeInstance != null) {
 			boolean hasModifier = attributeInstance.hasModifier(modifier.id());
 			if (applyAttribute.test(player)) {
 				if (!hasModifier) {
-					//Should have it, but doesn't have the modifier yet, add it
 					attributeInstance.addTransientModifier(modifier);
 				}
 			} else if (hasModifier) {
-				//Shouldn't have the modifier, remove it
 				attributeInstance.removeModifier(modifier.id());
 			}
 		}
@@ -114,7 +106,6 @@ public class InternalAbilities {
 		}
 
 		public Predicate<Player> applySpeed(boolean onType) {
-			//Note: We do this instead of wrapping it to avoid the capturing lambdas
 			if (onType && this == ABLE_WITH_SPEED) {
 				return Predicates.alwaysTrue();
 			}

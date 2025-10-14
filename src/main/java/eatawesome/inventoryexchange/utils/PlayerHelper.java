@@ -81,7 +81,6 @@ public final class PlayerHelper {
 			}
 			level.restoringBlockSnapshots = false;
 		} else {
-			//Place all the blocks into the world and sync them to the client
 			for (BlockSnapshot snap : blockSnapshots) {
 				BlockState oldBlock = snap.getState();
 				BlockPos snapPos = snap.getPos();

@@ -8,6 +8,7 @@ import eatawesome.inventoryexchange.capabilities.InventoryExchangeCapabilities;
 import eatawesome.inventoryexchange.gameObjs.registries.InventoryExchangeAttachmentTypes;
 import eatawesome.inventoryexchange.gameObjs.registries.InventoryExchangeContainerTypes;
 import eatawesome.inventoryexchange.impl.capability.AbilityEMCImpl;
+import eatawesome.inventoryexchange.impl.capability.InfiniteContainerImpl;
 import eatawesome.inventoryexchange.network.PacketHandler;
 import moze_intel.projecte.config.ProjectEConfig;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -99,6 +100,7 @@ public class InventoryExchange {
 
 	public void registerCapabilities(RegisterCapabilitiesEvent event) {
 		event.registerEntity(InventoryExchangeCapabilities.ABILITY_EMC_CAPABILITY, EntityType.PLAYER, (player, context) -> new AbilityEMCImpl(player));
+		event.registerEntity(InventoryExchangeCapabilities.INFINITE_CONTAINER_CAPABILITY, EntityType.PLAYER, (player, context) -> new InfiniteContainerImpl(player));
 	}
 
     private void commonSetup(FMLCommonSetupEvent event) {

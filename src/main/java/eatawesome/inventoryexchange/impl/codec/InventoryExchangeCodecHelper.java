@@ -57,7 +57,6 @@ public class InventoryExchangeCodecHelper implements IInventoryExchangeCodecHelp
 	});
 
 	private static final Codec<ItemStack> LENIENT_STACK_CODEC = ItemStack.CODEC.promotePartial(error -> InventoryExchange.LOGGER.error("Tried to load invalid item: '{}'", error));
-	//Based off of ItemStack#OPTIONAL_CODEC
 	private static final Codec<ItemStack> LENIENT_OPTIONAL_STACK_CODEC = ExtraCodecs.optionalEmptyMap(LENIENT_STACK_CODEC.orElse(ItemStack.EMPTY)).xmap(
 			stack -> stack.orElse(ItemStack.EMPTY),
 			stack -> stack.isEmpty() ? Optional.empty() : Optional.of(stack)
@@ -138,13 +137,11 @@ public class InventoryExchangeCodecHelper implements IInventoryExchangeCodecHelp
 
 	@Override
 	public <TYPE> MapCodec<TYPE> orElseWithLog(MapCodec<TYPE> codec, TYPE fallback, Supplier<String> onError) {
-		return codec.mapResult(new ResultFunction<>() {//Like orElse except logs the error
+		return codec.mapResult(new ResultFunction<>() {
 			@Override
 			public <T> DataResult<TYPE> apply(DynamicOps<T> ops, MapLike<T> input, DataResult<TYPE> result) {
 				if (result.isError()) {
 					InventoryExchange.LOGGER.error(onError.get(), result.error().orElseThrow().message());
-					//If there is a key that is not serializable promote it to an invalid object. This will be filtered out before converting to a map
-					// but allows for us to collect and see what errors might exist in the values
 					return DataResult.success(fallback);
 				}
 				return result;
