@@ -10,6 +10,7 @@ import eatawesome.inventoryexchange.gameObjs.registries.InventoryExchangeAttachm
 import eatawesome.inventoryexchange.gameObjs.registries.InventoryExchangeContainerTypes;
 import eatawesome.inventoryexchange.impl.capability.AbilityEMCImpl;
 import eatawesome.inventoryexchange.impl.capability.InfiniteContainerImpl;
+import eatawesome.inventoryexchange.impl.capability.PortableFurnaceImpl;
 import eatawesome.inventoryexchange.network.PacketHandler;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
@@ -19,7 +20,6 @@ import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
-import net.neoforged.neoforge.common.NeoForge;
 
 @Mod(InventoryExchange.MODID)
 public class InventoryExchange {
@@ -63,6 +63,7 @@ public class InventoryExchange {
 	public void registerCapabilities(RegisterCapabilitiesEvent event) {
 		event.registerEntity(InventoryExchangeCapabilities.ABILITY_EMC_CAPABILITY, EntityType.PLAYER, (player, context) -> new AbilityEMCImpl(player));
 		event.registerEntity(InventoryExchangeCapabilities.INFINITE_CONTAINER_CAPABILITY, EntityType.PLAYER, (player, context) -> new InfiniteContainerImpl(player));
+		event.registerEntity(InventoryExchangeCapabilities.PORTABLE_FURNACE_CAPABILITY, EntityType.PLAYER, (player, context) -> new PortableFurnaceImpl(player));
 	}
 
 	private void commonSetup(FMLCommonSetupEvent event) {
