@@ -16,6 +16,7 @@ import moze_intel.projecte.gameObjs.registries.PESoundEvents;
 import eatawesome.inventoryexchange.handlers.InternalAbilities;
 import eatawesome.inventoryexchange.impl.capability.PortableFurnaceImpl;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -68,7 +69,7 @@ public class TickEvents {
 			if (player.getFoodData().getFoodLevel() <= 16) {
 				if (knowledge.getEmc().intValue() >= 128) {
 					player.getFoodData().eat(4, 2.4F);
-					player.level().playSound(null, player.getX(), player.getY(), player.getZ(), PESoundEvents.CHARGE.get(), SoundSource.PLAYERS, 0.8F, 1.0F);
+					player.level().playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.GENERIC_EAT, SoundSource.PLAYERS, 0.8F, 1.0F);
 					int emc = knowledge.getEmc().intValue() - 128;
 					knowledge.setEmc(BigInteger.valueOf(emc));
 					knowledge.syncEmc(serverPlayer);
