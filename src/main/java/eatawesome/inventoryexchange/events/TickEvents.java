@@ -9,6 +9,7 @@ import eatawesome.inventoryexchange.InventoryExchange;
 import eatawesome.inventoryexchange.capabilities.IAbilityEMCProvider;
 import eatawesome.inventoryexchange.capabilities.InventoryExchangeCapabilities;
 import eatawesome.inventoryexchange.gameObjs.container.PortableFurnaceMenu;
+import eatawesome.inventoryexchange.utils.FeedToggle;
 import eatawesome.inventoryexchange.utils.PortableFurnaceHelper;
 import moze_intel.projecte.api.capabilities.IKnowledgeProvider;
 import moze_intel.projecte.api.capabilities.PECapabilities;
@@ -66,7 +67,7 @@ public class TickEvents {
 			}
 		
 			// Eating via EMC
-			if (player.getFoodData().getFoodLevel() <= 16) {
+			if (FeedToggle.isEnabled(player) && player.getFoodData().getFoodLevel() <= 16) {
 				if (knowledge.getEmc().intValue() >= 128) {
 					player.getFoodData().eat(4, 2.4F);
 					player.level().playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.GENERIC_EAT, SoundSource.PLAYERS, 0.8F, 1.0F);

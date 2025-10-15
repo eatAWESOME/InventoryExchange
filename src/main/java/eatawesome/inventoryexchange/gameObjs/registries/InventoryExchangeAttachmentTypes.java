@@ -6,6 +6,8 @@ import eatawesome.inventoryexchange.gameObjs.registration.InventoryExchangeDefer
 import eatawesome.inventoryexchange.impl.capability.AbilityEMCImpl.AbilityEMCAttachment;
 import eatawesome.inventoryexchange.impl.capability.InfiniteContainerImpl;
 import eatawesome.inventoryexchange.impl.capability.InfiniteContainerImpl.InfiniteContainerAttachment;
+import eatawesome.inventoryexchange.impl.capability.PlayerSettingsImpl;
+import eatawesome.inventoryexchange.impl.capability.PlayerSettingsImpl.PlayerSettingsAttachment;
 import eatawesome.inventoryexchange.impl.capability.PortableFurnaceImpl;
 import eatawesome.inventoryexchange.impl.capability.PortableFurnaceImpl.PortableFurnaceAttachment;
 import it.unimi.dsi.fastutil.ints.Int2ObjectFunction;
@@ -49,6 +51,15 @@ public class InventoryExchangeAttachmentTypes {
 							.copyOnDeath()
 							.build()
 			);
+
+	public static final InventoryExchangeDeferredHolder<AttachmentType<?>, AttachmentType<PlayerSettingsAttachment>> PLAYER_SETTINGS =
+		ATTACHMENT_TYPES.register("player_settings",
+			() -> AttachmentType.<PlayerSettingsAttachment>builder(holder -> new PlayerSettingsAttachment())
+				.serialize(PlayerSettingsImpl.CODEC)
+				.copyHandler(PlayerSettingsAttachment::copy)
+				.copyOnDeath()
+				.build()
+		);
 
 	public static <HANDLER extends IItemHandlerModifiable> HANDLER copyHandler(IItemHandler handler, Int2ObjectFunction<HANDLER> handlerCreator) {
 		int slots = handler.getSlots();

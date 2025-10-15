@@ -6,12 +6,14 @@ import eatawesome.inventoryexchange.gameObjs.container.InfiniteContainer;
 import eatawesome.inventoryexchange.gameObjs.container.PortableCraftingMenu;
 import eatawesome.inventoryexchange.gameObjs.container.PortableFurnaceMenu;
 import eatawesome.inventoryexchange.network.packets.IInventoryExchangePacket;
+import eatawesome.inventoryexchange.utils.FeedToggle;
 import eatawesome.inventoryexchange.utils.InfiniteContainerHelper;
 import eatawesome.inventoryexchange.utils.InventoryExchangeKeybind;
 import moze_intel.projecte.gameObjs.container.TransmutationContainer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -94,6 +96,11 @@ public record KeyPressPKT(InventoryExchangeKeybind key) implements IInventoryExc
 					@Override
 					public Component getDisplayName() { return Component.translatable("container.furnace"); }
 				});
+			}
+			return;
+		} else if (key == InventoryExchangeKeybind.FEED_TOGGLE) {
+			if (player instanceof ServerPlayer serverPlayer) {
+				FeedToggle.toggleValue(serverPlayer);
 			}
 			return;
 		}

@@ -2,12 +2,14 @@ package eatawesome.inventoryexchange.commands;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.mojang.brigadier.arguments.BoolArgumentType;
 import eatawesome.inventoryexchange.InventoryExchange;
 import eatawesome.inventoryexchange.capabilities.IInfiniteContainerProvider;
 import eatawesome.inventoryexchange.capabilities.InventoryExchangeCapabilities;
 import eatawesome.inventoryexchange.gameObjs.container.InfiniteContainer;
 import eatawesome.inventoryexchange.gameObjs.container.PortableFurnaceMenu;
 import eatawesome.inventoryexchange.impl.capability.PortableFurnaceImpl;
+import eatawesome.inventoryexchange.utils.FeedToggle;
 import eatawesome.inventoryexchange.utils.InfiniteContainerHelper;
 import eatawesome.inventoryexchange.utils.PermissionHelper;
 import net.minecraft.commands.CommandSourceStack;
@@ -36,14 +38,16 @@ public class InventoryExchangeCommands {
 						.requires(src -> PermissionHelper.has(src, CommandPermissions.VIEW_FURNACE, PermissionHelper.BASE))
 						.executes(ctx -> {
 							ServerPlayer viewer = ctx.getSource().getPlayerOrException();
-							return execOpenFurnace(viewer, viewer);
+							openFurnace(viewer, viewer);
+							return 1;
 						})
 						.then(Commands.argument("player", EntityArgument.player())
 							.requires(src -> PermissionHelper.has(src, CommandPermissions.VIEW_FURNACE, PermissionHelper.ADMIN))
 							.executes(ctx -> {
 								ServerPlayer viewer = ctx.getSource().getPlayerOrException();
 								ServerPlayer target = EntityArgument.getPlayer(ctx, "player");
-								return execOpenFurnace(viewer, target);
+								openFurnace(viewer, target);
+								return 1;
 							})
 						)
 					)
@@ -51,14 +55,39 @@ public class InventoryExchangeCommands {
 						.requires(src -> PermissionHelper.has(src, CommandPermissions.VIEW_INFINITE_INVENTORY, PermissionHelper.BASE))
 						.executes(ctx -> {
 							ServerPlayer viewer = ctx.getSource().getPlayerOrException();
-							return execOpenInfinite(viewer, viewer);
+							openInfinite(viewer, viewer);
+							return 1;
 						})
 						.then(Commands.argument("player", EntityArgument.player())
 							.requires(src -> PermissionHelper.has(src, CommandPermissions.VIEW_INFINITE_INVENTORY, PermissionHelper.ADMIN))
 							.executes(ctx -> {
 								ServerPlayer viewer = ctx.getSource().getPlayerOrException();
 								ServerPlayer target = EntityArgument.getPlayer(ctx, "player");
-								return execOpenInfinite(viewer, target);
+								openInfinite(viewer, target);
+								return 1;
+							})
+						)
+					)
+				)
+				.then(Commands.literal("toggle")
+					.then(Commands.literal("feeding")
+						.requires(src -> PermissionHelper.has(src, CommandPermissions.TOGGLE_FEEDING, PermissionHelper.BASE))
+						.executes(ctx -> {
+							ServerPlayer self = ctx.getSource().getPlayerOrException();
+							FeedToggle.toggleValue(self);
+							return 1;
+						})
+					)
+				)
+				.then(Commands.literal("set")
+					.then(Commands.literal("feeding")
+						.requires(src -> PermissionHelper.has(src, CommandPermissions.SET_FEEDING, PermissionHelper.BASE))
+						.then(Commands.argument("value", BoolArgumentType.bool())
+							.executes(ctx -> {
+								ServerPlayer self = ctx.getSource().getPlayerOrException();
+								boolean value = BoolArgumentType.getBool(ctx, "value");
+								FeedToggle.setValue(self, value);
+								return 1;
 							})
 						)
 					)
@@ -73,34 +102,22 @@ public class InventoryExchangeCommands {
 		dispatcher.register(alias);
 	}
 
-	private static int execOpenFurnace(ServerPlayer viewer, ServerPlayer target) {
-		try {
-			viewer.openMenu(new SimpleMenuProvider(
-				(id, inv, p) -> new PortableFurnaceMenu(id, inv, target),
-				Component.translatable("container.furnace")
-			));
-			new PortableFurnaceImpl(target).sync(viewer);
-			return 1;
-		} catch (Throwable t) {
-			InventoryExchange.LOGGER.error("Error opening furnace view for {} -> {}", viewer.getGameProfile().getName(), target.getGameProfile().getName(), t);
-			return 0;
-		}
+	private static void openFurnace(ServerPlayer viewer, ServerPlayer target) {
+		viewer.openMenu(new SimpleMenuProvider(
+			(id, inv, p) -> new PortableFurnaceMenu(id, inv, target),
+			Component.translatable("container.furnace")
+		));
+		new PortableFurnaceImpl(target).sync(viewer);
 	}
 
-	private static int execOpenInfinite(ServerPlayer viewer, ServerPlayer target) {
-		try {
-			viewer.openMenu(new SimpleMenuProvider(
-				(id, inv, p) -> new InfiniteContainer(id, inv, InfiniteContainerHelper.getInventory(target)),
-				Component.translatable("container.inventoryexchange.infinite_container")
-			));
-			IInfiniteContainerProvider provider = target.getCapability(InventoryExchangeCapabilities.INFINITE_CONTAINER_CAPABILITY);
-			if (provider != null) {
-				provider.sync(viewer);
-			}
-			return 1;
-		} catch (Throwable t) {
-			InventoryExchange.LOGGER.error("Error opening infinite inventory view for {} -> {}", viewer.getGameProfile().getName(), target.getGameProfile().getName(), t);
-			return 0;
+	private static void openInfinite(ServerPlayer viewer, ServerPlayer target) {
+		viewer.openMenu(new SimpleMenuProvider(
+			(id, inv, p) -> new InfiniteContainer(id, inv, InfiniteContainerHelper.getInventory(target)),
+			Component.translatable("container.inventoryexchange.infinite_container")
+		));
+		IInfiniteContainerProvider provider = target.getCapability(InventoryExchangeCapabilities.INFINITE_CONTAINER_CAPABILITY);
+		if (provider != null) {
+			provider.sync(viewer);
 		}
 	}
 }
