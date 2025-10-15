@@ -2,6 +2,7 @@ package eatawesome.inventoryexchange.network;
 
 import eatawesome.inventoryexchange.network.packets.IInventoryExchangePacket;
 import eatawesome.inventoryexchange.network.packets.to_client.AbilityEMCSyncPKT;
+import eatawesome.inventoryexchange.network.packets.to_client.InfiniteContainerSyncPKT;
 import eatawesome.inventoryexchange.network.packets.to_client.PortableFurnaceSyncPKT;
 import eatawesome.inventoryexchange.network.packets.to_server.InfiniteContainerScrollPKT;
 import eatawesome.inventoryexchange.network.packets.to_server.InfiniteContainerSortPKT;
@@ -37,6 +38,7 @@ public final class PacketHandler {
 	
 	private void registerServerToClient(PacketRegistrar registrar) {
 		registrar.play(AbilityEMCSyncPKT.TYPE, AbilityEMCSyncPKT.STREAM_CODEC);
+		registrar.play(InfiniteContainerSyncPKT.TYPE, InfiniteContainerSyncPKT.STREAM_CODEC);
 		registrar.play(PortableFurnaceSyncPKT.TYPE, PortableFurnaceSyncPKT.STREAM_CODEC);
 	}
 

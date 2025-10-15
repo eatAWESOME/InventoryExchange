@@ -20,7 +20,6 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 
-/* commands */
 @EventBusSubscriber(modid = InventoryExchange.MODID)
 public class InventoryExchangeCommands {
 
@@ -30,28 +29,36 @@ public class InventoryExchangeCommands {
 
 		LiteralArgumentBuilder<CommandSourceStack> root =
 			Commands.literal("inventoryexchange")
-				.requires(src -> PermissionHelper.has(src, CommandPermissions.VIEW_ROOT, PermissionHelper.ADMIN))
+				.requires(src -> PermissionHelper.has(src, CommandPermissions.VIEW_ROOT, PermissionHelper.BASE))
 				.then(Commands.literal("view")
-					.requires(src -> PermissionHelper.has(src, CommandPermissions.VIEW_ROOT, PermissionHelper.ADMIN))
+					.requires(src -> PermissionHelper.has(src, CommandPermissions.VIEW_ROOT, PermissionHelper.BASE))
 					.then(Commands.literal("furnace")
-						.requires(src -> PermissionHelper.has(src, CommandPermissions.VIEW_FURNACE, PermissionHelper.ADMIN))
+						.requires(src -> PermissionHelper.has(src, CommandPermissions.VIEW_FURNACE, PermissionHelper.BASE))
+						.executes(ctx -> {
+							ServerPlayer viewer = ctx.getSource().getPlayerOrException();
+							return execOpenFurnace(viewer, viewer);
+						})
 						.then(Commands.argument("player", EntityArgument.player())
+							.requires(src -> PermissionHelper.has(src, CommandPermissions.VIEW_FURNACE, PermissionHelper.ADMIN))
 							.executes(ctx -> {
 								ServerPlayer viewer = ctx.getSource().getPlayerOrException();
 								ServerPlayer target = EntityArgument.getPlayer(ctx, "player");
-								openFurnace(viewer, target);
-								return 1;
+								return execOpenFurnace(viewer, target);
 							})
 						)
 					)
 					.then(Commands.literal("infiniteinventory")
-						.requires(src -> PermissionHelper.has(src, CommandPermissions.VIEW_INFINITE_INVENTORY, PermissionHelper.ADMIN))
+						.requires(src -> PermissionHelper.has(src, CommandPermissions.VIEW_INFINITE_INVENTORY, PermissionHelper.BASE))
+						.executes(ctx -> {
+							ServerPlayer viewer = ctx.getSource().getPlayerOrException();
+							return execOpenInfinite(viewer, viewer);
+						})
 						.then(Commands.argument("player", EntityArgument.player())
+							.requires(src -> PermissionHelper.has(src, CommandPermissions.VIEW_INFINITE_INVENTORY, PermissionHelper.ADMIN))
 							.executes(ctx -> {
 								ServerPlayer viewer = ctx.getSource().getPlayerOrException();
 								ServerPlayer target = EntityArgument.getPlayer(ctx, "player");
-								openInfinite(viewer, target);
-								return 1;
+								return execOpenInfinite(viewer, target);
 							})
 						)
 					)
@@ -59,30 +66,41 @@ public class InventoryExchangeCommands {
 
 		LiteralArgumentBuilder<CommandSourceStack> alias =
 			Commands.literal("ie")
-				.requires(src -> PermissionHelper.has(src, CommandPermissions.VIEW_ROOT, PermissionHelper.ADMIN))
+				.requires(src -> PermissionHelper.has(src, CommandPermissions.VIEW_ROOT, PermissionHelper.BASE))
 				.redirect(root.build());
 
 		dispatcher.register(root);
 		dispatcher.register(alias);
 	}
 
-	private static void openFurnace(ServerPlayer viewer, ServerPlayer target) {
-		viewer.openMenu(new SimpleMenuProvider(
-			(id, inv, p) -> new PortableFurnaceMenu(id, inv, target),
-			Component.translatable("container.furnace")
-		));
-		new PortableFurnaceImpl(target).sync(viewer);
+	private static int execOpenFurnace(ServerPlayer viewer, ServerPlayer target) {
+		try {
+			viewer.openMenu(new SimpleMenuProvider(
+				(id, inv, p) -> new PortableFurnaceMenu(id, inv, target),
+				Component.translatable("container.furnace")
+			));
+			new PortableFurnaceImpl(target).sync(viewer);
+			return 1;
+		} catch (Throwable t) {
+			InventoryExchange.LOGGER.error("Error opening furnace view for {} -> {}", viewer.getGameProfile().getName(), target.getGameProfile().getName(), t);
+			return 0;
+		}
 	}
 
-	private static void openInfinite(ServerPlayer viewer, ServerPlayer target) {
-		var targetInv = InfiniteContainerHelper.getInventory(target);
-		viewer.openMenu(new SimpleMenuProvider(
-			(id, inv, p) -> new InfiniteContainer(id, inv, targetInv),
-			Component.translatable("container.inventoryexchange.infinite_container")
-		));
-		IInfiniteContainerProvider provider = target.getCapability(InventoryExchangeCapabilities.INFINITE_CONTAINER_CAPABILITY);
-		if (provider != null) {
-			provider.sync(viewer);
+	private static int execOpenInfinite(ServerPlayer viewer, ServerPlayer target) {
+		try {
+			viewer.openMenu(new SimpleMenuProvider(
+				(id, inv, p) -> new InfiniteContainer(id, inv, InfiniteContainerHelper.getInventory(target)),
+				Component.translatable("container.inventoryexchange.infinite_container")
+			));
+			IInfiniteContainerProvider provider = target.getCapability(InventoryExchangeCapabilities.INFINITE_CONTAINER_CAPABILITY);
+			if (provider != null) {
+				provider.sync(viewer);
+			}
+			return 1;
+		} catch (Throwable t) {
+			InventoryExchange.LOGGER.error("Error opening infinite inventory view for {} -> {}", viewer.getGameProfile().getName(), target.getGameProfile().getName(), t);
+			return 0;
 		}
 	}
 }
