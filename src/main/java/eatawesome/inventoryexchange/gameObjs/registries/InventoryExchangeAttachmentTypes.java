@@ -6,6 +6,8 @@ import eatawesome.inventoryexchange.gameObjs.registration.InventoryExchangeDefer
 import eatawesome.inventoryexchange.impl.capability.AbilityEMCImpl.AbilityEMCAttachment;
 import eatawesome.inventoryexchange.impl.capability.InfiniteContainerImpl;
 import eatawesome.inventoryexchange.impl.capability.InfiniteContainerImpl.InfiniteContainerAttachment;
+import eatawesome.inventoryexchange.impl.capability.PortableFurnaceImpl;
+import eatawesome.inventoryexchange.impl.capability.PortableFurnaceImpl.PortableFurnaceAttachment;
 import it.unimi.dsi.fastutil.ints.Int2ObjectFunction;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.attachment.AttachmentType;
@@ -35,6 +37,15 @@ public class InventoryExchangeAttachmentTypes {
 					() -> AttachmentType.<InfiniteContainerAttachment>builder(holder -> new InfiniteContainerAttachment())
 							.serialize(InfiniteContainerImpl.CODEC)
 							.copyHandler(InfiniteContainerAttachment::copy)
+							.copyOnDeath()
+							.build()
+			);
+	
+	public static final InventoryExchangeDeferredHolder<AttachmentType<?>, AttachmentType<PortableFurnaceAttachment>> PORTABLE_FURNACE =
+			ATTACHMENT_TYPES.register("portable_furnace",
+					() -> AttachmentType.<PortableFurnaceAttachment>builder(holder -> new PortableFurnaceAttachment())
+							.serialize(PortableFurnaceImpl.CODEC)
+							.copyHandler(PortableFurnaceAttachment::copy)
 							.copyOnDeath()
 							.build()
 			);

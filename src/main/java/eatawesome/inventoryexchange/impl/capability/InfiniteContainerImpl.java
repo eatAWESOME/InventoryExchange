@@ -5,7 +5,7 @@ import eatawesome.inventoryexchange.capabilities.IInfiniteContainerProvider;
 import eatawesome.inventoryexchange.config.InventoryExchangeConfig;
 import eatawesome.inventoryexchange.gameObjs.registries.InventoryExchangeAttachmentTypes;
 import eatawesome.inventoryexchange.impl.codec.InventoryExchangeCodecHelper;
-import eatawesome.inventoryexchange.network.packets.to_client.infinite_container.InfiniteContainerSyncPKT;
+import eatawesome.inventoryexchange.network.packets.to_client.InfiniteContainerSyncPKT;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;

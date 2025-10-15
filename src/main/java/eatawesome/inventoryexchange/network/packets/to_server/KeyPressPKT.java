@@ -4,6 +4,7 @@ import io.netty.buffer.ByteBuf;
 import eatawesome.inventoryexchange.InventoryExchange;
 import eatawesome.inventoryexchange.gameObjs.container.InfiniteContainer;
 import eatawesome.inventoryexchange.gameObjs.container.PortableCraftingMenu;
+import eatawesome.inventoryexchange.gameObjs.container.PortableFurnaceMenu;
 import eatawesome.inventoryexchange.network.packets.IInventoryExchangePacket;
 import eatawesome.inventoryexchange.utils.InfiniteContainerHelper;
 import eatawesome.inventoryexchange.utils.InventoryExchangeKeybind;
@@ -83,6 +84,18 @@ public record KeyPressPKT(InventoryExchangeKeybind key) implements IInventoryExc
 		        });
 			}
 		    return;
+		} else if (key == InventoryExchangeKeybind.FURNACE) {
+			if (!player.level().isClientSide) {
+				player.openMenu(new MenuProvider() {
+					@Override
+					public AbstractContainerMenu createMenu(int windowId, Inventory inv, Player p) {
+						return new PortableFurnaceMenu(windowId, inv);
+					}
+					@Override
+					public Component getDisplayName() { return Component.translatable("container.furnace"); }
+				});
+			}
+			return;
 		}
 	}
 }

@@ -2,6 +2,7 @@ package eatawesome.inventoryexchange.client;
 
 import eatawesome.inventoryexchange.InventoryExchange;
 import eatawesome.inventoryexchange.gameObjs.gui.InfiniteContainerScreen;
+import eatawesome.inventoryexchange.gameObjs.gui.PortableFurnaceScreen;
 import eatawesome.inventoryexchange.gameObjs.registries.InventoryExchangeContainerTypes;
 import eatawesome.inventoryexchange.utils.ClientKeyHelper;
 import net.neoforged.api.distmarker.Dist;
@@ -28,5 +29,6 @@ public class InventoryExchangeClient {
 	
 	private void registerScreens(RegisterMenuScreensEvent event) {
         event.register(InventoryExchangeContainerTypes.INFINITE_CONTAINER.get(), InfiniteContainerScreen::new);
+		event.register(InventoryExchangeContainerTypes.PORTABLE_FURNACE.get(), PortableFurnaceScreen::new);
     }
 }

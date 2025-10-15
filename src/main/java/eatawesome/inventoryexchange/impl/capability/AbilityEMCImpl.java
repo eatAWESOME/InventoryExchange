@@ -25,6 +25,7 @@ import moze_intel.projecte.emc.EMCMappingHandler;
 import eatawesome.inventoryexchange.impl.codec.InventoryExchangeCodecHelper;
 import eatawesome.inventoryexchange.network.InventoryExchangeStreamCodecs;
 import eatawesome.inventoryexchange.network.packets.to_client.AbilityEMCSyncPKT;
+import eatawesome.inventoryexchange.utils.PlayerHelper;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -80,6 +81,7 @@ public class AbilityEMCImpl implements IAbilityEMCProvider {
 	@Override
 	public void sync(@NotNull ServerPlayer player) {
 		PacketDistributor.sendToPlayer(player, new AbilityEMCSyncPKT(attachment().emc));
+		PlayerHelper.updateScore(player, PlayerHelper.SCOREBOARD_ABILITY_EMC, getEmc());
 	}
 
 	public static class AbilityEMCAttachment {
