@@ -10,8 +10,11 @@
   "key.inventoryexchange.feed_toggle": "Toggle Feeding via EMC",
   "key.inventoryexchange.furnace": "Open Furnace",
   "key.inventoryexchange.infinite_container": "Open Infinite Inventory",
+  "key.inventoryexchange.repair_toggle": "Toggle Repairing Items via EMC",
   "key.inventoryexchange.transmutation": "Open Transmutation",
   "message.inventoryexchange.feeding_enabled": "Feeding via EMC: Enabled",
   "message.inventoryexchange.feeding_disabled": "Feeding via EMC: Disabled",
+  "message.inventoryexchange.repair_enabled": "Repairing Items via EMC: Enabled",
+  "message.inventoryexchange.repair_disabled": "Repairing Items via EMC: Disabled",
   "misc.inventoryexchange.mod_name": "InventoryExchange"
 }

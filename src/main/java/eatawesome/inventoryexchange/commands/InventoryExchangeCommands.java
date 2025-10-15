@@ -12,6 +12,7 @@ import eatawesome.inventoryexchange.impl.capability.PortableFurnaceImpl;
 import eatawesome.inventoryexchange.utils.FeedToggle;
 import eatawesome.inventoryexchange.utils.InfiniteContainerHelper;
 import eatawesome.inventoryexchange.utils.PermissionHelper;
+import eatawesome.inventoryexchange.utils.RepairToggle;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
@@ -78,6 +79,14 @@ public class InventoryExchangeCommands {
 							return 1;
 						})
 					)
+					.then(Commands.literal("repairing")
+						.requires(src -> PermissionHelper.has(src, CommandPermissions.TOGGLE_REPAIRING, PermissionHelper.BASE))
+						.executes(ctx -> {
+							ServerPlayer self = ctx.getSource().getPlayerOrException();
+							RepairToggle.toggleValue(self);
+							return 1;
+						})
+					)
 				)
 				.then(Commands.literal("set")
 					.then(Commands.literal("feeding")
@@ -87,6 +96,17 @@ public class InventoryExchangeCommands {
 								ServerPlayer self = ctx.getSource().getPlayerOrException();
 								boolean value = BoolArgumentType.getBool(ctx, "value");
 								FeedToggle.setValue(self, value);
+								return 1;
+							})
+						)
+					)
+					.then(Commands.literal("repairing")
+						.requires(src -> PermissionHelper.has(src, CommandPermissions.SET_REPAIRING, PermissionHelper.BASE))
+						.then(Commands.argument("value", BoolArgumentType.bool())
+							.executes(ctx -> {
+								ServerPlayer self = ctx.getSource().getPlayerOrException();
+								boolean value = BoolArgumentType.getBool(ctx, "value");
+								RepairToggle.setValue(self, value);
 								return 1;
 							})
 						)

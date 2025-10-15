@@ -16,7 +16,8 @@ public enum InventoryExchangeKeybind implements IHasEnumNameTranslationKey {
 	TRANSMUTATION,
 	CRAFTING,
 	FURNACE,
-	FEED_TOGGLE;
+	FEED_TOGGLE,
+	REPAIR_TOGGLE;
 
 	public static final IntFunction<InventoryExchangeKeybind> BY_ID = ByIdMap.continuous(InventoryExchangeKeybind::ordinal, values(), ByIdMap.OutOfBoundsStrategy.WRAP);
 	public static final StreamCodec<ByteBuf, InventoryExchangeKeybind> STREAM_CODEC = ByteBufCodecs.idMapper(BY_ID, InventoryExchangeKeybind::ordinal);

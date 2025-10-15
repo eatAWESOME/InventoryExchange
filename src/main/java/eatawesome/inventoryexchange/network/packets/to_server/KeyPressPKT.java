@@ -9,6 +9,7 @@ import eatawesome.inventoryexchange.network.packets.IInventoryExchangePacket;
 import eatawesome.inventoryexchange.utils.FeedToggle;
 import eatawesome.inventoryexchange.utils.InfiniteContainerHelper;
 import eatawesome.inventoryexchange.utils.InventoryExchangeKeybind;
+import eatawesome.inventoryexchange.utils.RepairToggle;
 import moze_intel.projecte.gameObjs.container.TransmutationContainer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.StreamCodec;
@@ -101,6 +102,11 @@ public record KeyPressPKT(InventoryExchangeKeybind key) implements IInventoryExc
 		} else if (key == InventoryExchangeKeybind.FEED_TOGGLE) {
 			if (player instanceof ServerPlayer serverPlayer) {
 				FeedToggle.toggleValue(serverPlayer);
+			}
+			return;
+		} else if (key == InventoryExchangeKeybind.REPAIR_TOGGLE) {
+			if (player instanceof ServerPlayer serverPlayer) {
+				RepairToggle.toggleValue(serverPlayer);
 			}
 			return;
 		}

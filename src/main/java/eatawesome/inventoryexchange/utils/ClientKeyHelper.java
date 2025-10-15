@@ -24,6 +24,7 @@ public class ClientKeyHelper {
 		addKeyBinding(event, builder, InventoryExchangeKeybind.CRAFTING, KeyModifier.NONE, GLFW.GLFW_KEY_KP_6);
 		addKeyBinding(event, builder, InventoryExchangeKeybind.FURNACE, KeyModifier.NONE, GLFW.GLFW_KEY_KP_3);
 		addKeyBinding(event, builder, InventoryExchangeKeybind.FEED_TOGGLE, KeyModifier.NONE, GLFW.GLFW_KEY_KP_1);
+		addKeyBinding(event, builder, InventoryExchangeKeybind.REPAIR_TOGGLE, KeyModifier.NONE, GLFW.GLFW_KEY_KP_2);
 		toMC = builder.build();
 	}
 
