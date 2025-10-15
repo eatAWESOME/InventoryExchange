@@ -1,7 +1,12 @@
 package eatawesome.inventoryexchange.events;
 
+import java.math.BigInteger;
+
 import eatawesome.inventoryexchange.InventoryExchange;
+import eatawesome.inventoryexchange.capabilities.IAbilityEMCProvider;
+import eatawesome.inventoryexchange.capabilities.InventoryExchangeCapabilities;
 import eatawesome.inventoryexchange.utils.InfiniteContainerHelper;
+import eatawesome.inventoryexchange.utils.PortableFurnaceHelper;
 import moze_intel.projecte.api.ItemInfo;
 import moze_intel.projecte.api.capabilities.IKnowledgeProvider;
 import moze_intel.projecte.api.capabilities.PECapabilities;
@@ -10,10 +15,12 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.GameRules;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.player.ItemEntityPickupEvent;
@@ -24,6 +31,7 @@ import net.neoforged.neoforge.items.IItemHandlerModifiable;
 @EventBusSubscriber(modid = InventoryExchange.MODID)
 public class PlayerEvents {
 
+	// Learn knowledge on item pickup and insert items into infinite container if inventory full
 	@SubscribeEvent
 	public static void onEntityItemPickupPre(ItemEntityPickupEvent.Pre event) {
 		Player player = event.getPlayer();
@@ -48,6 +56,7 @@ public class PlayerEvents {
         }
 	}
 	
+	// Insert items leftover from pickup into infinite container
 	@SubscribeEvent
 	public static void onEntityItemPickupPost(ItemEntityPickupEvent.Post event) {
 		Player player = event.getPlayer();
@@ -69,6 +78,7 @@ public class PlayerEvents {
         }
 	}
 	
+	// Knowledge from container open
 	@SubscribeEvent
     public static void onContainerOpen(PlayerContainerEvent.Open event) {
 		Player player = event.getEntity();
@@ -76,6 +86,7 @@ public class PlayerEvents {
         containerKnowledgeCheck(player, container);
     }
 
+	// Knowledge from container close
     @SubscribeEvent
     public static void onContainerClose(PlayerContainerEvent.Close event) {
     	Player player = event.getEntity();
@@ -83,6 +94,7 @@ public class PlayerEvents {
         containerKnowledgeCheck(player, container);
     }
 	
+    // Knowledge from crafting
 	@SubscribeEvent
 	public static void onItemCrafted(PlayerEvent.ItemCraftedEvent event) {
 		Player player = event.getEntity();
@@ -90,11 +102,47 @@ public class PlayerEvents {
 	    knowledgeCheck(player, itemStack);
 	}
 	
+	// Knowledge from smelting
 	@SubscribeEvent
 	public static void onItemSmelted(PlayerEvent.ItemSmeltedEvent event) {
 		Player player = event.getEntity();
 	    ItemStack itemStack = event.getSmelting();
 	    knowledgeCheck(player, itemStack);
+	}
+
+	// Drop items on death
+	@SubscribeEvent
+	public static void onPlayerClone(PlayerEvent.Clone event) {
+		if (event.isWasDeath()) {
+			Player oldPlayer = event.getOriginal();
+			Player newPlayer = event.getEntity();
+			if (newPlayer instanceof ServerPlayer newServerPlayer && !newPlayer.level().getGameRules().getBoolean(GameRules.RULE_KEEPINVENTORY)) {
+				IItemHandlerModifiable oldInfinite = InfiniteContainerHelper.getInventory(oldPlayer);
+				IItemHandlerModifiable oldFurnace = PortableFurnaceHelper.getInventory(oldPlayer);
+				IItemHandlerModifiable newInfinite = InfiniteContainerHelper.getInventory(newPlayer);
+				IItemHandlerModifiable newFurnace = PortableFurnaceHelper.getInventory(newPlayer);
+
+				dropAndClearHandler(oldPlayer, oldInfinite, false);
+				dropAndClearHandler(oldPlayer, oldFurnace, true);
+
+				clearHandler(newInfinite, false);
+				clearHandler(newFurnace, true);
+				
+				IKnowledgeProvider oldKnowledge = oldPlayer.getCapability(PECapabilities.KNOWLEDGE_CAPABILITY);
+				IAbilityEMCProvider oldAbilityEMC = oldPlayer.getCapability(InventoryExchangeCapabilities.ABILITY_EMC_CAPABILITY);
+				IKnowledgeProvider newKnowledge = newPlayer.getCapability(PECapabilities.KNOWLEDGE_CAPABILITY);
+				IAbilityEMCProvider newAbilityEMC = newPlayer.getCapability(InventoryExchangeCapabilities.ABILITY_EMC_CAPABILITY);
+
+				oldKnowledge.setEmc(BigInteger.valueOf(0));
+				oldKnowledge.syncEmc((ServerPlayer) oldPlayer);
+				oldAbilityEMC.setEmc(BigInteger.valueOf(0));
+				oldAbilityEMC.sync((ServerPlayer) oldPlayer);
+				newKnowledge.setEmc(BigInteger.valueOf(0));
+				newKnowledge.syncEmc(newServerPlayer);
+				newAbilityEMC.setEmc(BigInteger.valueOf(0));
+				newAbilityEMC.sync(newServerPlayer);
+			}
+		}
 	}
 
 	public static void containerKnowledgeCheck(Player player, AbstractContainerMenu container) {
@@ -186,4 +234,26 @@ public class PlayerEvents {
         float pitch = ((player.getRandom().nextFloat() - player.getRandom().nextFloat()) * 0.7F + 1.0F) * 2.0F;
         player.level().playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ITEM_PICKUP, SoundSource.PLAYERS, vol, pitch);
     }
+
+	private static void dropAndClearHandler(Player source, IItemHandlerModifiable handler, boolean isPortableFurnace) {
+		if (handler == null) return;
+		for (int i = 0; i < handler.getSlots(); i++) {
+			if (isPortableFurnace && i == 1) continue;
+			ItemStack stack = handler.getStackInSlot(i);
+			if (!stack.isEmpty()) {
+				ItemStack toDrop = stack.copy();
+				handler.setStackInSlot(i, ItemStack.EMPTY);
+				ItemEntity entity = new ItemEntity(source.level(), source.getX(), source.getY() + 0.5, source.getZ(), toDrop);
+				source.level().addFreshEntity(entity);
+			}
+		}
+	}
+
+	private static void clearHandler(IItemHandlerModifiable handler, boolean isPortableFurnace) {
+		if (handler == null) return;
+		for (int i = 0; i < handler.getSlots(); i++) {
+			if (isPortableFurnace && i == 1) continue;
+			handler.setStackInSlot(i, ItemStack.EMPTY);
+		}
+	}
 }
