@@ -4,7 +4,9 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import eatawesome.inventoryexchange.InventoryExchange;
 import eatawesome.inventoryexchange.gameObjs.container.InfiniteContainer;
 import eatawesome.inventoryexchange.network.packets.to_server.InfiniteContainerScrollPKT;
+import eatawesome.inventoryexchange.network.packets.to_server.InfiniteContainerSortPKT;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
@@ -12,9 +14,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.neoforged.neoforge.network.PacketDistributor;
 
-/**
- * GUI for InfiniteContainer. Scrollbar handle scales with currently “potential” rows.
- */
 public class InfiniteContainerScreen extends AbstractContainerScreen<InfiniteContainer> {
 
     private static final ResourceLocation TEXTURE =
@@ -22,7 +21,6 @@ public class InfiniteContainerScreen extends AbstractContainerScreen<InfiniteCon
 
     private int localRowOffset;
 
-    // Scrollbar specifications
     private static final int SCROLLBAR_WIDTH = 6;
     private static final int SCROLLBAR_RIGHT_MARGIN = 4;
 
@@ -30,11 +28,14 @@ public class InfiniteContainerScreen extends AbstractContainerScreen<InfiniteCon
     private int scrollbarTopY;
     private int scrollbarBottomY;
 
+    // Controls
+    private Button sortButton;
+
     public InfiniteContainerScreen(InfiniteContainer menu, Inventory playerInv, Component title) {
         super(menu, playerInv, title);
         this.imageWidth = Math.max(256,
             InfiniteContainer.CHEST_START_X + InfiniteContainer.COLS * InfiniteContainer.SLOT_SPACING + 8);
-        this.imageHeight = 256; // adjust if your texture differs
+        this.imageHeight = 256;
         this.localRowOffset = menu.getRowOffset();
     }
 
@@ -45,6 +46,21 @@ public class InfiniteContainerScreen extends AbstractContainerScreen<InfiniteCon
         this.scrollbarTopY = InfiniteContainer.CHEST_START_Y;
         this.scrollbarBottomY = InfiniteContainer.CHEST_START_Y +
             (InfiniteContainer.VISIBLE_ROWS * InfiniteContainer.SLOT_SPACING) - 2;
+
+        // Button
+        int btnBase = InfiniteContainer.SLOT_SPACING;
+        int btnWidth = btnBase + 15;
+        int btnHeight = btnBase;
+        int btnRight = this.leftPos + this.imageWidth - 4;
+        int btnX = (btnRight - btnWidth) - 2;
+        int btnY = (this.topPos + InfiniteContainer.PLAYER_INV_START_Y) - 1;
+        this.sortButton = Button.builder(Component.translatable("container.inventoryexchange.infinite_container_sort"), b -> {
+            PacketDistributor.sendToServer(new InfiniteContainerSortPKT());
+            this.setFocused(null);
+            b.setFocused(false);
+        }).bounds(btnX, btnY, btnWidth, btnHeight).build();
+        this.addRenderableWidget(this.sortButton);
+
         clampLocalOffset();
     }
 
@@ -87,6 +103,7 @@ public class InfiniteContainerScreen extends AbstractContainerScreen<InfiniteCon
         super.containerTick();
         this.localRowOffset = this.menu.getRowOffset();
         clampLocalOffset();
+        if (this.sortButton != null) this.sortButton.setFocused(false);
     }
 
     @Override
@@ -124,26 +141,21 @@ public class InfiniteContainerScreen extends AbstractContainerScreen<InfiniteCon
         int y = (this.height - this.imageHeight) / 2;
         gui.blit(TEXTURE, x, y, 0, 0, this.imageWidth, this.imageHeight);
 
-        // Scrollbar
         int trackX = this.leftPos + scrollbarX;
         int trackY = this.topPos + scrollbarTopY;
         int trackH = scrollbarBottomY - scrollbarTopY;
 
         int rows = potentialRows();
-        // Scale handle: proportion = visibleRows / potentialRows
         int handleH = Math.max(10,
             Math.min(trackH, Math.round(trackH * (InfiniteContainer.VISIBLE_ROWS / (float) rows))));
         int handleY = trackY + Math.round((trackH - handleH) * scrollFraction());
 
-        // Track
         gui.fill(trackX, trackY, trackX + SCROLLBAR_WIDTH, trackY + trackH, 0x60202020);
-        // Handle
         gui.fill(trackX + 1, handleY, trackX + SCROLLBAR_WIDTH - 1, handleY + handleH, 0xFF9A9A9A);
     }
 
     @Override
     protected void renderLabels(GuiGraphics gui, int mouseX, int mouseY) {
-        // Suppressed
     }
 
     @Override
@@ -156,6 +168,14 @@ public class InfiniteContainerScreen extends AbstractContainerScreen<InfiniteCon
             return true;
         }
         return super.mouseClicked(mouseX, mouseY, button);
+    }
+
+    @Override
+    public boolean mouseReleased(double mouseX, double mouseY, int button) {
+        boolean r = super.mouseReleased(mouseX, mouseY, button);
+        if (this.sortButton != null) this.sortButton.setFocused(false);
+        this.setFocused(null);
+        return r;
     }
 
     @Override

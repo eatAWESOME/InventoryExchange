@@ -4,6 +4,7 @@
   "config.inventoryexchange.enable_debug_logs": "Enable Debug Logs",
   "config.inventoryexchange.enable_debug_logs.desc": "If true, enables debug logs.",
   "container.inventoryexchange.infinite_container": "Infinite Inventory",
+  "container.inventoryexchange.infinite_container_sort": "Sort",
   "container.inventoryexchange.transmutation": "Transmutation",
   "key.inventoryexchange.crafting": "Open Crafting",
   "key.inventoryexchange.infinite_container": "Open Infinite Inventory",
