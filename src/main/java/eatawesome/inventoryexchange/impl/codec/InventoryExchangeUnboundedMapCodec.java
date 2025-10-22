@@ -13,7 +13,7 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.RecordBuilder;
 
 import eatawesome.inventoryexchange.InventoryExchange;
-import eatawesome.inventoryexchange.codec.MapProcessor;
+import eatawesome.inventoryexchange.api.codec.MapProcessor;
 
 import java.util.LinkedHashMap;
 import java.util.Map;

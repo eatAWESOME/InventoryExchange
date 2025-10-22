@@ -1,4 +1,4 @@
-package eatawesome.inventoryexchange.codec;
+package eatawesome.inventoryexchange.api.codec;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;

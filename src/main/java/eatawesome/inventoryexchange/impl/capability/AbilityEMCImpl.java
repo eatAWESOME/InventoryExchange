@@ -2,41 +2,22 @@ package eatawesome.inventoryexchange.impl.capability;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
-import it.unimi.dsi.fastutil.ints.Int2ObjectMaps;
-import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
-import it.unimi.dsi.fastutil.ints.IntList;
 import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Objects;
-import java.util.Set;
-import moze_intel.projecte.api.ItemInfo;
-import eatawesome.inventoryexchange.InventoryExchange;
 import eatawesome.inventoryexchange.capabilities.IAbilityEMCProvider;
-import eatawesome.inventoryexchange.event.PlayerAbilityEMCChangeEvent;
-import eatawesome.inventoryexchange.codec.IInventoryExchangeCodecHelper;
+import eatawesome.inventoryexchange.api.event.PlayerAbilityEMCChangeEvent;
+import eatawesome.inventoryexchange.api.codec.IInventoryExchangeCodecHelper;
 import eatawesome.inventoryexchange.gameObjs.registries.InventoryExchangeAttachmentTypes;
-import moze_intel.projecte.api.proxy.IEMCProxy;
-import moze_intel.projecte.emc.EMCMappingHandler;
-import eatawesome.inventoryexchange.impl.codec.InventoryExchangeCodecHelper;
 import eatawesome.inventoryexchange.network.InventoryExchangeStreamCodecs;
 import eatawesome.inventoryexchange.network.packets.to_client.AbilityEMCSyncPKT;
 import eatawesome.inventoryexchange.utils.PlayerHelper;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.attachment.IAttachmentHolder;
 import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.items.IItemHandlerModifiable;
-import net.neoforged.neoforge.items.ItemStackHandler;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -85,12 +66,7 @@ public class AbilityEMCImpl implements IAbilityEMCProvider {
 	}
 
 	public static class AbilityEMCAttachment {
-
-		private static final int LOCK_SLOTS = 9;
-
-		private static final Codec<Set<ItemInfo>> MUTABLE_ABILITY_EMC_CODEC = ItemInfo.CODEC.listOf()
-			.promotePartial(error -> InventoryExchange.LOGGER.error("Failed to load stored AbilityEMC: {}", error))
-			.xmap(HashSet::new, List::copyOf);
+		
 		public static final Codec<AbilityEMCAttachment> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 				IInventoryExchangeCodecHelper.INSTANCE.nonNegativeBigInt().optionalFieldOf("emc", BigInteger.ZERO).forGetter(attachment -> attachment.emc)
 		).apply(instance, AbilityEMCAttachment::new));

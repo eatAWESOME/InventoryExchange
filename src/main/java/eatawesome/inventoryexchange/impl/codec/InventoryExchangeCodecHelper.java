@@ -16,8 +16,8 @@ import com.mojang.serialization.RecordBuilder;
 
 
 import eatawesome.inventoryexchange.InventoryExchange;
-import eatawesome.inventoryexchange.codec.IInventoryExchangeCodecHelper;
-import eatawesome.inventoryexchange.codec.MapProcessor;
+import eatawesome.inventoryexchange.api.codec.IInventoryExchangeCodecHelper;
+import eatawesome.inventoryexchange.api.codec.MapProcessor;
 
 import java.io.BufferedReader;
 import java.io.IOException;

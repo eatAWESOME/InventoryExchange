@@ -1,4 +1,4 @@
-package eatawesome.inventoryexchange.codec;
+package eatawesome.inventoryexchange.api.codec;
 
 import java.util.Map;
 import org.jetbrains.annotations.Nullable;

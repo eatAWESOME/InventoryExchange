@@ -1,4 +1,4 @@
-package eatawesome.inventoryexchange.event;
+package eatawesome.inventoryexchange.api.event;
 
 import java.util.UUID;
 import net.minecraft.world.entity.player.Player;
