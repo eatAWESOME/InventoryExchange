@@ -26,6 +26,8 @@ public class PEItemModelProvider extends ItemModelProvider {
 
 	@Override
 	protected void registerModels() {
+		registerGenerated(PEItems.TOME_OF_KNOWLEDGE);
+		/*
 		blockParentModel(PEBlocks.ALCHEMICAL_COAL, PEBlocks.MOBIUS_FUEL, PEBlocks.AETERNALIS_FUEL, PEBlocks.DARK_MATTER, PEBlocks.RED_MATTER,
 				PEBlocks.DARK_MATTER_PEDESTAL, PEBlocks.DARK_MATTER_FURNACE, PEBlocks.RED_MATTER_FURNACE, PEBlocks.COLLECTOR, PEBlocks.COLLECTOR_MK2,
 				PEBlocks.COLLECTOR_MK3, PEBlocks.NOVA_CATALYST, PEBlocks.NOVA_CATACLYSM, PEBlocks.TRANSMUTATION_TABLE, PEBlocks.RELAY, PEBlocks.RELAY_MK2,
@@ -54,6 +56,7 @@ public class PEItemModelProvider extends ItemModelProvider {
 				.end();
 		//Note: We don't actually have a manual, but I moved this model over to data gen anyways
 		generated("manual", modLoc("item/book"));
+		*/
 	}
 
 	private void generateAlchemicalBags() {

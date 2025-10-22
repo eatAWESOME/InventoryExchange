@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "U": {
+      "item": "inventoryexchange:ultima"
+    }
+  },
+  "pattern": [
+    "UUU",
+    "U U",
+    "U U"
+  ],
+  "result": {
+    "count": 1,
+    "id": "inventoryexchange:ultima_leggings"
+  }
+}

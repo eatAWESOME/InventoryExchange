@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "D": {
+      "item": "minecraft:diamond"
+    },
+    "U": {
+      "item": "inventoryexchange:ultima"
+    }
+  },
+  "pattern": [
+    "UUU",
+    "UDU",
+    " D "
+  ],
+  "result": {
+    "count": 1,
+    "id": "inventoryexchange:ultima_tool"
+  }
+}

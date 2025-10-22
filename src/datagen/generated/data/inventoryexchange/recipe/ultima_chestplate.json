@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "U": {
+      "item": "inventoryexchange:ultima"
+    }
+  },
+  "pattern": [
+    "U U",
+    "UUU",
+    "UUU"
+  ],
+  "result": {
+    "count": 1,
+    "id": "inventoryexchange:ultima_chestplate"
+  }
+}

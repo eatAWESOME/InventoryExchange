@@ -13,6 +13,7 @@ import eatawesome.inventoryexchange.utils.FeedToggle;
 import eatawesome.inventoryexchange.utils.InfiniteContainerHelper;
 import eatawesome.inventoryexchange.utils.PermissionHelper;
 import eatawesome.inventoryexchange.utils.RepairToggle;
+import eatawesome.inventoryexchange.utils.text.InventoryExchangeLang;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
@@ -133,7 +134,7 @@ public class InventoryExchangeCommands {
 	private static void openInfinite(ServerPlayer viewer, ServerPlayer target) {
 		viewer.openMenu(new SimpleMenuProvider(
 			(id, inv, p) -> new InfiniteContainer(id, inv, InfiniteContainerHelper.getInventory(target)),
-			Component.translatable("container.inventoryexchange.infinite_container")
+			InventoryExchangeLang.INFINITE_CONTAINER_CONTAINER.translate()
 		));
 		IInfiniteContainerProvider provider = target.getCapability(InventoryExchangeCapabilities.INFINITE_CONTAINER_CAPABILITY);
 		if (provider != null) {

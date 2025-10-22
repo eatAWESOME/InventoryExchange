@@ -37,12 +37,11 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.fml.common.EventBusSubscriber.Bus;
 import net.neoforged.neoforge.common.data.AdvancementProvider;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 
-@EventBusSubscriber(modid = PECore.MODID)//, bus = Bus.MOD)
+//@EventBusSubscriber(modid = PECore.MODID)
 public class ProjectEDataGenerator {
 
 	@SubscribeEvent
@@ -56,35 +55,33 @@ public class ProjectEDataGenerator {
 		PEDatapackRegistryProvider drProvider = gen.addProvider(event.includeServer(), new PEDatapackRegistryProvider(output, event.getLookupProvider()));
 		CompletableFuture<Provider> lookupProvider = drProvider.getRegistryProvider();
 
-		gen.addProvider(true, new PEPackMetadataGenerator(output, PELang.PACK_DESCRIPTION));
+		//gen.addProvider(true, new PEPackMetadataGenerator(output, PELang.PACK_DESCRIPTION));
 		//Client side data generators
-		gen.addProvider(event.includeClient(), new PELangProvider(output));
+		//gen.addProvider(event.includeClient(), new PELangProvider(output));
 		gen.addProvider(event.includeClient(), new PESoundProvider(output, existingFileHelper));
-		gen.addProvider(event.includeClient(), new PEBlockStateProvider(output, existingFileHelper));
+		//gen.addProvider(event.includeClient(), new PEBlockStateProvider(output, existingFileHelper));
 		gen.addProvider(event.includeClient(), new PEItemModelProvider(output, existingFileHelper));
-		gen.addProvider(event.includeClient(), new PESpriteSourceProvider(output, lookupProvider, existingFileHelper));
+		//gen.addProvider(event.includeClient(), new PESpriteSourceProvider(output, lookupProvider, existingFileHelper));
 		//Server side data generators
 		//Tag data generators
-		PEBlockTagsProvider blockTagsProvider = gen.addProvider(event.includeServer(), new PEBlockTagsProvider(output, lookupProvider, existingFileHelper));
-		gen.addProvider(event.includeServer(), new PEItemTagsProvider(output, lookupProvider, blockTagsProvider.contentsGetter(), existingFileHelper));
-		gen.addProvider(event.includeServer(), new PEEntityTypeTagsProvider(output, lookupProvider, existingFileHelper));
-		gen.addProvider(event.includeServer(), new PEBlockEntityTypeTagsProvider(output, lookupProvider, existingFileHelper));
-		gen.addProvider(event.includeServer(), new PEDamageTypeTagsProvider(output, lookupProvider, existingFileHelper));
-		gen.addProvider(event.includeServer(), new PEPotionsTagsProvider(output, lookupProvider, existingFileHelper));
+		//PEBlockTagsProvider blockTagsProvider = gen.addProvider(event.includeServer(), new PEBlockTagsProvider(output, lookupProvider, existingFileHelper));
+		//gen.addProvider(event.includeServer(), new PEItemTagsProvider(output, lookupProvider, blockTagsProvider.contentsGetter(), existingFileHelper));
+		//gen.addProvider(event.includeServer(), new PEEntityTypeTagsProvider(output, lookupProvider, existingFileHelper));
+		//gen.addProvider(event.includeServer(), new PEBlockEntityTypeTagsProvider(output, lookupProvider, existingFileHelper));
+		//gen.addProvider(event.includeServer(), new PEDamageTypeTagsProvider(output, lookupProvider, existingFileHelper));
+		//gen.addProvider(event.includeServer(), new PEPotionsTagsProvider(output, lookupProvider, existingFileHelper));
 		//Other generators (after tags in case we need them to exist)
-		gen.addProvider(event.includeServer(), new AdvancementProvider(output, lookupProvider, existingFileHelper, List.of(new PEAdvancementsGenerator())));
-		gen.addProvider(event.includeServer(), new LootTableProvider(output, Collections.emptySet(), List.of(
-				new SubProviderEntry(PEBlockLootTable::new, LootContextParamSets.BLOCK)
-		), lookupProvider));
-		gen.addProvider(event.includeServer(), new PERecipeProvider(output, lookupProvider, existingFileHelper));
-		gen.addProvider(event.includeServer(), new PEDataMapsProvider(output, lookupProvider));
+		//gen.addProvider(event.includeServer(), new AdvancementProvider(output, lookupProvider, existingFileHelper, List.of(new PEAdvancementsGenerator())));
+		//gen.addProvider(event.includeServer(), new LootTableProvider(output, Collections.emptySet(), List.of(new SubProviderEntry(PEBlockLootTable::new, LootContextParamSets.BLOCK)), lookupProvider));
+		//gen.addProvider(event.includeServer(), new PERecipeProvider(output, lookupProvider, existingFileHelper));
+		//gen.addProvider(event.includeServer(), new PEDataMapsProvider(output, lookupProvider));
 		gen.addProvider(event.includeServer(), new PECustomConversionProvider(output, lookupProvider));
-		gen.addProvider(event.includeServer(), new PEWorldTransmutationProvider(output, lookupProvider));
+		//gen.addProvider(event.includeServer(), new PEWorldTransmutationProvider(output, lookupProvider));
 
 		//Client side, but needs recipes to exist
-		if (ModList.get().isLoaded(IntegrationHelper.EMI_MODID)) {
+		/*if (ModList.get().isLoaded(IntegrationHelper.EMI_MODID)) {
 			gen.addProvider(event.includeClient(), new EmiAliasProvider(output, lookupProvider, PECore.PEID, ProjectEAliasMapping::new));
 			gen.addProvider(event.includeClient(), new ProjectEEmiDefaults(output, existingFileHelper, lookupProvider));
-		}//TODO: Do we want to have something like Mekanism's persistent disable-able provider
+		}*///TODO: Do we want to have something like Mekanism's persistent disable-able provider
 	}
 }

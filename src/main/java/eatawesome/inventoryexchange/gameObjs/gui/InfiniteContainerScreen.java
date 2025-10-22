@@ -5,6 +5,7 @@ import eatawesome.inventoryexchange.InventoryExchange;
 import eatawesome.inventoryexchange.gameObjs.container.InfiniteContainer;
 import eatawesome.inventoryexchange.network.packets.to_server.InfiniteContainerScrollPKT;
 import eatawesome.inventoryexchange.network.packets.to_server.InfiniteContainerSortPKT;
+import eatawesome.inventoryexchange.utils.text.InventoryExchangeLang;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -38,7 +39,7 @@ public class InfiniteContainerScreen extends AbstractContainerScreen<InfiniteCon
         this.imageHeight = 256;
         this.localRowOffset = menu.getRowOffset();
     }
-
+    
     @Override
     protected void init() {
         super.init();
@@ -54,7 +55,7 @@ public class InfiniteContainerScreen extends AbstractContainerScreen<InfiniteCon
         int btnRight = this.leftPos + this.imageWidth - 4;
         int btnX = (btnRight - btnWidth) - 2;
         int btnY = (this.topPos + InfiniteContainer.PLAYER_INV_START_Y) - 1;
-        this.sortButton = Button.builder(Component.translatable("container.inventoryexchange.infinite_container_sort"), b -> {
+        this.sortButton = Button.builder(InventoryExchangeLang.INFINITE_CONTAINER_SORT.translate(), b -> {
             PacketDistributor.sendToServer(new InfiniteContainerSortPKT());
             this.setFocused(null);
             b.setFocused(false);

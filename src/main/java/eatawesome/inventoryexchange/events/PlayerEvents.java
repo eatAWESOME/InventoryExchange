@@ -6,6 +6,7 @@ import eatawesome.inventoryexchange.InventoryExchange;
 import eatawesome.inventoryexchange.capabilities.IAbilityEMCProvider;
 import eatawesome.inventoryexchange.capabilities.InventoryExchangeCapabilities;
 import eatawesome.inventoryexchange.utils.InfiniteContainerHelper;
+import eatawesome.inventoryexchange.utils.PlayerHelper;
 import eatawesome.inventoryexchange.utils.PortableFurnaceHelper;
 import moze_intel.projecte.api.ItemInfo;
 import moze_intel.projecte.api.capabilities.IKnowledgeProvider;
@@ -15,6 +16,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -23,6 +25,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameRules;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
+import net.neoforged.neoforge.event.entity.living.LivingEquipmentChangeEvent;
 import net.neoforged.neoforge.event.entity.player.ItemEntityPickupEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerContainerEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
@@ -141,6 +145,24 @@ public class PlayerEvents {
 				newKnowledge.syncEmc(newServerPlayer);
 				newAbilityEMC.setEmc(BigInteger.valueOf(0));
 				newAbilityEMC.sync(newServerPlayer);
+			}
+		}
+	}
+	
+	@SubscribeEvent
+	public static void onLivingDamagePre(LivingDamageEvent.Pre event) {
+		if (event.getEntity() instanceof Player player && PlayerHelper.hasFullUltimaSet(player)) {
+			event.setNewDamage(0.0F);
+		}
+	}
+	
+	@SubscribeEvent
+	public static void onEquipmentChange(LivingEquipmentChangeEvent event) {
+		if (event.getEntity() instanceof Player player) {
+			if (event.getSlot() == EquipmentSlot.HEAD || event.getSlot() == EquipmentSlot.CHEST || event.getSlot() == EquipmentSlot.LEGS || event.getSlot() == EquipmentSlot.FEET) {
+				if (!PlayerHelper.hasFullUltimaSet(player)) {
+					PlayerHelper.removeUltimaEffects(player);
+				}
 			}
 		}
 	}

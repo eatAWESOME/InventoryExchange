@@ -4,8 +4,11 @@ import org.slf4j.Logger;
 import com.mojang.logging.LogUtils;
 import eatawesome.inventoryexchange.capabilities.InventoryExchangeCapabilities;
 import eatawesome.inventoryexchange.config.InventoryExchangeConfig;
+import eatawesome.inventoryexchange.gameObjs.registries.InventoryExchangeArmorMaterials;
 import eatawesome.inventoryexchange.gameObjs.registries.InventoryExchangeAttachmentTypes;
 import eatawesome.inventoryexchange.gameObjs.registries.InventoryExchangeContainerTypes;
+import eatawesome.inventoryexchange.gameObjs.registries.InventoryExchangeCreativeTabs;
+import eatawesome.inventoryexchange.gameObjs.registries.InventoryExchangeItems;
 import eatawesome.inventoryexchange.impl.capability.AbilityEMCImpl;
 import eatawesome.inventoryexchange.impl.capability.InfiniteContainerImpl;
 import eatawesome.inventoryexchange.impl.capability.PortableFurnaceImpl;
@@ -24,6 +27,7 @@ import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 public class InventoryExchange {
 
 	public static final String MODID = "inventoryexchange";
+	public static final String MODNAME = "InventoryExchange";
 	public static final Logger LOGGER = LogUtils.getLogger();
 
 	public static ResourceLocation rl(String path) { return ResourceLocation.fromNamespaceAndPath(MODID, path); }
@@ -46,9 +50,12 @@ public class InventoryExchange {
 
 		modEventBus.addListener(this::commonSetup);
 		modEventBus.addListener(this::registerCapabilities);
-
+		
+		InventoryExchangeArmorMaterials.ARMOR_MATERIALS.register(modEventBus);
 		InventoryExchangeAttachmentTypes.ATTACHMENT_TYPES.register(modEventBus);
 		InventoryExchangeContainerTypes.CONTAINER_TYPES.register(modEventBus);
+		InventoryExchangeItems.ITEMS.register(modEventBus);
+		InventoryExchangeCreativeTabs.CREATIVE_TABS.register(modEventBus);
 
 		this.packetHandler = new PacketHandler(modEventBus, modContainer.getModInfo().getVersion());
 	}

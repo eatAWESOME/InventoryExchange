@@ -3,9 +3,9 @@ package eatawesome.inventoryexchange.utils;
 import java.math.BigInteger;
 import java.util.List;
 import java.util.function.BiPredicate;
-import java.util.function.IntSupplier;
 
 import eatawesome.inventoryexchange.InventoryExchange;
+import eatawesome.inventoryexchange.gameObjs.registries.InventoryExchangeItems;
 import moze_intel.projecte.PECore;
 import moze_intel.projecte.integration.IntegrationHelper;
 import moze_intel.projecte.utils.Constants;
@@ -16,10 +16,13 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemCooldowns;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -177,5 +180,33 @@ public final class PlayerHelper {
 
 	public static void updateScore(ServerPlayer player, ObjectiveCriteria objective, int value) {
 		player.getScoreboard().forAllObjectives(objective, player, score -> score.set(value));
+	}
+	
+	public static boolean hasFullUltimaSet(Player player) {
+		return player.getItemBySlot(EquipmentSlot.HEAD).is(InventoryExchangeItems.ULTIMA_HELMET.get())
+			&& player.getItemBySlot(EquipmentSlot.CHEST).is(InventoryExchangeItems.ULTIMA_CHESTPLATE.get())
+			&& player.getItemBySlot(EquipmentSlot.LEGS).is(InventoryExchangeItems.ULTIMA_LEGGINGS.get())
+			&& player.getItemBySlot(EquipmentSlot.FEET).is(InventoryExchangeItems.ULTIMA_BOOTS.get());
+	}
+	
+	public static void updateUltimaEffects(Player player) {
+		updateEffect(player, MobEffects.NIGHT_VISION, 1200, 0);
+		updateEffect(player, MobEffects.WATER_BREATHING, 1200, 0);
+		updateEffect(player, MobEffects.FIRE_RESISTANCE, 1200, 0);
+		updateEffect(player, MobEffects.MOVEMENT_SPEED, 1200, 2);
+	}
+	
+	public static void updateEffect(Player player, Holder<MobEffect> effect, int duration, int amplifier) {
+		MobEffectInstance cur = player.getEffect(effect);
+		if (cur == null || cur.getDuration() <= 1180 || cur.getAmplifier() != amplifier) {
+			player.addEffect(new MobEffectInstance(effect, duration, amplifier, true, false, true));
+		}
+	}
+	
+	public static void removeUltimaEffects(Player player) {
+		player.removeEffect(MobEffects.NIGHT_VISION);
+		player.removeEffect(MobEffects.WATER_BREATHING);
+		player.removeEffect(MobEffects.FIRE_RESISTANCE);
+		player.removeEffect(MobEffects.MOVEMENT_SPEED);
 	}
 }

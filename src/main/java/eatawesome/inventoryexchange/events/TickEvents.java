@@ -10,13 +10,13 @@ import eatawesome.inventoryexchange.capabilities.IAbilityEMCProvider;
 import eatawesome.inventoryexchange.capabilities.InventoryExchangeCapabilities;
 import eatawesome.inventoryexchange.gameObjs.container.PortableFurnaceMenu;
 import eatawesome.inventoryexchange.utils.FeedToggle;
+import eatawesome.inventoryexchange.utils.PlayerHelper;
 import eatawesome.inventoryexchange.utils.PortableFurnaceHelper;
 import eatawesome.inventoryexchange.utils.RepairToggle;
 import moze_intel.projecte.api.capabilities.IKnowledgeProvider;
 import moze_intel.projecte.api.capabilities.PECapabilities;
 import moze_intel.projecte.api.proxy.IEMCProxy;
 import moze_intel.projecte.gameObjs.registries.PESoundEvents;
-import moze_intel.projecte.utils.EMCHelper;
 import eatawesome.inventoryexchange.handlers.InternalAbilities;
 import eatawesome.inventoryexchange.impl.capability.PortableFurnaceImpl;
 import net.minecraft.server.level.ServerPlayer;
@@ -37,6 +37,16 @@ public class TickEvents {
 	private static final int FEED_COST = 128;
 	private static final int FEED_POINTS = 4;
 	private static final float FEED_SATURATION = 2.4F;
+	
+	
+	@SubscribeEvent
+	public static void onPlayerTickPre(PlayerTickEvent.Pre event) {
+		Player player = event.getEntity();
+		boolean full = PlayerHelper.hasFullUltimaSet(player);
+		if (full) {
+			PlayerHelper.updateUltimaEffects(player);
+		}
+	}
 	
 	@SubscribeEvent
 	public static void playerTick(PlayerTickEvent.Post event) {

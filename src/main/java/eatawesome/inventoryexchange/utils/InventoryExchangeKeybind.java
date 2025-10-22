@@ -12,12 +12,13 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.util.ByIdMap;
 
 public enum InventoryExchangeKeybind implements IHasEnumNameTranslationKey {
-	INFINITE_CONTAINER,
-	TRANSMUTATION,
 	CRAFTING,
-	FURNACE,
 	FEED_TOGGLE,
-	REPAIR_TOGGLE;
+	FURNACE,
+	INFINITE_CONTAINER,
+	REPAIR_TOGGLE,
+	TRANSMUTATION,
+	ULTIMA_TOOL_MODE;
 
 	public static final IntFunction<InventoryExchangeKeybind> BY_ID = ByIdMap.continuous(InventoryExchangeKeybind::ordinal, values(), ByIdMap.OutOfBoundsStrategy.WRAP);
 	public static final StreamCodec<ByteBuf, InventoryExchangeKeybind> STREAM_CODEC = ByteBufCodecs.idMapper(BY_ID, InventoryExchangeKeybind::ordinal);

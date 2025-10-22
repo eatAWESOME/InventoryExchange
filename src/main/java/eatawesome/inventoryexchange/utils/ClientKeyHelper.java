@@ -19,12 +19,13 @@ public class ClientKeyHelper {
 
 	public static void registerKeyBindings(RegisterKeyMappingsEvent event) {
 		ImmutableBiMap.Builder<InventoryExchangeKeybind, KeyMapping> builder = ImmutableBiMap.builder();
+		addKeyBinding(event, builder, InventoryExchangeKeybind.CRAFTING, KeyModifier.NONE, GLFW.GLFW_KEY_KP_1);
+		addKeyBinding(event, builder, InventoryExchangeKeybind.FEED_TOGGLE, KeyModifier.NONE, GLFW.GLFW_KEY_KP_7);
+		addKeyBinding(event, builder, InventoryExchangeKeybind.FURNACE, KeyModifier.NONE, GLFW.GLFW_KEY_KP_2);
 		addKeyBinding(event, builder, InventoryExchangeKeybind.INFINITE_CONTAINER, KeyModifier.NONE, GLFW.GLFW_KEY_KP_4);
+		addKeyBinding(event, builder, InventoryExchangeKeybind.REPAIR_TOGGLE, KeyModifier.NONE, GLFW.GLFW_KEY_KP_8);
 		addKeyBinding(event, builder, InventoryExchangeKeybind.TRANSMUTATION, KeyModifier.NONE, GLFW.GLFW_KEY_KP_5);
-		addKeyBinding(event, builder, InventoryExchangeKeybind.CRAFTING, KeyModifier.NONE, GLFW.GLFW_KEY_KP_6);
-		addKeyBinding(event, builder, InventoryExchangeKeybind.FURNACE, KeyModifier.NONE, GLFW.GLFW_KEY_KP_3);
-		addKeyBinding(event, builder, InventoryExchangeKeybind.FEED_TOGGLE, KeyModifier.NONE, GLFW.GLFW_KEY_KP_1);
-		addKeyBinding(event, builder, InventoryExchangeKeybind.REPAIR_TOGGLE, KeyModifier.NONE, GLFW.GLFW_KEY_KP_2);
+		addKeyBinding(event, builder, InventoryExchangeKeybind.ULTIMA_TOOL_MODE, KeyModifier.NONE, GLFW.GLFW_KEY_KP_9);
 		toMC = builder.build();
 	}
 
