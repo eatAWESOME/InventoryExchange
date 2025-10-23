@@ -152,9 +152,6 @@ public class PEItems {
 	public static final ItemRegistryObject<HyperkineticLens> HYPERKINETIC_LENS = ITEMS.registerNoStackFireImmune("hyperkinetic_lens", HyperkineticLens::new);
 	public static final ItemRegistryObject<CataliticLens> CATALYTIC_LENS = ITEMS.registerNoStackFireImmune("catalytic_lens", CataliticLens::new);
     
-	public static final ItemDeferredRegister TOME_REGISTER = new ItemDeferredRegister(PECore.PEID);
-	public static final ItemRegistryObject<Tome> TOME_OF_KNOWLEDGE = TOME_REGISTER.registerNoStack("tome", properties -> new Tome(properties.rarity(Rarity.EPIC)));
-	
 	//public static final ItemRegistryObject<Tome> TOME_OF_KNOWLEDGE = ITEMS.registerNoStack("tome", properties -> new Tome(properties.rarity(Rarity.EPIC)));
 	public static final ItemRegistryObject<TransmutationTablet> TRANSMUTATION_TABLET = ITEMS.registerNoStackFireImmune("transmutation_tablet", TransmutationTablet::new);
 

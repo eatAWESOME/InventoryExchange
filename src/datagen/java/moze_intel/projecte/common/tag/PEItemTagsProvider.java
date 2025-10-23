@@ -31,6 +31,8 @@ import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import eatawesome.inventoryexchange.gameObjs.registries.InventoryExchangeItems;
+
 public class PEItemTagsProvider extends ItemTagsProvider {
 
 	public PEItemTagsProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider, CompletableFuture<TagsProvider.TagLookup<Block>> blockTags,
@@ -43,7 +45,7 @@ public class PEItemTagsProvider extends ItemTagsProvider {
 		addBags();
 		addGear();
 		addIgnoreMissing();
-		tag(ItemTags.BOOKSHELF_BOOKS).add(PEItems.TOME_OF_KNOWLEDGE.get());
+		tag(ItemTags.BOOKSHELF_BOOKS).add(InventoryExchangeItems.TOME_OF_KNOWLEDGE.get());
 		tag(ItemTags.FREEZE_IMMUNE_WEARABLES).add(PEItems.GEM_CHESTPLATE.get());
 		tag(PETags.Items.COLLECTOR_FUEL).add(
 				Items.CHARCOAL,

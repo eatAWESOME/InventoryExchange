@@ -4,7 +4,6 @@ import eatawesome.inventoryexchange.InventoryExchange;
 import eatawesome.inventoryexchange.gameObjs.registration.InventoryExchangeDeferredHolder;
 import eatawesome.inventoryexchange.gameObjs.registration.impl.CreativeTabDeferredRegister;
 import eatawesome.inventoryexchange.utils.text.InventoryExchangeLang;
-import moze_intel.projecte.gameObjs.registries.PEItems;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
@@ -23,7 +22,7 @@ public class InventoryExchangeCreativeTabs {
 				output.accept(InventoryExchangeItems.ULTIMA_CHESTPLATE);
 				output.accept(InventoryExchangeItems.ULTIMA_LEGGINGS);
 				output.accept(InventoryExchangeItems.ULTIMA_BOOTS);
-				output.accept(PEItems.TOME_OF_KNOWLEDGE);
+				output.accept(InventoryExchangeItems.TOME_OF_KNOWLEDGE);
 			})
 	);
 
@@ -34,8 +33,8 @@ public class InventoryExchangeCreativeTabs {
 		} else if (tabKey == CreativeModeTabs.REDSTONE_BLOCKS) {
 		} else if (tabKey == CreativeModeTabs.TOOLS_AND_UTILITIES) {
 			addToExistingTab(event,
-					PEItems.TOME_OF_KNOWLEDGE,
-					InventoryExchangeItems.ULTIMA_TOOL
+					InventoryExchangeItems.ULTIMA_TOOL,
+					InventoryExchangeItems.TOME_OF_KNOWLEDGE
 			);
 		} else if (tabKey == CreativeModeTabs.COMBAT) {
 			addToExistingTab(event,

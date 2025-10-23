@@ -158,7 +158,6 @@ public class PECore {
 		PEDataComponentTypes.DATA_COMPONENT_TYPES.register(modEventBus);
 		//PEEntityTypes.ENTITY_TYPES.register(modEventBus);
 		//PEItems.ITEMS.register(modEventBus);
-		PEItems.TOME_REGISTER.register(modEventBus);
 		PENormalizedSimpleStacks.NSS_SERIALIZERS.register(modEventBus);
 		//PERecipeConditions.CONDITION_CODECS.register(modEventBus);
 		//PERecipeSerializers.RECIPE_SERIALIZERS.register(modEventBus);

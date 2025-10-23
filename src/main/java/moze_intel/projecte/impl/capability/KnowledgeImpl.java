@@ -3,6 +3,7 @@ package moze_intel.projecte.impl.capability;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
+import eatawesome.inventoryexchange.gameObjs.registries.InventoryExchangeItems;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMaps;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
@@ -23,7 +24,6 @@ import moze_intel.projecte.api.event.PlayerKnowledgeChangeEvent;
 import moze_intel.projecte.api.proxy.IEMCProxy;
 import moze_intel.projecte.emc.EMCMappingHandler;
 import moze_intel.projecte.gameObjs.registries.PEAttachmentTypes;
-import moze_intel.projecte.gameObjs.registries.PEItems;
 import moze_intel.projecte.impl.codec.PECodecHelper;
 import moze_intel.projecte.network.PEStreamCodecs;
 import moze_intel.projecte.network.packets.to_client.knowledge.KnowledgeSyncChangePKT;
@@ -142,7 +142,7 @@ public class KnowledgeImpl implements IKnowledgeProvider {
 			// Note: We ignore the tome here being a separate entity because it should not have any persistent item
 			return tryAdd(attachment, persistentInfo);
 		}
-		if (info.getItem().is(PEItems.TOME_OF_KNOWLEDGE.getKey())) {
+		if (info.getItem().is(InventoryExchangeItems.TOME_OF_KNOWLEDGE.getKey())) {
 			//Make sure we don't have any data components as it doesn't have any effect for the tome
 			info = info.itemOnly();
 			//Note: We don't bother checking if we already somehow know the tome without having full knowledge
@@ -168,7 +168,7 @@ public class KnowledgeImpl implements IKnowledgeProvider {
 	public boolean removeKnowledge(@NotNull ItemInfo info) {
 		KnowledgeAttachment attachment = attachment();
 		if (attachment.fullKnowledge) {
-			if (info.getItem().is(PEItems.TOME_OF_KNOWLEDGE.getKey())) {
+			if (info.getItem().is(InventoryExchangeItems.TOME_OF_KNOWLEDGE.getKey())) {
 				//If we have full knowledge and are trying to remove the tome allow it.
 				//Make sure we don't have any data components as it doesn't have any effect for the tome
 				info = info.itemOnly();

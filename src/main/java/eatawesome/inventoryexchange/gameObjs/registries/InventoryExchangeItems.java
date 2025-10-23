@@ -5,8 +5,10 @@ import eatawesome.inventoryexchange.gameObjs.items.UltimaArmor;
 import eatawesome.inventoryexchange.gameObjs.items.UltimaTool;
 import eatawesome.inventoryexchange.gameObjs.registration.impl.ItemDeferredRegister;
 import eatawesome.inventoryexchange.gameObjs.registration.impl.ItemRegistryObject;
+import moze_intel.projecte.gameObjs.items.Tome;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Rarity;
 
 public class InventoryExchangeItems {
 
@@ -18,4 +20,6 @@ public class InventoryExchangeItems {
 	public static final ItemRegistryObject<Item> ULTIMA_LEGGINGS = ITEMS.register("ultima_leggings", () -> new UltimaArmor(ArmorItem.Type.LEGGINGS));
 	public static final ItemRegistryObject<Item> ULTIMA_BOOTS = ITEMS.register("ultima_boots", () -> new UltimaArmor(ArmorItem.Type.BOOTS));
 
+	public static final moze_intel.projecte.gameObjs.registration.impl.ItemDeferredRegister PE_ITEMS = new moze_intel.projecte.gameObjs.registration.impl.ItemDeferredRegister(InventoryExchange.MODID);
+	public static final moze_intel.projecte.gameObjs.registration.impl.ItemRegistryObject<Tome> TOME_OF_KNOWLEDGE = PE_ITEMS.registerNoStack("tome", properties -> new Tome(properties.rarity(Rarity.EPIC)));
 }

@@ -6,7 +6,6 @@ import moze_intel.projecte.PECore;
 import moze_intel.projecte.config.PEConfigTranslations;
 import moze_intel.projecte.config.ProjectEConfig;
 import eatawesome.inventoryexchange.gameObjs.registries.InventoryExchangeItems;
-import moze_intel.projecte.gameObjs.registries.PEItems;
 import moze_intel.projecte.gameObjs.registries.PESoundEvents;
 import eatawesome.inventoryexchange.utils.InventoryExchangeKeybind;
 import eatawesome.inventoryexchange.utils.text.InventoryExchangeLang;
@@ -90,13 +89,13 @@ public class InventoryExchangeLangProvider extends BaseLanguageProvider {
 		add(InventoryExchangeLang.ULTIMA_TOOL_DEEP, "Ultima Tool set to Deep Mode (3x)");
 		
 		// Items
-		add(PEItems.TOME_OF_KNOWLEDGE, "Tome of Knowledge");
 		add(InventoryExchangeItems.ULTIMA, "Ultima");
 		add(InventoryExchangeItems.ULTIMA_TOOL, "Ultima Tool");
 		add(InventoryExchangeItems.ULTIMA_HELMET, "Ultima Helmet");
 		add(InventoryExchangeItems.ULTIMA_CHESTPLATE, "Ultima Chestplate");
 		add(InventoryExchangeItems.ULTIMA_LEGGINGS, "Ultima Leggings");
 		add(InventoryExchangeItems.ULTIMA_BOOTS, "Ultima Boots");
+		add(InventoryExchangeItems.TOME_OF_KNOWLEDGE, "Tome of Knowledge");
 
 		// Tooltips
 		add(PELang.TOOLTIP_TOME, "Unlocks all transmutation knowledge when learned");

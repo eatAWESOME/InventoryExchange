@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.function.Predicate;
+
+import eatawesome.inventoryexchange.gameObjs.registries.InventoryExchangeItems;
 import moze_intel.projecte.api.ItemInfo;
 import moze_intel.projecte.api.capabilities.IKnowledgeProvider;
 import moze_intel.projecte.api.capabilities.IKnowledgeProvider.TargetUpdateType;
@@ -106,7 +108,7 @@ public class TransmutationInventory extends CombinedInvWrapper {
 			return;
 		}
 		long learnedItemEmc = IEMCProxy.INSTANCE.getValue(learnedItem);
-		if (learnedItemEmc == 0 || learnedItem.getItem().is(PEItems.TOME_OF_KNOWLEDGE.getKey())) {
+		if (learnedItemEmc == 0 || learnedItem.getItem().is(InventoryExchangeItems.TOME_OF_KNOWLEDGE.getKey())) {
 			//The learned item has no EMC. As the most likely case that would happen is if it was a tome of knowledge
 			// we want to just update the client targets to be safe
 			// Note: We also reset the search page, as while the page we are on should still exist, it is likely now meaningless
@@ -178,7 +180,7 @@ public class TransmutationInventory extends CombinedInvWrapper {
 			return;
 		}
 		long unlearnedItemEmc = IEMCProxy.INSTANCE.getValue(unlearnedItem);
-		if (unlearnedItemEmc == 0 || unlearnedItem.getItem().is(PEItems.TOME_OF_KNOWLEDGE.getKey())) {
+		if (unlearnedItemEmc == 0 || unlearnedItem.getItem().is(InventoryExchangeItems.TOME_OF_KNOWLEDGE.getKey())) {
 			//The removed item has no EMC. As the most likely case that would happen is if it was a tome of knowledge
 			// we want to just update the client targets to be safe
 			// Note: We also reset the search page so that we don't accidentally end up on a page that no longer exists

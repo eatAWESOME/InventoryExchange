@@ -385,7 +385,7 @@ public class PELangProvider extends BaseLanguageProvider {
 		add(PEItems.ARCANA_RING, "Ring of Arcana");
 		add(PEItems.VOID_RING, "Void Ring");
 		add(PEItems.ZERO_RING, "Zero Ring");
-		add(PEItems.TOME_OF_KNOWLEDGE, "Tome of Knowledge");
+		//add(PEItems.TOME_OF_KNOWLEDGE, "Tome of Knowledge");
 		add(PEItems.TRANSMUTATION_TABLET, "Transmutation Tablet");
 	}
 

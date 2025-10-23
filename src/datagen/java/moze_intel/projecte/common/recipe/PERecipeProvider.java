@@ -48,6 +48,8 @@ import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import eatawesome.inventoryexchange.gameObjs.registries.InventoryExchangeItems;
+
 public class PERecipeProvider extends RecipeProvider {
 
 	private final ExistingFileHelper existingFileHelper;
@@ -146,7 +148,7 @@ public class PERecipeProvider extends RecipeProvider {
 	private static ShapedRecipeBuilder baseTomeRecipe(boolean alternate) {
 		String lowToHigh = "LMH";
 		String highToLow = "HML";
-		return ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, PEItems.TOME_OF_KNOWLEDGE)
+		return ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, InventoryExchangeItems.TOME_OF_KNOWLEDGE)
 				.pattern(alternate ? lowToHigh : highToLow)
 				.pattern("KBK")
 				.pattern(alternate ? highToLow : lowToHigh)
@@ -155,7 +157,7 @@ public class PERecipeProvider extends RecipeProvider {
 				.define('M', PEItems.MEDIUM_COVALENCE_DUST)
 				.define('H', PEItems.HIGH_COVALENCE_DUST)
 				.unlockedBy("has_covalence_dust", hasItems(PEItems.LOW_COVALENCE_DUST, PEItems.MEDIUM_COVALENCE_DUST, PEItems.HIGH_COVALENCE_DUST))
-				.group(PEItems.TOME_OF_KNOWLEDGE.getId().toString());
+				.group(InventoryExchangeItems.TOME_OF_KNOWLEDGE.getId().toString());
 	}
 
 	private static void addMatterRecipes(RecipeOutput recipeOutput) {

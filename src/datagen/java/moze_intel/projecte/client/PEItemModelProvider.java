@@ -1,5 +1,6 @@
 package moze_intel.projecte.client;
 
+import eatawesome.inventoryexchange.gameObjs.registries.InventoryExchangeItems;
 import moze_intel.projecte.PECore;
 import moze_intel.projecte.gameObjs.items.KleinStar.KleinTier;
 import moze_intel.projecte.gameObjs.registration.INamedEntry;
@@ -26,7 +27,7 @@ public class PEItemModelProvider extends ItemModelProvider {
 
 	@Override
 	protected void registerModels() {
-		registerGenerated(PEItems.TOME_OF_KNOWLEDGE);
+		registerGenerated(InventoryExchangeItems.TOME_OF_KNOWLEDGE);
 		/*
 		blockParentModel(PEBlocks.ALCHEMICAL_COAL, PEBlocks.MOBIUS_FUEL, PEBlocks.AETERNALIS_FUEL, PEBlocks.DARK_MATTER, PEBlocks.RED_MATTER,
 				PEBlocks.DARK_MATTER_PEDESTAL, PEBlocks.DARK_MATTER_FURNACE, PEBlocks.RED_MATTER_FURNACE, PEBlocks.COLLECTOR, PEBlocks.COLLECTOR_MK2,

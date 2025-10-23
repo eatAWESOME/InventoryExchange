@@ -16,6 +16,7 @@ public enum InventoryExchangeLang implements ILangEntry {
 	ULTIMA_CHESTPLATE("item", "ultima_chestplate"),
 	ULTIMA_LEGGINGS("item", "ultima_leggings"),
 	ULTIMA_BOOTS("item", "ultima_boots"),
+	TOME_OF_KNOWLEDGE("item", "tome_of_knowledge"),
 	
 	// Keys
 	CRAFTING("key", "crafting"),

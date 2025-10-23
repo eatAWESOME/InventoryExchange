@@ -8,6 +8,8 @@ import moze_intel.projecte.gameObjs.registries.PEItems;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
+import eatawesome.inventoryexchange.gameObjs.registries.InventoryExchangeItems;
+
 public class SlotConsume extends InventoryContainerSlot {
 
 	private final TransmutationInventory inv;
@@ -33,6 +35,6 @@ public class SlotConsume extends InventoryContainerSlot {
 
 	@Override
 	public boolean mayPlace(@NotNull ItemStack stack) {
-		return IEMCProxy.INSTANCE.hasValue(stack) || stack.is(PEItems.TOME_OF_KNOWLEDGE);
+		return IEMCProxy.INSTANCE.hasValue(stack) || stack.is(InventoryExchangeItems.TOME_OF_KNOWLEDGE);
 	}
 }

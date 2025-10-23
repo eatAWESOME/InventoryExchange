@@ -21,7 +21,7 @@ public class PECreativeTabs {
 			builder.displayItems((displayParameters, output) -> {
 				output.accept(PEItems.PHILOSOPHERS_STONE);
 				output.accept(PEItems.REPAIR_TALISMAN);
-				output.accept(PEItems.TOME_OF_KNOWLEDGE);
+				//output.accept(PEItems.TOME_OF_KNOWLEDGE);
 				output.accept(PEItems.TRANSMUTATION_TABLET);
 				output.accept(PEBlocks.TRANSMUTATION_TABLE);
 
@@ -228,7 +228,7 @@ public class PECreativeTabs {
 			addToExistingTab(event,
 					PEItems.PHILOSOPHERS_STONE,
 					PEItems.REPAIR_TALISMAN,
-					PEItems.TOME_OF_KNOWLEDGE,
+					//PEItems.TOME_OF_KNOWLEDGE,
 					PEItems.TRANSMUTATION_TABLET,
 
 					PEItems.DESTRUCTION_CATALYST,
