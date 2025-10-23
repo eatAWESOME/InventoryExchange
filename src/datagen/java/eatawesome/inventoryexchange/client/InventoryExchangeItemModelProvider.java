@@ -17,13 +17,13 @@ public class InventoryExchangeItemModelProvider extends ItemModelProvider {
 
 	@Override
 	protected void registerModels() {
-		registerGenerated(InventoryExchangeItems.ULTIMA);
-		registerGenerated(InventoryExchangeItems.ULTIMA_TOOL);
-		registerGenerated(InventoryExchangeItems.ULTIMA_HELMET);
-		registerGenerated(InventoryExchangeItems.ULTIMA_CHESTPLATE);
-		registerGenerated(InventoryExchangeItems.ULTIMA_LEGGINGS);
-		registerGenerated(InventoryExchangeItems.ULTIMA_BOOTS);
-		registerGenerated(InventoryExchangeItems.TOME_OF_KNOWLEDGE);
+		register(InventoryExchangeItems.ULTIMA);
+		register(InventoryExchangeItems.ULTIMA_TOOL, "handheld");
+		register(InventoryExchangeItems.ULTIMA_HELMET);
+		register(InventoryExchangeItems.ULTIMA_CHESTPLATE);
+		register(InventoryExchangeItems.ULTIMA_LEGGINGS);
+		register(InventoryExchangeItems.ULTIMA_BOOTS);
+		register(InventoryExchangeItems.TOME_OF_KNOWLEDGE);
 	}
 
 	protected ResourceLocation itemTexture(INamedEntry itemProvider) {
@@ -34,43 +34,27 @@ public class InventoryExchangeItemModelProvider extends ItemModelProvider {
 		return modLoc("item/" + itemProvider.getName());
 	}
 
-	protected void registerGenerated(INamedEntry... itemProviders) {
+	protected void register(INamedEntry... itemProviders) {
 		for (INamedEntry itemProvider : itemProviders) {
-			generated(itemProvider);
+			register(itemProvider);
 		}
 	}
 
-	protected void registerGenerated(moze_intel.projecte.gameObjs.registration.INamedEntry... itemProviders) {
+	protected void register(moze_intel.projecte.gameObjs.registration.INamedEntry... itemProviders) {
 		for (moze_intel.projecte.gameObjs.registration.INamedEntry itemProvider : itemProviders) {
-			generated(itemProvider);
+			register(itemProvider);
 		}
 	}
-
-	protected ItemModelBuilder generated(INamedEntry itemProvider) {
-		return generated(itemProvider, itemTexture(itemProvider));
+	
+	protected ItemModelBuilder register(INamedEntry itemProvider, String type) {
+		return withExistingParent(itemProvider.getName(), "item/" + type).texture("layer0", itemTexture(itemProvider));
+	}
+	
+	protected ItemModelBuilder register(INamedEntry itemProvider) {
+		return withExistingParent(itemProvider.getName(), "item/generated").texture("layer0", itemTexture(itemProvider));
 	}
 
-	protected ItemModelBuilder generated(moze_intel.projecte.gameObjs.registration.INamedEntry itemProvider) {
-		return generated(itemProvider, itemTexture(itemProvider));
-	}
-
-	protected ItemModelBuilder generated(INamedEntry itemProvider, ResourceLocation texture) {
-		return generated(itemProvider.getName(), texture);
-	}
-
-	protected ItemModelBuilder generated(moze_intel.projecte.gameObjs.registration.INamedEntry itemProvider, ResourceLocation texture) {
-		return generated(itemProvider.getName(), texture);
-	}
-
-	protected ItemModelBuilder generated(String name, ResourceLocation texture) {
-		return withExistingParent(name, "item/generated").texture("layer0", texture);
-	}
-
-	protected ItemModelBuilder handheld(INamedEntry itemProvider, ResourceLocation texture) {
-		return handheld(itemProvider.getName(), texture);
-	}
-
-	protected ItemModelBuilder handheld(String name, ResourceLocation texture) {
-		return withExistingParent(name, "item/handheld").texture("layer0", texture);
+	protected ItemModelBuilder register(moze_intel.projecte.gameObjs.registration.INamedEntry itemProvider) {
+		return withExistingParent(itemProvider.getName(), "item/generated").texture("layer0", itemTexture(itemProvider));
 	}
 }
