@@ -79,14 +79,14 @@ public class PEMorningStar extends PETool implements IItemMode<PickaxeMode>, IHa
 				ToolHelper::dowseCampfire,
 				(ctx, state) -> {
 					if (state.is(PETags.Blocks.VEIN_SHOVEL)) {
-						if (ProjectEConfig.server.items.pickaxeAoeVeinMining.get()) {
+						if (false) {//ProjectEConfig.server.items.pickaxeAoeVeinMining.get()) {
 							return ToolHelper.digAOE(ctx.getLevel(), ctx.getPlayer(), ctx.getHand(), ctx.getItemInHand(), ctx.getClickedPos(), ctx.getClickedFace(), false, 0);
 						}
 						return ToolHelper.tryVeinMine(ctx.getPlayer(), ctx.getItemInHand(), ctx.getClickedPos(), ctx.getClickedFace());
 					}
 					return InteractionResult.PASS;
 				}, (ctx, state) -> {
-					if (state.is(Tags.Blocks.ORES) && !ProjectEConfig.server.items.pickaxeAoeVeinMining.get()) {
+					if (state.is(Tags.Blocks.ORES)) {// && !ProjectEConfig.server.items.pickaxeAoeVeinMining.get()) {
 						return ToolHelper.tryVeinMine(ctx.getPlayer(), ctx.getItemInHand(), ctx.getClickedPos(), ctx.getClickedFace());
 					}
 					return InteractionResult.PASS;
@@ -98,7 +98,7 @@ public class PEMorningStar extends PETool implements IItemMode<PickaxeMode>, IHa
 	@Override
 	public InteractionResultHolder<ItemStack> use(@NotNull Level level, @NotNull Player player, @NotNull InteractionHand hand) {
 		ItemStack stack = player.getItemInHand(hand);
-		if (ProjectEConfig.server.items.pickaxeAoeVeinMining.get()) {
+		if (false) {//ProjectEConfig.server.items.pickaxeAoeVeinMining.get()) {
 			return ItemHelper.actionResultFromType(ToolHelper.mineOreVeinsInAOE(player, hand), stack);
 		}
 		return InteractionResultHolder.pass(stack);

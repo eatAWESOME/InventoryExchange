@@ -104,7 +104,7 @@ public class TransmutationRenderingOverlay implements LayeredDraw.Layer {
 			} else {
 				transmutationResult = changes.values().iterator().next().getBlock();
 				Vec3 viewPosition = activeRenderInfo.getPosition();
-				float alpha = ProjectEConfig.client.pulsatingOverlay.get() ? getPulseProportion() * 0.60F : 0.35F;
+				float alpha = 0.35F;//ProjectEConfig.client.pulsatingOverlay.get() ? getPulseProportion() * 0.60F : 0.35F;
 				VertexConsumer builder = event.getMultiBufferSource().getBuffer(PERenderType.TRANSMUTATION_OVERLAY);
 				PoseStack matrix = event.getPoseStack();
 				CollisionContext selectionContext = CollisionContext.of(player);

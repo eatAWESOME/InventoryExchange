@@ -124,7 +124,7 @@ public class PEPickaxe extends PickaxeItem implements IItemCharge, IItemMode<Pic
 	@Override
 	public InteractionResultHolder<ItemStack> use(@NotNull Level level, @NotNull Player player, @NotNull InteractionHand hand) {
 		ItemStack stack = player.getItemInHand(hand);
-		if (ProjectEConfig.server.items.pickaxeAoeVeinMining.get()) {
+		if (false) {//ProjectEConfig.server.items.pickaxeAoeVeinMining.get()) {
 			//If we are supposed to mine in an AOE then attempt to do so
 			return ItemHelper.actionResultFromType(ToolHelper.mineOreVeinsInAOE(player, hand), stack);
 		}
@@ -135,7 +135,7 @@ public class PEPickaxe extends PickaxeItem implements IItemCharge, IItemMode<Pic
 	@Override
 	public InteractionResult useOn(UseOnContext context) {
 		Player player = context.getPlayer();
-		if (player == null || ProjectEConfig.server.items.pickaxeAoeVeinMining.get()) {
+		if (player == null) {// || ProjectEConfig.server.items.pickaxeAoeVeinMining.get()) {
 			//If we don't have a player or the config says we should mine in an AOE (this happens when right clicking air as well)
 			// Then we just pass so that it can be processed in onItemRightClick
 			return InteractionResult.PASS;

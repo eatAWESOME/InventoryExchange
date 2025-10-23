@@ -18,12 +18,12 @@ public class ClientConfig extends BasePEConfig {
 	//public final CachedBooleanValue statToolTips;
 	public final CachedBooleanValue tagToolTips;
 
-	public final CachedBooleanValue pulsatingOverlay;
+	//public final CachedBooleanValue pulsatingOverlay;
 
 	ClientConfig() {
 		ModConfigSpec.Builder builder = new ModConfigSpec.Builder();
 
-		pulsatingOverlay = CachedBooleanValue.wrap(this, PEConfigTranslations.CLIENT_PHILO_OVERLAY.applyToBuilder(builder).define("pulsatingOverlay", false));
+		//pulsatingOverlay = CachedBooleanValue.wrap(this, PEConfigTranslations.CLIENT_PHILO_OVERLAY.applyToBuilder(builder).define("pulsatingOverlay", false));
 
 		PEConfigTranslations.CLIENT_TOOLTIPS.applyToBuilder(builder).push("tooltips");
 		emcToolTips = CachedBooleanValue.wrap(this, PEConfigTranslations.CLIENT_TOOLTIPS_EMC.applyToBuilder(builder).define("emc", true));

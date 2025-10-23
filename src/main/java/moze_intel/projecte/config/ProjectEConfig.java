@@ -18,12 +18,12 @@ public class ProjectEConfig {
 	public static final Path CONFIG_DIR = FMLPaths.getOrCreateGameRelativePath(FMLPaths.CONFIGDIR.get().resolve(PECore.MODID + "/" + PECore.PEID));
 	private static final Map<IConfigSpec, IPEConfig> KNOWN_CONFIGS = new HashMap<>();
 
-	public static final ServerConfig server = new ServerConfig();
+	//public static final ServerConfig server = new ServerConfig();
 	public static final CommonConfig common = new CommonConfig();
 	public static final ClientConfig client = new ClientConfig();
 
 	public static void register(ModContainer modContainer) {
-		registerConfig(modContainer, server);
+		//registerConfig(modContainer, server);
 		registerConfig(modContainer, common);
 		registerConfig(modContainer, client);
 	}

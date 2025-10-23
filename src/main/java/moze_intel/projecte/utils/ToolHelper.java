@@ -125,7 +125,7 @@ public class ToolHelper {
 	 * Clears the given tag in an AOE. Charge affects the AOE. Optional per-block EMC cost.
 	 */
 	public static InteractionResult clearTagAOE(Level level, Player player, InteractionHand hand, ItemStack stack, long emcCost, TagKey<Block> tag) {
-		if (ProjectEConfig.server.items.disableAllRadiusMining.get()) {
+		if (false) {//ProjectEConfig.server.items.disableAllRadiusMining.get()) {
 			return InteractionResult.PASS;
 		}
 		int charge = getCharge(stack);
@@ -299,7 +299,8 @@ public class ToolHelper {
 	 * Called by multiple tools' left click function. Charge has no effect. Free operation.
 	 */
 	public static void digBasedOnMode(ItemStack stack, Level level, BlockPos pos, LivingEntity living, RayTracePointer tracePointer, PickaxeMode mode) {
-		if (level.isClientSide || mode == PickaxeMode.STANDARD || ProjectEConfig.server.items.disableAllRadiusMining.get() || !(living instanceof Player player)) {
+		if (level.isClientSide || mode == PickaxeMode.STANDARD || //ProjectEConfig.server.items.disableAllRadiusMining.get() || 
+				!(living instanceof Player player)) {
 			return;
 		}
 		BlockHitResult result = tracePointer.rayTrace(level, player, ClipContext.Fluid.NONE);
@@ -340,7 +341,7 @@ public class ToolHelper {
 	 * Carves in an AOE. Charge affects the breadth and/or depth of the AOE. Optional per-block EMC cost.
 	 */
 	public static InteractionResult digAOE(Level level, Player player, InteractionHand hand, ItemStack stack, BlockPos pos, Direction sideHit, boolean affectDepth, long emcCost) {
-		if (ProjectEConfig.server.items.disableAllRadiusMining.get()) {
+		if (false) {//ProjectEConfig.server.items.disableAllRadiusMining.get()) {
 			return InteractionResult.PASS;
 		}
 		int charge = getCharge(stack);
@@ -487,7 +488,7 @@ public class ToolHelper {
 	 * Scans and harvests an ore vein.
 	 */
 	public static InteractionResult tryVeinMine(Player player, ItemStack stack, BlockPos pos, Direction sideHit) {
-		if (ProjectEConfig.server.items.disableAllRadiusMining.get()) {
+		if (false) {//ProjectEConfig.server.items.disableAllRadiusMining.get()) {
 			return InteractionResult.PASS;
 		}
 		Level level = player.level();
@@ -506,7 +507,7 @@ public class ToolHelper {
 	 * Mines all ore veins in a Box around the player.
 	 */
 	public static InteractionResult mineOreVeinsInAOE(Player player, InteractionHand hand) {
-		if (ProjectEConfig.server.items.disableAllRadiusMining.get()) {
+		if (false) {//ProjectEConfig.server.items.disableAllRadiusMining.get()) {
 			return InteractionResult.PASS;
 		}
 		Level level = player.level();
@@ -518,7 +519,7 @@ public class ToolHelper {
 
 	public static <DATA> InteractionResult harvestVein(Level level, Player player, BlockPos dropPos, ItemStack stack, AABB area, DATA data,
 			BiPredicate<BlockState, DATA> stateChecker, DropSpawner spawnDrops) {
-		if (ProjectEConfig.server.items.disableAllRadiusMining.get()) {
+		if (false) {//ProjectEConfig.server.items.disableAllRadiusMining.get()) {
 			return InteractionResult.PASS;
 		}
 		List<ItemStack> drops = new ArrayList<>();
