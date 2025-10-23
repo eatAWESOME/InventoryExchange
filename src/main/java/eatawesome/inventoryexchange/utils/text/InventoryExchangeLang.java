@@ -35,6 +35,7 @@ public enum InventoryExchangeLang implements ILangEntry {
 	ULTIMA_TOOL_WIDE("message", "ultima_tool_wide"),
 	ULTIMA_TOOL_TALL("message", "ultima_tool_tall"),
 	ULTIMA_TOOL_DEEP("message", "ultima_tool_deep"),
+	KNOWLEDGE_LEARNED("message", "knowledge_learned"),
 	
 	// Misc
 	INVENTORYEXCHANGE("misc", "mod_name"),

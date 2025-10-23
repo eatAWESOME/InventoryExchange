@@ -22,19 +22,7 @@ public class InventoryExchangeLangProvider extends BaseLanguageProvider {
 
 	@Override
 	protected void addTranslations() {
-		addAdvancements();
-		addBlocks();
-		addCommands();
-		addConfigs();
-		addEMC();
-		addEntityTypes();
-		addTags();
-		addItems();
-		addModes();
-		addPedestalTooltips();
-		addSubtitles();
-		addTooltips();
-		addTransmutation();
+		
 		// Misc stuff
 		add(InventoryExchangeLang.INVENTORYEXCHANGE, InventoryExchange.MODNAME);
 		add(InventoryExchangeLang.PACK_DESCRIPTION, InventoryExchange.MODNAME + " Mod");
@@ -47,10 +35,12 @@ public class InventoryExchangeLangProvider extends BaseLanguageProvider {
 		add(PELang.BLACKLIST, "Blacklist");
 		add(PELang.WHITELIST, "Whitelist");
 		add(PELang.DENSITY_MODE_TARGET, "Set target to: %1$s");
+		
 		// Containers
 		add(InventoryExchangeLang.INFINITE_CONTAINER_CONTAINER, "Infinite Inventory");
 		add(InventoryExchangeLang.INFINITE_CONTAINER_SORT, "Sort");
 		add(InventoryExchangeLang.TRANSMUTATION_CONTAINER, "Transmutation");
+		
 		// Keybinds
 		add(InventoryExchangeKeybind.CRAFTING, "Open Crafting");
 		add(InventoryExchangeKeybind.FEED_TOGGLE, "Toggle Feeding via EMC");
@@ -59,16 +49,8 @@ public class InventoryExchangeLangProvider extends BaseLanguageProvider {
 		add(InventoryExchangeKeybind.REPAIR_TOGGLE, "Toggle Repairing Items via EMC");
 		add(InventoryExchangeKeybind.TRANSMUTATION, "Transmutation");
 		add(InventoryExchangeKeybind.ULTIMA_TOOL_MODE, "Change Ultima Tool Mode");
-		
-	}
 
-	private void addAdvancements() {
-	}
-
-	private void addBlocks() {
-	}
-
-	private void addCommands() {
+		// Commands
 		add(PELang.CLEAR_KNOWLEDGE_NOTIFY, "Your transmutation knowledge was cleared by %1$s!");
 		add(PELang.CLEAR_KNOWLEDGE_SUCCESS, "Cleared knowledge for: %1$s");
 		add(PELang.DUMP_MISSING_EMC_NONE_MISSING, "All Items have an EMC value.");
@@ -106,16 +88,56 @@ public class InventoryExchangeLangProvider extends BaseLanguageProvider {
 		add(InventoryExchangeLang.ULTIMA_TOOL_WIDE, "Ultima Tool set to Wide Mode (3x)");
 		add(InventoryExchangeLang.ULTIMA_TOOL_TALL, "Ultima Tool set to Tall Mode (3x)");
 		add(InventoryExchangeLang.ULTIMA_TOOL_DEEP, "Ultima Tool set to Deep Mode (3x)");
+		
+		// Items
+		add(PEItems.TOME_OF_KNOWLEDGE, "Tome of Knowledge");
+		add(InventoryExchangeItems.ULTIMA, "Ultima");
+		add(InventoryExchangeItems.ULTIMA_TOOL, "Ultima Tool");
+		add(InventoryExchangeItems.ULTIMA_HELMET, "Ultima Helmet");
+		add(InventoryExchangeItems.ULTIMA_CHESTPLATE, "Ultima Chestplate");
+		add(InventoryExchangeItems.ULTIMA_LEGGINGS, "Ultima Leggings");
+		add(InventoryExchangeItems.ULTIMA_BOOTS, "Ultima Boots");
 
-	}
+		// Tooltips
+		add(PELang.TOOLTIP_TOME, "Unlocks all transmutation knowledge when learned");
+		
+		// Subtitles
+		add(PESoundEvents.WIND_MAGIC, "Wind Magic");
+		add(PESoundEvents.WATER_MAGIC, "Water Magic");
+		add(PESoundEvents.POWER, "Device Powered");
+		add(PESoundEvents.HEAL, "Healing Performed");
+		add(PESoundEvents.DESTRUCT, "Destruction");
+		add(PESoundEvents.CHARGE, "Device Charged");
+		add(PESoundEvents.UNCHARGE, "Device Uncharged");
+		add(PESoundEvents.TRANSMUTE, "Block Transmuted");
 
-	private void addConfigs() {
+		// Configs
 		addInventoryExchangeConfigs(InventoryExchangeConfigTranslations.values());
 		addPEConfigs(ProjectEConfig.getConfigs());
 		addPEConfigs(PEConfigTranslations.values());
-	}
-
-	private void addEMC() {
+		
+		// Transmutation
+		add(PELang.TRANSMUTATION_TRANSMUTE, "Transmutation");
+		add(PELang.TRANSMUTATION_LEARNED_1, "L");
+		add(PELang.TRANSMUTATION_LEARNED_2, "e");
+		add(PELang.TRANSMUTATION_LEARNED_3, "a");
+		add(PELang.TRANSMUTATION_LEARNED_4, "r");
+		add(PELang.TRANSMUTATION_LEARNED_5, "n");
+		add(PELang.TRANSMUTATION_LEARNED_6, "e");
+		add(PELang.TRANSMUTATION_LEARNED_7, "d");
+		add(PELang.TRANSMUTATION_LEARNED_8, "!");
+		add(PELang.TRANSMUTATION_UNLEARNED_1, "U");
+		add(PELang.TRANSMUTATION_UNLEARNED_2, "n");
+		add(PELang.TRANSMUTATION_UNLEARNED_3, "l");
+		add(PELang.TRANSMUTATION_UNLEARNED_4, "e");
+		add(PELang.TRANSMUTATION_UNLEARNED_5, "a");
+		add(PELang.TRANSMUTATION_UNLEARNED_6, "r");
+		add(PELang.TRANSMUTATION_UNLEARNED_7, "n");
+		add(PELang.TRANSMUTATION_UNLEARNED_8, "e");
+		add(PELang.TRANSMUTATION_UNLEARNED_9, "d");
+		add(InventoryExchangeLang.KNOWLEDGE_LEARNED, "Transmutation Knowledge Learned!");
+		
+		// EMC
 		add(PELang.EMC, "%1$s EMC");
 		add(PELang.EMC_MAX_GEN_RATE, "Maximum Generation Rate: %1$s EMC/t");
 		add(PELang.EMC_MAX_OUTPUT_RATE, "Maximum Output Rate: %1$s EMC/t");
@@ -128,7 +150,8 @@ public class InventoryExchangeLangProvider extends BaseLanguageProvider {
 		add(PELang.EMC_TOOLTIP_WITH_SELL, "EMC: %1$s (%2$s)");
 		add(PELang.EMC_STACK_TOOLTIP_WITH_SELL, "Stack EMC: %1$s (%2$s)");
 		add(PELang.EMC_TOO_MUCH, "WAY TOO MUCH");
-		//Postfix names for large EMC values. Names gotten from: https://en.wikipedia.org/wiki/Names_of_large_numbers
+		
+		//Postfix names for large EMC values.
 		addPostfix(0, "Trillion");
 		addPostfix(1, "Quadrillion");
 		addPostfix(2, "Quintillion");
@@ -151,67 +174,5 @@ public class InventoryExchangeLangProvider extends BaseLanguageProvider {
 
 	private void addPostfix(int index, String postfix) {
 		add(Util.makeDescriptionId("emc", PECore.rl("postfix." + index)), "%1$s " + postfix);
-	}
-
-	private void addEntityTypes() {
-	}
-
-	private void addTags() {
-	}
-
-	private void addItems() {
-		add(PEItems.TOME_OF_KNOWLEDGE, "Tome of Knowledge");
-		add(InventoryExchangeItems.ULTIMA, "Ultima");
-		add(InventoryExchangeItems.ULTIMA_TOOL, "Ultima Tool");
-		add(InventoryExchangeItems.ULTIMA_HELMET, "Ultima Helmet");
-		add(InventoryExchangeItems.ULTIMA_CHESTPLATE, "Ultima Chestplate");
-		add(InventoryExchangeItems.ULTIMA_LEGGINGS, "Ultima Leggings");
-		add(InventoryExchangeItems.ULTIMA_BOOTS, "Ultima Boots");
-	}
-
-	private void addModes() {
-		
-	}
-
-	private void addPedestalTooltips() {
-	}
-
-	private void addSubtitles() {
-		//TODO: Improve on these if someone has better ideas for the subtitles
-		add(PESoundEvents.WIND_MAGIC, "Wind Magic");
-		add(PESoundEvents.WATER_MAGIC, "Water Magic");
-		add(PESoundEvents.POWER, "Device Powered");
-		add(PESoundEvents.HEAL, "Healing Performed");
-		add(PESoundEvents.DESTRUCT, "Destruction");
-		add(PESoundEvents.CHARGE, "Device Charged");
-		add(PESoundEvents.UNCHARGE, "Device Uncharged");
-		add(PESoundEvents.TRANSMUTE, "Block Transmuted");
-	}
-
-	private void addTooltips() {
-		//add(PELang.TOOLTIP_TIME_WATCH_1, "Become the master of time");
-		//add(PELang.TOOLTIP_TIME_WATCH_2, "Interact (%1$s) to change mode");
-		add(PELang.TOOLTIP_TOME, "Unlocks all transmutation knowledge when learned");
-	}
-
-	private void addTransmutation() {
-		add(PELang.TRANSMUTATION_TRANSMUTE, "Transmutation");
-		add(PELang.TRANSMUTATION_LEARNED_1, "L");
-		add(PELang.TRANSMUTATION_LEARNED_2, "e");
-		add(PELang.TRANSMUTATION_LEARNED_3, "a");
-		add(PELang.TRANSMUTATION_LEARNED_4, "r");
-		add(PELang.TRANSMUTATION_LEARNED_5, "n");
-		add(PELang.TRANSMUTATION_LEARNED_6, "e");
-		add(PELang.TRANSMUTATION_LEARNED_7, "d");
-		add(PELang.TRANSMUTATION_LEARNED_8, "!");
-		add(PELang.TRANSMUTATION_UNLEARNED_1, "U");
-		add(PELang.TRANSMUTATION_UNLEARNED_2, "n");
-		add(PELang.TRANSMUTATION_UNLEARNED_3, "l");
-		add(PELang.TRANSMUTATION_UNLEARNED_4, "e");
-		add(PELang.TRANSMUTATION_UNLEARNED_5, "a");
-		add(PELang.TRANSMUTATION_UNLEARNED_6, "r");
-		add(PELang.TRANSMUTATION_UNLEARNED_7, "n");
-		add(PELang.TRANSMUTATION_UNLEARNED_8, "e");
-		add(PELang.TRANSMUTATION_UNLEARNED_9, "d");
 	}
 }

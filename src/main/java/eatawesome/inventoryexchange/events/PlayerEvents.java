@@ -5,6 +5,7 @@ import java.math.BigInteger;
 import eatawesome.inventoryexchange.InventoryExchange;
 import eatawesome.inventoryexchange.capabilities.IAbilityEMCProvider;
 import eatawesome.inventoryexchange.capabilities.InventoryExchangeCapabilities;
+import eatawesome.inventoryexchange.network.packets.to_client.KnowledgeToastPKT;
 import eatawesome.inventoryexchange.utils.InfiniteContainerHelper;
 import eatawesome.inventoryexchange.utils.PlayerHelper;
 import eatawesome.inventoryexchange.utils.PortableFurnaceHelper;
@@ -12,7 +13,6 @@ import moze_intel.projecte.api.ItemInfo;
 import moze_intel.projecte.api.capabilities.IKnowledgeProvider;
 import moze_intel.projecte.api.capabilities.PECapabilities;
 import moze_intel.projecte.api.proxy.IEMCProxy;
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -31,6 +31,7 @@ import net.neoforged.neoforge.event.entity.player.ItemEntityPickupEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerContainerEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.items.IItemHandlerModifiable;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 @EventBusSubscriber(modid = InventoryExchange.MODID)
 public class PlayerEvents {
@@ -184,7 +185,9 @@ public class PlayerEvents {
 	                if (!knowledge.hasKnowledge(itemStack)) {
 	                	knowledge.addKnowledge(itemStack);
 	                	knowledge.syncKnowledgeChange(serverPlayer, ItemInfo.fromStack(itemStack), true);
-	                	player.displayClientMessage(Component.literal("Learned " + itemStack.getItem().getName(itemStack).getString() + " Transmutation Knowledge"), false);
+	                	ItemStack icon = itemStack.copy();
+						icon.setCount(1);
+						PacketDistributor.sendToPlayer(serverPlayer, new KnowledgeToastPKT(icon));
 	                }
 	            }
 	        } catch (IllegalArgumentException e) {

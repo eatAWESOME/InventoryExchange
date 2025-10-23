@@ -12,5 +12,6 @@
   "configuration.projecte.server.misc.unsafe_key_binds.tooltip": "False requires your hand be empty for Gem Armour Offensive Abilities to be readied or triggered.",
   "emc.projecte.has_knowledge": "Learnt",
   "emc.projecte.no_knowledge": "Unlearnt",
+  "message.inventoryexchange.knowledge_learned": "Transmutation Knowledge Learnt!",
   "tooltip.projecte.tome": "Unlocks all transmutation knowledge when learnt"
 }

@@ -325,6 +325,7 @@
   "key.inventoryexchange.ultima_tool_mode": "Change Ultima Tool Mode",
   "message.inventoryexchange.feeding_disabled": "Feeding via EMC: Disabled",
   "message.inventoryexchange.feeding_enabled": "Feeding via EMC: Enabled",
+  "message.inventoryexchange.knowledge_learned": "Transmutation Knowledge Learned!",
   "message.inventoryexchange.repair_disabled": "Repairing Items via EMC: Disabled",
   "message.inventoryexchange.repair_enabled": "Repairing Items via EMC: Enabled",
   "message.inventoryexchange.ultima_tool_deep": "Ultima Tool set to Deep Mode (3x)",
