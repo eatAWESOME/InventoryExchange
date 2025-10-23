@@ -14,6 +14,13 @@ import eatawesome.inventoryexchange.utils.InfiniteContainerHelper;
 import eatawesome.inventoryexchange.utils.PermissionHelper;
 import eatawesome.inventoryexchange.utils.RepairToggle;
 import eatawesome.inventoryexchange.utils.text.InventoryExchangeLang;
+import moze_intel.projecte.network.commands.EMCCMD;
+import moze_intel.projecte.network.commands.KnowledgeCMD;
+import moze_intel.projecte.network.commands.RemoveEmcCMD;
+import moze_intel.projecte.network.commands.ResetEmcCMD;
+import moze_intel.projecte.network.commands.SetEmcCMD;
+import moze_intel.projecte.network.commands.client.DumpMissingEmc;
+import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
@@ -30,6 +37,7 @@ public class InventoryExchangeCommands {
 	@SubscribeEvent
 	public static void register(RegisterCommandsEvent event) {
 		CommandDispatcher<CommandSourceStack> dispatcher = event.getDispatcher();
+		CommandBuildContext context = event.getBuildContext();
 
 		LiteralArgumentBuilder<CommandSourceStack> root =
 			Commands.literal("inventoryexchange")
@@ -112,7 +120,14 @@ public class InventoryExchangeCommands {
 							})
 						)
 					)
-				);
+				)
+				.then(RemoveEmcCMD.register(context))
+				.then(ResetEmcCMD.register(context))
+				.then(SetEmcCMD.register(context))
+				.then(EMCCMD.register(context))
+				.then(KnowledgeCMD.register(context))
+				.then(DumpMissingEmc.register(context));
+		
 
 		LiteralArgumentBuilder<CommandSourceStack> alias =
 			Commands.literal("ie")

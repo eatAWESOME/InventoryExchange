@@ -77,7 +77,7 @@ public class PEClient {
 		modEventBus.addListener(this::addLayers);
 
 		NeoForge.EVENT_BUS.addListener(this::onEntityJoinWorld);
-		NeoForge.EVENT_BUS.addListener(this::registerClientCommands);
+		//NeoForge.EVENT_BUS.addListener(this::registerClientCommands);
 	}
 
 	private void onEntityJoinWorld(EntityJoinLevelEvent event) {
