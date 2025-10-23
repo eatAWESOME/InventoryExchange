@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "inventoryexchange:item/tome"
+    "layer0": "inventoryexchange:item/tome_of_knowledge"
   }
 }

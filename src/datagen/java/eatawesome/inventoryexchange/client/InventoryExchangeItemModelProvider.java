@@ -19,6 +19,7 @@ public class InventoryExchangeItemModelProvider extends ItemModelProvider {
 	protected void registerModels() {
 		register(InventoryExchangeItems.ULTIMA);
 		register(InventoryExchangeItems.ULTIMA_TOOL, "handheld");
+		register(InventoryExchangeItems.ULTIMA_WATCH);
 		register(InventoryExchangeItems.ULTIMA_HELMET);
 		register(InventoryExchangeItems.ULTIMA_CHESTPLATE);
 		register(InventoryExchangeItems.ULTIMA_LEGGINGS);

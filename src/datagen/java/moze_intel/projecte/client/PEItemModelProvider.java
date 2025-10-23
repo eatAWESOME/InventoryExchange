@@ -27,7 +27,6 @@ public class PEItemModelProvider extends ItemModelProvider {
 
 	@Override
 	protected void registerModels() {
-		registerGenerated(InventoryExchangeItems.TOME_OF_KNOWLEDGE);
 		/*
 		blockParentModel(PEBlocks.ALCHEMICAL_COAL, PEBlocks.MOBIUS_FUEL, PEBlocks.AETERNALIS_FUEL, PEBlocks.DARK_MATTER, PEBlocks.RED_MATTER,
 				PEBlocks.DARK_MATTER_PEDESTAL, PEBlocks.DARK_MATTER_FURNACE, PEBlocks.RED_MATTER_FURNACE, PEBlocks.COLLECTOR, PEBlocks.COLLECTOR_MK2,
@@ -78,6 +77,7 @@ public class PEItemModelProvider extends ItemModelProvider {
 	}
 
 	private void generateRings() {
+		/*
 		getBuilder(PEItems.ARCANA_RING.getName())
 				//Zero Off
 				.override()
@@ -196,7 +196,7 @@ public class PEItemModelProvider extends ItemModelProvider {
 				.override()
 				.predicate(PEClient.ACTIVE_OVERRIDE, 1)
 				.model(generated("zero_ring_on", modLoc("item/rings/zero_on")))
-				.end();
+				.end();*/
 	}
 
 	private void generateKleinStars() {

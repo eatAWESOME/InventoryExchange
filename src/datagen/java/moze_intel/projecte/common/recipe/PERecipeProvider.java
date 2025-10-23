@@ -77,7 +77,7 @@ public class PERecipeProvider extends RecipeProvider {
 		});
 		*/
 	}
-
+/*
 	private void buildRecipesInternal(@NotNull RecipeOutput recipeOutput) {
 		SpecialRecipeBuilder.special(RecipesCovalenceRepair::new)
 				.save(recipeOutput, PECore.rl("covalence_repair"));
@@ -1129,5 +1129,5 @@ public class PERecipeProvider extends RecipeProvider {
 			predicates[items.length + i] = ItemPredicate.Builder.item().of(tags[i]).build();
 		}
 		return inventoryTrigger(predicates);
-	}
+	}*/
 }

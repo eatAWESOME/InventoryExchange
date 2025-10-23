@@ -18,6 +18,7 @@ public class InventoryExchangeCreativeTabs {
 			builder.displayItems((displayParameters, output) -> {
 				output.accept(InventoryExchangeItems.ULTIMA);
 				output.accept(InventoryExchangeItems.ULTIMA_TOOL);
+				output.accept(InventoryExchangeItems.ULTIMA_WATCH);
 				output.accept(InventoryExchangeItems.ULTIMA_HELMET);
 				output.accept(InventoryExchangeItems.ULTIMA_CHESTPLATE);
 				output.accept(InventoryExchangeItems.ULTIMA_LEGGINGS);
@@ -34,6 +35,7 @@ public class InventoryExchangeCreativeTabs {
 		} else if (tabKey == CreativeModeTabs.TOOLS_AND_UTILITIES) {
 			addToExistingTab(event,
 					InventoryExchangeItems.ULTIMA_TOOL,
+					InventoryExchangeItems.ULTIMA_WATCH,
 					InventoryExchangeItems.TOME_OF_KNOWLEDGE
 			);
 		} else if (tabKey == CreativeModeTabs.COMBAT) {

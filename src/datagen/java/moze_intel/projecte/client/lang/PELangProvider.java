@@ -346,7 +346,7 @@ public class PELangProvider extends BaseLanguageProvider {
 		add(PEItems.VOLCANITE_AMULET, "Volcanite Amulet");
 		add(PEItems.SWIFTWOLF_RENDING_GALE, "Swiftwolf's Rending Gale");
 		add(PEItems.MERCURIAL_EYE, "Mercurial Eye");
-		add(PEItems.WATCH_OF_FLOWING_TIME, "Watch of Flowing Time");
+		//add(PEItems.WATCH_OF_FLOWING_TIME, "Watch of Flowing Time");
 		add(PEItems.GEM_OF_ETERNAL_DENSITY, "Gem of Eternal Density");
 		add(PEItems.LOW_DIVINING_ROD, "Divining Rod (low)");
 		add(PEItems.MEDIUM_DIVINING_ROD, "Divining Rod (medium)");

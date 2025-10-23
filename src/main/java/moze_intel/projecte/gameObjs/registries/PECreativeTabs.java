@@ -78,7 +78,7 @@ public class PECreativeTabs {
 				output.accept(PEItems.IGNITION_RING);
 				output.accept(PEItems.ZERO_RING);
 				output.accept(PEItems.SWIFTWOLF_RENDING_GALE);
-				output.accept(PEItems.WATCH_OF_FLOWING_TIME);
+				//output.accept(PEItems.WATCH_OF_FLOWING_TIME);
 				output.accept(PEItems.EVERTIDE_AMULET);
 				output.accept(PEItems.VOLCANITE_AMULET);
 				output.accept(PEItems.GEM_OF_ETERNAL_DENSITY);
@@ -238,7 +238,7 @@ public class PECreativeTabs {
 					PEItems.IGNITION_RING,
 					PEItems.ZERO_RING,
 					PEItems.SWIFTWOLF_RENDING_GALE,
-					PEItems.WATCH_OF_FLOWING_TIME,
+					//PEItems.WATCH_OF_FLOWING_TIME,
 					PEItems.EVERTIDE_AMULET,
 					PEItems.VOLCANITE_AMULET,
 					PEItems.GEM_OF_ETERNAL_DENSITY,

@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "C": {
+      "item": "minecraft:clock"
+    },
+    "U": {
+      "item": "inventoryexchange:ultima"
+    }
+  },
+  "pattern": [
+    " U ",
+    "UCU",
+    " U "
+  ],
+  "result": {
+    "count": 1,
+    "id": "inventoryexchange:ultima_watch"
+  }
+}

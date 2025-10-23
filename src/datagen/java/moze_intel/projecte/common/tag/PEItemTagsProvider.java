@@ -71,8 +71,8 @@ public class PEItemTagsProvider extends ItemTagsProvider {
 		);
 		tag(PETags.Items.DATA_COMPONENT_WHITELIST);
 		tag(PETags.Items.CURIOS_BELT).add(
-				PEItems.REPAIR_TALISMAN.get(),
-				PEItems.WATCH_OF_FLOWING_TIME.get()
+				PEItems.REPAIR_TALISMAN.get()//,
+				//PEItems.WATCH_OF_FLOWING_TIME.get()
 		);
 		tag(PETags.Items.RELAYS).add(
 				PEBlocks.RELAY.asItem(),

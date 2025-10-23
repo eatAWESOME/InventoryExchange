@@ -45,7 +45,7 @@ public final class ProjectEAliasMapping implements IAliasMapping {
 		rv.addAliases(PEItems.BODY_STONE, ProjectEAliases.AUTO_HEALER);
 		rv.addAliases(PEItems.SOUL_STONE, ProjectEAliases.AUTO_FEEDER);
 		rv.addAliases(PEItems.LIFE_STONE, ProjectEAliases.AUTO_FEEDER, ProjectEAliases.AUTO_HEALER);
-		rv.addAliases(PEItems.WATCH_OF_FLOWING_TIME, ProjectEAliases.TICK_ACCELERATOR, ProjectEAliases.TIME_CONTROL, ProjectEAliases.SLOW_HOSTILE, ProjectEAliases.SLOW_MOBS);
+		//rv.addAliases(PEItems.WATCH_OF_FLOWING_TIME, ProjectEAliases.TICK_ACCELERATOR, ProjectEAliases.TIME_CONTROL, ProjectEAliases.SLOW_HOSTILE, ProjectEAliases.SLOW_MOBS);
 
 		rv.addAliases(PEItems.EVERTIDE_AMULET, ProjectEAliases.INFINITE_WATER, ProjectEAliases.WATER_WALKING, ProjectEAliases.WEATHER_CONTROL, ProjectEAliases.TOOL_RANGED);
 		rv.addAliases(PEItems.VOLCANITE_AMULET, ProjectEAliases.INFINITE_LAVA, ProjectEAliases.LAVA_WALKING, ProjectEAliases.WEATHER_CONTROL, ProjectEAliases.TOOL_RANGED,

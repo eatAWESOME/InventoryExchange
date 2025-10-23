@@ -10,23 +10,26 @@ public final class PlayerSettingsImpl {
 	public static final Codec<PlayerSettingsAttachment> CODEC = RecordCodecBuilder.create(inst -> inst.group(
 		Codec.BOOL.fieldOf("feedEnabled").orElse(true).forGetter(att -> att.feedEnabled),
 		Codec.BOOL.fieldOf("repairEnabled").orElse(false).forGetter(att -> att.repairEnabled),
-		Codec.INT.fieldOf("ultimaToolMode").orElse(0).forGetter(att -> att.ultimaToolMode)
+		Codec.INT.fieldOf("ultimaToolMode").orElse(0).forGetter(att -> att.ultimaToolMode),
+		Codec.INT.fieldOf("ultimaWatchMode").orElse(0).forGetter(att -> att.ultimaWatchMode)
 	).apply(inst, PlayerSettingsAttachment::new));
 
 	public static class PlayerSettingsAttachment {
 		public boolean feedEnabled;
 		public boolean repairEnabled;
 		public int ultimaToolMode;
+		public int ultimaWatchMode;
 
-		public PlayerSettingsAttachment() { this(true, false, 0); }
-		public PlayerSettingsAttachment(boolean feedEnabled, boolean repairEnabled, int ultimaToolMode) {
+		public PlayerSettingsAttachment() { this(true, false, 0, 0); }
+		public PlayerSettingsAttachment(boolean feedEnabled, boolean repairEnabled, int ultimaToolMode, int ultimaWatchMode) {
 			this.feedEnabled = feedEnabled;
 			this.repairEnabled = repairEnabled;
 			this.ultimaToolMode = ultimaToolMode;
+			this.ultimaWatchMode = ultimaWatchMode;
 		}
 
 		public PlayerSettingsAttachment copy(IAttachmentHolder holder, HolderLookup.Provider registries) {
-			return new PlayerSettingsAttachment(feedEnabled, repairEnabled, ultimaToolMode);
+			return new PlayerSettingsAttachment(feedEnabled, repairEnabled, ultimaToolMode, ultimaWatchMode);
 		}
 	}
 

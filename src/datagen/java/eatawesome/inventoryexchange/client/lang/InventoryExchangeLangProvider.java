@@ -83,22 +83,33 @@ public class InventoryExchangeLangProvider extends BaseLanguageProvider {
 		add(InventoryExchangeLang.FEEDING_DISABLED, "Feeding via EMC: Disabled");
 		add(InventoryExchangeLang.REPAIR_ENABLED, "Repairing Items via EMC: Enabled");
 		add(InventoryExchangeLang.REPAIR_DISABLED, "Repairing Items via EMC: Disabled");
-		add(InventoryExchangeLang.ULTIMA_TOOL_SINGLE, "Ultima Tool set to Single Mode");
-		add(InventoryExchangeLang.ULTIMA_TOOL_WIDE, "Ultima Tool set to Wide Mode (3x)");
-		add(InventoryExchangeLang.ULTIMA_TOOL_TALL, "Ultima Tool set to Tall Mode (3x)");
-		add(InventoryExchangeLang.ULTIMA_TOOL_DEEP, "Ultima Tool set to Deep Mode (3x)");
 		
 		// Items
 		add(InventoryExchangeItems.ULTIMA, "Ultima");
 		add(InventoryExchangeItems.ULTIMA_TOOL, "Ultima Tool");
+		add(InventoryExchangeItems.ULTIMA_WATCH, "Ultima Watch");
 		add(InventoryExchangeItems.ULTIMA_HELMET, "Ultima Helmet");
 		add(InventoryExchangeItems.ULTIMA_CHESTPLATE, "Ultima Chestplate");
 		add(InventoryExchangeItems.ULTIMA_LEGGINGS, "Ultima Leggings");
 		add(InventoryExchangeItems.ULTIMA_BOOTS, "Ultima Boots");
 		add(InventoryExchangeItems.TOME_OF_KNOWLEDGE, "Tome of Knowledge");
+		
+		// Item Messages
+		add(InventoryExchangeLang.ULTIMA_TOOL_SINGLE, "Ultima Tool set to Single Mode");
+		add(InventoryExchangeLang.ULTIMA_TOOL_WIDE, "Ultima Tool set to Wide Mode (3x)");
+		add(InventoryExchangeLang.ULTIMA_TOOL_TALL, "Ultima Tool set to Tall Mode (3x)");
+		add(InventoryExchangeLang.ULTIMA_TOOL_DEEP, "Ultima Tool set to Deep Mode (3x)");
+		add(PELang.TIME_WATCH_DISABLED, "Item disabled by server admin");
+		add(PELang.TIME_WATCH_MODE, "Time control mode: %1$s");
+		add(PELang.TIME_WATCH_MODE_SWITCH, "Time control mode set to: %1$s");
+		add(PELang.TIME_WATCH_OFF, "Off");
+		add(PELang.TIME_WATCH_FAST_FORWARD, "Fast-Forward");
+		add(PELang.TIME_WATCH_REWIND, "Rewind");
 
 		// Tooltips
 		add(PELang.TOOLTIP_TOME, "Unlocks all transmutation knowledge when learned");
+		add(PELang.TOOLTIP_TIME_WATCH_1, "Become the master of time");
+		add(PELang.TOOLTIP_TIME_WATCH_2, "Interact (%1$s) to change mode");
 		
 		// Subtitles
 		add(PESoundEvents.WIND_MAGIC, "Wind Magic");

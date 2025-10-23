@@ -61,13 +61,13 @@ public final class InventoryExchangeRecipeProvider extends RecipeProvider {
 			.save(recipeOutput);
 		
 		ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, InventoryExchangeItems.ULTIMA_TOOL.get())
-			.define('U', InventoryExchangeItems.ULTIMA.get())
 			.define('D', Items.DIAMOND)
+			.define('U', InventoryExchangeItems.ULTIMA.get())
 			.pattern("UUU")
 			.pattern("UDU")
 			.pattern(" D ")
-			.unlockedBy(getHasName(InventoryExchangeItems.ULTIMA.get()), has(InventoryExchangeItems.ULTIMA.get()))
 			.unlockedBy(getHasName(Items.DIAMOND), has(Items.DIAMOND))
+			.unlockedBy(getHasName(InventoryExchangeItems.ULTIMA.get()), has(InventoryExchangeItems.ULTIMA.get()))
 			.save(recipeOutput);
 		
 		ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, InventoryExchangeItems.ULTIMA_HELMET.get())
@@ -97,6 +97,16 @@ public final class InventoryExchangeRecipeProvider extends RecipeProvider {
 			.define('U', InventoryExchangeItems.ULTIMA.get())
 			.pattern("U U")
 			.pattern("U U")
+			.unlockedBy(getHasName(InventoryExchangeItems.ULTIMA.get()), has(InventoryExchangeItems.ULTIMA.get()))
+			.save(recipeOutput);
+		
+		ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, InventoryExchangeItems.ULTIMA_WATCH.get())
+			.define('C', Items.CLOCK)
+			.define('U', InventoryExchangeItems.ULTIMA.get())
+			.pattern(" U ")
+			.pattern("UCU")
+			.pattern(" U ")
+			.unlockedBy(getHasName(Items.CLOCK), has(Items.CLOCK))
 			.unlockedBy(getHasName(InventoryExchangeItems.ULTIMA.get()), has(InventoryExchangeItems.ULTIMA.get()))
 			.save(recipeOutput);
 	}
