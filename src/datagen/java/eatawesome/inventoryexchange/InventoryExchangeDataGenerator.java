@@ -2,6 +2,7 @@ package eatawesome.inventoryexchange;
 
 import java.util.concurrent.CompletableFuture;
 
+import eatawesome.inventoryexchange.client.InventoryExchangeItemModelProvider;
 import eatawesome.inventoryexchange.client.lang.InventoryExchangeLangProvider;
 import eatawesome.inventoryexchange.common.InventoryExchangePackMetadataGenerator;
 import eatawesome.inventoryexchange.common.recipe.InventoryExchangeRecipeProvider;
@@ -27,6 +28,7 @@ public class InventoryExchangeDataGenerator {
 
 		gen.addProvider(true, new InventoryExchangePackMetadataGenerator(output, InventoryExchangeLang.PACK_DESCRIPTION));
 		gen.addProvider(event.includeClient(), new InventoryExchangeLangProvider(output));
+		gen.addProvider(event.includeClient(), new InventoryExchangeItemModelProvider(output, existingFileHelper));
 		gen.addProvider(event.includeServer(), new InventoryExchangeRecipeProvider(output, lookupProvider, existingFileHelper));
 		
 		ProjectEDataGenerator.gatherData(event);

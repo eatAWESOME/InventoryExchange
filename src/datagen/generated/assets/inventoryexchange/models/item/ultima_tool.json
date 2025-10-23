@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "projecte:item/tome"
+    "layer0": "inventoryexchange:item/ultima_tool"
   }
 }

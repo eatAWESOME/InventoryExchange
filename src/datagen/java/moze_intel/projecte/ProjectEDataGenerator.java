@@ -60,7 +60,7 @@ public class ProjectEDataGenerator {
 		//gen.addProvider(event.includeClient(), new PELangProvider(output));
 		gen.addProvider(event.includeClient(), new PESoundProvider(output, existingFileHelper));
 		//gen.addProvider(event.includeClient(), new PEBlockStateProvider(output, existingFileHelper));
-		gen.addProvider(event.includeClient(), new PEItemModelProvider(output, existingFileHelper));
+		//gen.addProvider(event.includeClient(), new PEItemModelProvider(output, existingFileHelper));
 		//gen.addProvider(event.includeClient(), new PESpriteSourceProvider(output, lookupProvider, existingFileHelper));
 		//Server side data generators
 		//Tag data generators
