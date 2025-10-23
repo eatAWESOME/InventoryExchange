@@ -1,6 +1,7 @@
 package eatawesome.inventoryexchange.events;
 
 import java.math.BigInteger;
+import java.util.List;
 
 import eatawesome.inventoryexchange.InventoryExchange;
 import eatawesome.inventoryexchange.capabilities.IAbilityEMCProvider;
@@ -13,6 +14,8 @@ import moze_intel.projecte.api.ItemInfo;
 import moze_intel.projecte.api.capabilities.IKnowledgeProvider;
 import moze_intel.projecte.api.capabilities.PECapabilities;
 import moze_intel.projecte.api.proxy.IEMCProxy;
+import net.minecraft.advancements.AdvancementRewards;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -27,6 +30,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.neoforge.event.entity.living.LivingEquipmentChangeEvent;
+import net.neoforged.neoforge.event.entity.player.AdvancementEvent;
 import net.neoforged.neoforge.event.entity.player.ItemEntityPickupEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerContainerEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
@@ -165,6 +169,17 @@ public class PlayerEvents {
 					PlayerHelper.removeUltimaEffects(player);
 				}
 			}
+		}
+	}
+	
+	@SubscribeEvent
+	public static void onAdvancementEarn(AdvancementEvent.AdvancementEarnEvent event) {
+		if (event.getEntity() instanceof ServerPlayer serverPlayer) {
+			AdvancementRewards rewards = event.getAdvancement().value().rewards();
+			List<ResourceLocation> recipeIds = rewards.recipes();
+			if (recipeIds == null || recipeIds.isEmpty()) return;
+
+			serverPlayer.awardRecipesByKey(recipeIds);
 		}
 	}
 

@@ -17,6 +17,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
@@ -26,8 +27,8 @@ public class UltimaWatch extends Item {
 	
 	private static final int TIME_CHANGE_COST = 4;
 
-	public UltimaWatch(Properties props) {
-		super(props);
+	public UltimaWatch() {
+		super(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC).fireResistant());
 	}
 
 	@NotNull

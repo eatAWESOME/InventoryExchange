@@ -29,10 +29,6 @@ public final class UltimaTool extends DiggerItem {
 		super(Tiers.NETHERITE, BlockTags.MINEABLE_WITH_PICKAXE, new Item.Properties().stacksTo(1).rarity(Rarity.EPIC).fireResistant());
 	}
 
-	public static Item create() {
-		return new UltimaTool();
-	}
-
 	@Override
 	public boolean isCorrectToolForDrops(ItemStack stack, BlockState state) {
 		return state.is(BlockTags.MINEABLE_WITH_PICKAXE)

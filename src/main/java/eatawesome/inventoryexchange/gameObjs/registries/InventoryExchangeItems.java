@@ -14,9 +14,9 @@ import net.minecraft.world.item.Rarity;
 public class InventoryExchangeItems {
 
 	public static final ItemDeferredRegister ITEMS = new ItemDeferredRegister(InventoryExchange.MODID);
-	public static final ItemRegistryObject<Item> ULTIMA = ITEMS.register("ultima");
-	public static final ItemRegistryObject<Item> ULTIMA_TOOL = ITEMS.register("ultima_tool", UltimaTool::create);
-	public static final ItemRegistryObject<Item> ULTIMA_WATCH = ITEMS.registerNoStackFireImmune("ultima_watch", UltimaWatch::new);
+	public static final ItemRegistryObject<Item> ULTIMA = ITEMS.registerUltima("ultima");
+	public static final ItemRegistryObject<Item> ULTIMA_TOOL = ITEMS.register("ultima_tool", UltimaTool::new);
+	public static final ItemRegistryObject<Item> ULTIMA_WATCH = ITEMS.register("ultima_watch", UltimaWatch::new);
 	public static final ItemRegistryObject<Item> ULTIMA_HELMET = ITEMS.register("ultima_helmet", () -> new UltimaArmor(ArmorItem.Type.HELMET));
 	public static final ItemRegistryObject<Item> ULTIMA_CHESTPLATE = ITEMS.register("ultima_chestplate", () -> new UltimaArmor(ArmorItem.Type.CHESTPLATE));
 	public static final ItemRegistryObject<Item> ULTIMA_LEGGINGS = ITEMS.register("ultima_leggings", () -> new UltimaArmor(ArmorItem.Type.LEGGINGS));
