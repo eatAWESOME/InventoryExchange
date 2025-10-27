@@ -4,32 +4,21 @@ import moze_intel.projecte.PECore;
 import moze_intel.projecte.api.capabilities.IKnowledgeProvider;
 import moze_intel.projecte.api.capabilities.PECapabilities;
 import moze_intel.projecte.gameObjs.container.TransmutationContainer;
-import moze_intel.projecte.gameObjs.items.rings.ArchangelSmite;
-import moze_intel.projecte.gameObjs.registries.PEItems;
 import moze_intel.projecte.network.packets.IPEPacket;
-import moze_intel.projecte.network.packets.to_client.NovaExplosionSyncPKT;
 import moze_intel.projecte.network.packets.to_client.SyncEmcPKT;
-import moze_intel.projecte.network.packets.to_client.SyncFuelMapperPKT;
 import moze_intel.projecte.network.packets.to_client.container.SyncOffhandPkt;
-import moze_intel.projecte.network.packets.to_client.SyncWorldTransmutations;
-import moze_intel.projecte.network.packets.to_client.container.UpdateCondenserLockPKT;
 import moze_intel.projecte.network.packets.to_client.container.UpdateWindowLongPKT;
-import moze_intel.projecte.network.packets.to_client.alch_bag.SyncAllBagDataPKT;
-import moze_intel.projecte.network.packets.to_client.alch_bag.SyncBagsDataPKT;
 import moze_intel.projecte.network.packets.to_client.knowledge.KnowledgeSyncChangePKT;
 import moze_intel.projecte.network.packets.to_client.knowledge.KnowledgeSyncEmcPKT;
 import moze_intel.projecte.network.packets.to_client.knowledge.KnowledgeSyncInputsAndLocksPKT;
 import moze_intel.projecte.network.packets.to_client.knowledge.KnowledgeSyncPKT;
-import moze_intel.projecte.network.packets.to_server.KeyPressPKT;
 import moze_intel.projecte.network.packets.to_server.SearchUpdatePKT;
-import moze_intel.projecte.network.packets.to_server.UpdateGemModePKT;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.network.PacketDistributor;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
@@ -43,13 +32,10 @@ import org.apache.maven.artifact.versioning.ArtifactVersion;
 public final class PacketHandler {
 
 	//Client to server instanced packets
-	private SimplePacketPayLoad activateArchangel;
 
 	//Server to client instanced packets
 	private SimplePacketPayLoad clearKnowledge;
 	private SimplePacketPayLoad updateTransmutationTargets;
-
-	private SimplePacketPayLoad resetCooldown;
 
 	public PacketHandler(IEventBus modEventBus, ArtifactVersion version) {
 		modEventBus.addListener(RegisterPayloadHandlersEvent.class, event -> {
@@ -60,20 +46,10 @@ public final class PacketHandler {
 	}
 
 	private void registerClientToServer(PacketRegistrar registrar) {
-		registrar.play(KeyPressPKT.TYPE, KeyPressPKT.STREAM_CODEC);
-		activateArchangel = registrar.playInstanced(PECore.rl("activate_archangel"), (ignored, context) -> {
-			Player player = context.player();
-			ItemStack main = player.getMainHandItem();
-			if (!main.isEmpty() && main.is(PEItems.ARCHANGEL_SMITE)) {
-				ArchangelSmite.fireVolley(main, player);
-			}
-		});
 		registrar.play(SearchUpdatePKT.TYPE, SearchUpdatePKT.STREAM_CODEC);
-		registrar.play(UpdateGemModePKT.TYPE, UpdateGemModePKT.STREAM_CODEC);
 	}
 
 	private void registerServerToClient(PacketRegistrar registrar) {
-		resetCooldown = registrar.playInstanced(PECore.rl("reset_cooldown"), (ignored, context) -> context.player().resetAttackStrengthTicker());
 		clearKnowledge = registrar.playInstanced(PECore.rl("clear_knowledge"), (ignored, context) -> {
 			Player player = context.player();
 			IKnowledgeProvider knowledge = player.getCapability(PECapabilities.KNOWLEDGE_CAPABILITY);
@@ -88,14 +64,8 @@ public final class PacketHandler {
 		registrar.play(KnowledgeSyncEmcPKT.TYPE, KnowledgeSyncEmcPKT.STREAM_CODEC);
 		registrar.play(KnowledgeSyncInputsAndLocksPKT.TYPE, KnowledgeSyncInputsAndLocksPKT.STREAM_CODEC);
 		registrar.play(KnowledgeSyncChangePKT.TYPE, KnowledgeSyncChangePKT.STREAM_CODEC);
-		registrar.play(NovaExplosionSyncPKT.TYPE, NovaExplosionSyncPKT.STREAM_CODEC);
-		registrar.play(SyncAllBagDataPKT.TYPE, SyncAllBagDataPKT.STREAM_CODEC);
-		registrar.play(SyncBagsDataPKT.TYPE, SyncBagsDataPKT.STREAM_CODEC);
 		registrar.play(SyncEmcPKT.TYPE, SyncEmcPKT.STREAM_CODEC);
 		registrar.play(SyncOffhandPkt.TYPE, SyncOffhandPkt.STREAM_CODEC);
-		registrar.play(SyncFuelMapperPKT.TYPE, SyncFuelMapperPKT.STREAM_CODEC);
-		registrar.play(SyncWorldTransmutations.TYPE, SyncWorldTransmutations.STREAM_CODEC);
-		registrar.play(UpdateCondenserLockPKT.TYPE, UpdateCondenserLockPKT.STREAM_CODEC);
 		updateTransmutationTargets = registrar.playInstanced(PECore.rl("update_transmutation_targets"), (ignored, context) -> {
 			if (context.player().containerMenu instanceof TransmutationContainer container) {
 				container.transmutationInventory.updateClientTargets(false);
@@ -110,14 +80,6 @@ public final class PacketHandler {
 
 	public void updateTransmutationTargets(ServerPlayer player) {
 		PacketDistributor.sendToPlayer(player, updateTransmutationTargets);
-	}
-
-	public void resetCooldown(ServerPlayer player) {
-		PacketDistributor.sendToPlayer(player, resetCooldown);
-	}
-
-	public void activateArchangel() {
-		PacketDistributor.sendToServer(activateArchangel);
 	}
 
 	protected record SimplePacketPayLoad(CustomPacketPayload.Type<CustomPacketPayload> type) implements CustomPacketPayload {

@@ -11,7 +11,6 @@ import moze_intel.projecte.integration.IntegrationHelper;
 import moze_intel.projecte.utils.Constants;
 import moze_intel.projecte.utils.MathUtils;
 import moze_intel.projecte.utils.ReadOnlyScoreCriteria;
-import moze_intel.projecte.utils.WorldHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;

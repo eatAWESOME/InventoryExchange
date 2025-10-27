@@ -4,7 +4,6 @@ import java.math.BigInteger;
 import moze_intel.projecte.api.proxy.IEMCProxy;
 import moze_intel.projecte.gameObjs.container.inventory.TransmutationInventory;
 import moze_intel.projecte.gameObjs.container.slots.InventoryContainerSlot;
-import moze_intel.projecte.gameObjs.registries.PEItems;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 

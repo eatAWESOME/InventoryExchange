@@ -124,7 +124,6 @@ public final class EMCMappingHandler {
 
 	private static void fireEmcRemapEvent() {
 		//Start by doing our implementations
-		FuelMapper.loadMap();
 		loadIndex++;
 		MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
 		if (server != null) {

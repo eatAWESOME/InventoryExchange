@@ -13,8 +13,6 @@ import moze_intel.projecte.api.capabilities.PECapabilities;
 import moze_intel.projecte.api.capabilities.block_entity.IEmcStorage.EmcAction;
 import moze_intel.projecte.api.capabilities.item.IItemEmcHolder;
 import moze_intel.projecte.api.proxy.IEMCProxy;
-import moze_intel.projecte.config.ProjectEConfig;
-import moze_intel.projecte.emc.FuelMapper;
 import moze_intel.projecte.gameObjs.registries.PEDataComponentTypes;
 import moze_intel.projecte.integration.IntegrationHelper;
 import moze_intel.projecte.utils.text.ILangEntry;
@@ -102,7 +100,7 @@ public final class EMCHelper {
 				if (actualExtracted > 0) { //Prioritize extracting from emc storage items
 					player.containerMenu.broadcastChanges();
 					return actualExtracted;
-				} else if (!metRequirement && FuelMapper.isStackFuel(stack)) {
+				} else if (!metRequirement) {
 					//TODO: Should we be validating we simulate that we will be able to extract the stack and how much of it?
 					long emc = IEMCProxy.INSTANCE.getValue(stack);
 					int toRemove = Mth.ceil((double) (minFuel - emcConsumed) / emc);
@@ -155,13 +153,9 @@ public final class EMCHelper {
 		if (originalValue == 0) {
 			return 0;
 		}
-		long emc = Mth.lfloor(originalValue);// * ProjectEConfig.server.difficulty.covalenceLoss.get());
+		long emc = Mth.lfloor(originalValue);
 		if (emc < 1) {
-			if (true) {//ProjectEConfig.server.difficulty.covalenceLossRounding.get()) {
-				emc = 1;
-			} else {
-				emc = 0;
-			}
+			return 1;
 		}
 		return emc;
 	}

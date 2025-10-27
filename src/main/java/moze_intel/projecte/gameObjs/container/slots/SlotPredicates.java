@@ -3,7 +3,6 @@ package moze_intel.projecte.gameObjs.container.slots;
 import java.util.function.Predicate;
 import moze_intel.projecte.api.capabilities.PECapabilities;
 import moze_intel.projecte.api.proxy.IEMCProxy;
-import moze_intel.projecte.emc.FuelMapper;
 import moze_intel.projecte.utils.ItemHelper;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeType;
@@ -15,10 +14,9 @@ public final class SlotPredicates {
 
 	public static final Predicate<ItemStack> HAS_EMC = IEMCProxy.INSTANCE::hasValue;
 
-	public static final Predicate<ItemStack> COLLECTOR_LOCK = FuelMapper::isStackFuel;
+	public static final Predicate<ItemStack> COLLECTOR_LOCK = input -> false;
 
-	public static final Predicate<ItemStack> COLLECTOR_INV = input -> input.getCapability(PECapabilities.EMC_HOLDER_ITEM_CAPABILITY) != null ||
-																	  (FuelMapper.isStackFuel(input) && !FuelMapper.isStackMaxFuel(input));
+	public static final Predicate<ItemStack> COLLECTOR_INV = input -> input.getCapability(PECapabilities.EMC_HOLDER_ITEM_CAPABILITY) != null;
 
 	// slotrelayklein, slotmercurialklein
 	public static final Predicate<ItemStack> EMC_HOLDER = input -> input.getCapability(PECapabilities.EMC_HOLDER_ITEM_CAPABILITY) != null;

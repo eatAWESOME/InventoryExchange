@@ -13,8 +13,6 @@ import moze_intel.projecte.emc.components.processor.DecoratedShieldProcessor;
 import moze_intel.projecte.emc.components.processor.FireworkProcessor;
 import moze_intel.projecte.emc.components.processor.FireworkStarProcessor;
 import moze_intel.projecte.emc.components.processor.MapScaleProcessor;
-import moze_intel.projecte.gameObjs.customRecipes.PhiloStoneSmeltingRecipe;
-import moze_intel.projecte.gameObjs.customRecipes.RecipesCovalenceRepair;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.world.item.crafting.BannerDuplicateRecipe;
 import net.minecraft.world.item.crafting.BookCloningRecipe;
@@ -43,18 +41,14 @@ public class SpecialRecipeMarkHandledMapper implements IRecipeTypeMapper {
 				return MappingConfig.isEnabled(DecoratedShieldProcessor.INSTANCE);
 			} else if (recipe instanceof DecoratedPotRecipe) {
 				return MappingConfig.isEnabled(DecoratedPotProcessor.INSTANCE);
-			} else if (recipe instanceof RepairItemRecipe || recipe instanceof RecipesCovalenceRepair) {
+			} else if (recipe instanceof RepairItemRecipe) {
 				return MappingConfig.isEnabled(DamageProcessor.INSTANCE);
 			} else if (recipe instanceof FireworkStarRecipe || recipe instanceof FireworkStarFadeRecipe) {
 				return MappingConfig.isEnabled(FireworkStarProcessor.INSTANCE);
 			} else if (recipe instanceof FireworkRocketRecipe) {
 				return MappingConfig.isEnabled(FireworkProcessor.INSTANCE);
 			}
-			//TODO: Do we eventually want to try and figure out how to handle the armor dye recipe?
-			//Not needed, it just recreates the smelting recipes
-			return recipe instanceof PhiloStoneSmeltingRecipe
-				   //Cloning recipes, creates something from itself, doesn't change overall emc values as amounts all balance out
-					|| recipe instanceof BookCloningRecipe || recipe instanceof MapCloningRecipe || recipe instanceof BannerDuplicateRecipe;
+			return recipe instanceof BookCloningRecipe || recipe instanceof MapCloningRecipe || recipe instanceof BannerDuplicateRecipe;
 		} else if (recipe instanceof MapExtendingRecipe) {
 			return MappingConfig.isEnabled(MapScaleProcessor.INSTANCE);
 		}

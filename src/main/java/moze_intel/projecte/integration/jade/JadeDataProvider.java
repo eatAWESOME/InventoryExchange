@@ -1,7 +1,6 @@
 package moze_intel.projecte.integration.jade;
 
 import moze_intel.projecte.api.proxy.IEMCProxy;
-import moze_intel.projecte.config.ProjectEConfig;
 import moze_intel.projecte.utils.EMCHelper;
 import net.minecraft.resources.ResourceLocation;
 import snownee.jade.api.BlockAccessor;
@@ -15,11 +14,9 @@ public class JadeDataProvider implements IBlockComponentProvider {
 
 	@Override
 	public void appendTooltip(ITooltip tooltip, BlockAccessor accessor, IPluginConfig config) {
-		if (true) {//ProjectEConfig.server.misc.lookingAtDisplay.get()) {
-			long value = IEMCProxy.INSTANCE.getValue(accessor.getBlock());
-			if (value > 0) {
-				tooltip.add(EMCHelper.getEmcTextComponent(value, 1));
-			}
+		long value = IEMCProxy.INSTANCE.getValue(accessor.getBlock());
+		if (value > 0) {
+			tooltip.add(EMCHelper.getEmcTextComponent(value, 1));
 		}
 	}
 

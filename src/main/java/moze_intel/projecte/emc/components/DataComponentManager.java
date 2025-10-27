@@ -8,7 +8,6 @@ import moze_intel.projecte.api.ItemInfo;
 import moze_intel.projecte.api.components.IDataComponentProcessor;
 import moze_intel.projecte.config.MappingConfig;
 import moze_intel.projecte.emc.EMCMappingHandler;
-import moze_intel.projecte.gameObjs.PETags;
 import moze_intel.projecte.utils.AnnotationHelper;
 import net.minecraft.core.component.DataComponentPatch;
 import org.jetbrains.annotations.NotNull;
@@ -39,7 +38,7 @@ public class DataComponentManager {
 
 	@NotNull
 	static ItemInfo getPersistentInfo(@NotNull ItemInfo info) {
-		if (!info.hasModifiedComponents() || info.getItem().is(PETags.Items.DATA_COMPONENT_WHITELIST) || EMCMappingHandler.hasEmcValue(info)) {
+		if (!info.hasModifiedComponents() || EMCMappingHandler.hasEmcValue(info)) {
 			//If we have no custom Data Components, we want to allow data components to be kept, or we have an exact match to a stored value just go with it
 			return info;
 		}

@@ -18,8 +18,6 @@ import moze_intel.projecte.api.capabilities.block_entity.IEmcStorage.EmcAction;
 import moze_intel.projecte.api.capabilities.item.IItemEmcHolder;
 import moze_intel.projecte.api.event.PlayerAttemptLearnEvent;
 import moze_intel.projecte.api.proxy.IEMCProxy;
-import moze_intel.projecte.gameObjs.PETags;
-import moze_intel.projecte.gameObjs.registries.PEItems;
 import moze_intel.projecte.utils.MathUtils;
 import moze_intel.projecte.utils.PlayerHelper;
 import moze_intel.projecte.utils.text.SearchQueryParser;
@@ -115,17 +113,7 @@ public class TransmutationInventory extends CombinedInvWrapper {
 			resetSearchPage();
 			updateClientTargets(false);
 		} else if (doesItemMatchFilter(learnedItem)) {
-			//Ensure the item matches the filter we currently are displaying, as if it doesn't then we don't have to update the display
-			boolean learnedFuel = learnedItem.getItem().is(PETags.Items.COLLECTOR_FUEL);
-			//Check if our newly learned item is on a later page than the one we currently are on. We don't have to update it,
-			// but we do update the fact that we have a next page, in case we previously were on the last page
-			if (learnedFuel) {
-				long lastFuelEmc = IEMCProxy.INSTANCE.getValue(outputs.getStackInSlot(outputs.getSlots() - 1));
-				if (learnedItemEmc < lastFuelEmc) {
-					hasNextPage = true;
-					return;
-				}
-			} else if (learnedItemEmc < IEMCProxy.INSTANCE.getValue(outputs.getStackInSlot(MAX_MATTER_DISPLAY - 1))) {
+			if (learnedItemEmc < IEMCProxy.INSTANCE.getValue(outputs.getStackInSlot(MAX_MATTER_DISPLAY - 1))) {
 				hasNextPage = true;
 				return;
 			}
@@ -188,11 +176,7 @@ public class TransmutationInventory extends CombinedInvWrapper {
 			updateClientTargets(false);
 		} else if (doesItemMatchFilter(unlearnedItem)) {
 			//Ensure the item matches the filter we currently are displaying, as if it doesn't then we don't have to update the display
-			if (unlearnedItem.getItem().is(PETags.Items.COLLECTOR_FUEL)) {
-				maybeUpdateClientTargets(unlearnedItem, unlearnedItemEmc, FUEL_START, outputs.getSlots());
-			} else {
-				maybeUpdateClientTargets(unlearnedItem, unlearnedItemEmc, 0, MAX_MATTER_DISPLAY);
-			}
+			maybeUpdateClientTargets(unlearnedItem, unlearnedItemEmc, 0, MAX_MATTER_DISPLAY);
 		}
 	}
 
@@ -331,11 +315,7 @@ public class TransmutationInventory extends CombinedInvWrapper {
 				filterPredicate = data -> data.emc() > 0 && data.emc() <= availableEMC;
 			} else if (provider.hasKnowledge(lockInfo)) {
 				//Note: We can just check the tag, as we know it has an emc value
-				if (lockInfo.getItem().is(PETags.Items.COLLECTOR_FUEL)) {
-					outputs.setStackInSlot(FUEL_START + fuelCounter++, lockInfo.createStack());
-				} else {
-					outputs.setStackInSlot(matterCounter++, lockInfo.createStack());
-				}
+				outputs.setStackInSlot(matterCounter++, lockInfo.createStack());
 				//Otherwise, we need to filter based on the lower value emc target the user is filtering by,
 				// and exclude the lock item itself as we have already manually included that ourselves at the start
 				filterPredicate = data -> {
@@ -362,30 +342,13 @@ public class TransmutationInventory extends CombinedInvWrapper {
 				.map(EmcData::info)
 				.toList();
 
-		int fuelPageCounter = 0;
 		int matterPageCounter = 0;
 		//Take into account if the lock is being displayed at the top of each page for how many fuel/matter fits on a singular page
-		int desiredFuelPage = searchPage * (MAX_FUEL_DISPLAY - fuelCounter);
 		int desiredMatterPage = searchPage * (MAX_MATTER_DISPLAY - matterCounter);
 		hasNextPage = false;
 		for (ItemInfo info : knowledge) {
 			//Note: We can just check the tag, as we know it has an emc value
-			if (info.getItem().is(PETags.Items.COLLECTOR_FUEL)) {
-				if (fuelCounter < MAX_FUEL_DISPLAY) {
-					if (doesItemMatchFilter(info)) {
-						if (fuelPageCounter == desiredFuelPage) {
-							outputs.setStackInSlot(FUEL_START + fuelCounter++, info.createStack());
-						} else {
-							fuelPageCounter++;
-						}
-					}
-				} else {
-					hasNextPage = true;
-					if (matterCounter == MAX_MATTER_DISPLAY) {//We have all the fuel and matter that we need to display
-						break;
-					}
-				}
-			} else if (matterCounter < MAX_MATTER_DISPLAY) {
+			if (matterCounter < MAX_MATTER_DISPLAY) {
 				if (doesItemMatchFilter(info)) {
 					if (matterPageCounter == desiredMatterPage) {
 						outputs.setStackInSlot(matterCounter++, info.createStack());

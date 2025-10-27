@@ -5,7 +5,6 @@ import mcp.mobius.waila.api.IBlockComponentProvider;
 import mcp.mobius.waila.api.IPluginConfig;
 import mcp.mobius.waila.api.ITooltip;
 import moze_intel.projecte.api.proxy.IEMCProxy;
-import moze_intel.projecte.config.ProjectEConfig;
 import moze_intel.projecte.utils.EMCHelper;
 
 public class WTHITDataProvider implements IBlockComponentProvider {
@@ -14,11 +13,9 @@ public class WTHITDataProvider implements IBlockComponentProvider {
 
 	@Override
 	public void appendBody(ITooltip tooltip, IBlockAccessor accessor, IPluginConfig config) {
-		if (true) {//ProjectEConfig.server.misc.lookingAtDisplay.get()) {
-			long value = IEMCProxy.INSTANCE.getValue(accessor.getBlock());
-			if (value > 0) {
-				tooltip.addLine(EMCHelper.getEmcTextComponent(value, 1));
-			}
+		long value = IEMCProxy.INSTANCE.getValue(accessor.getBlock());
+		if (value > 0) {
+			tooltip.addLine(EMCHelper.getEmcTextComponent(value, 1));
 		}
 	}
 }
