@@ -11,6 +11,7 @@ import moze_intel.projecte.api.proxy.IEMCProxy;
 import moze_intel.projecte.config.MappingConfig;
 import moze_intel.projecte.emc.mappers.OreBlacklistMapper;
 import moze_intel.projecte.emc.mappers.RawMaterialsBlacklistMapper;
+import moze_intel.projecte.gameObjs.PETags;
 import moze_intel.projecte.gameObjs.items.Tome;
 import moze_intel.projecte.integration.IntegrationHelper;
 import moze_intel.projecte.utils.text.PELang;
@@ -49,10 +50,13 @@ public class DumpMissingEmc {
 
 	private static boolean expectedMissing(FeatureFlagSet enabledFeatures, ItemInfo info) {
 		Holder<Item> holder = info.getItem();
+		if (holder.is(PETags.Items.IGNORE_MISSING_EMC)) {
+			return true;
+		}
 		if (switch (holder.value()) {
 			//Assume unbreakable blocks won't have an EMC value by default
 			case BlockItem blockItem when blockItem.getBlock().defaultDestroyTime() == Block.INDESTRUCTIBLE -> true;
-			case Tome tome when !false -> true;//ProjectEConfig.common.craftableTome.get() -> true;
+			case Tome tome when !false -> true;
 			case BundleItem bundleItem when !enabledFeatures.contains(FeatureFlags.BUNDLE) -> true;
 			default -> false;
 		}) {
@@ -74,7 +78,7 @@ public class DumpMissingEmc {
 			}
 		}
 		PotionContents potionContents = info.getOrNull(DataComponents.POTION_CONTENTS);
-		return potionContents != null && potionContents.potion().isPresent();
+		return potionContents != null && potionContents.potion().isPresent() && potionContents.potion().get().is(PETags.Potions.IGNORE_MISSING_EMC);
 	}
 
 	private static int execute(CommandContext<CommandSourceStack> ctx, boolean skipExpectedMissing) {

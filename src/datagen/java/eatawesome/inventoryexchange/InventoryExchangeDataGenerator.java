@@ -6,6 +6,8 @@ import eatawesome.inventoryexchange.client.InventoryExchangeItemModelProvider;
 import eatawesome.inventoryexchange.client.lang.InventoryExchangeLangProvider;
 import eatawesome.inventoryexchange.common.InventoryExchangePackMetadataGenerator;
 import eatawesome.inventoryexchange.common.recipe.InventoryExchangeRecipeProvider;
+import eatawesome.inventoryexchange.common.tag.InventoryExchangeBlockTagsProvider;
+import eatawesome.inventoryexchange.common.tag.InventoryExchangeItemTagsProvider;
 import eatawesome.inventoryexchange.utils.text.InventoryExchangeLang;
 import moze_intel.projecte.ProjectEDataGenerator;
 import net.minecraft.core.HolderLookup.Provider;
@@ -29,6 +31,8 @@ public class InventoryExchangeDataGenerator {
 		gen.addProvider(true, new InventoryExchangePackMetadataGenerator(output, InventoryExchangeLang.PACK_DESCRIPTION));
 		gen.addProvider(event.includeClient(), new InventoryExchangeLangProvider(output));
 		gen.addProvider(event.includeClient(), new InventoryExchangeItemModelProvider(output, existingFileHelper));
+		InventoryExchangeBlockTagsProvider blockTagsProvider = gen.addProvider(event.includeServer(), new InventoryExchangeBlockTagsProvider(output, lookupProvider, existingFileHelper));
+		gen.addProvider(event.includeServer(), new InventoryExchangeItemTagsProvider(output, lookupProvider, blockTagsProvider.contentsGetter(), existingFileHelper));
 		gen.addProvider(event.includeServer(), new InventoryExchangeRecipeProvider(output, lookupProvider, existingFileHelper));
 		
 		ProjectEDataGenerator.gatherData(event);

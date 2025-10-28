@@ -4,6 +4,9 @@ import java.util.concurrent.CompletableFuture;
 import moze_intel.projecte.client.sound.PESoundProvider;
 import moze_intel.projecte.common.PECustomConversionProvider;
 import moze_intel.projecte.common.PEDatapackRegistryProvider;
+import moze_intel.projecte.common.tag.PEBlockTagsProvider;
+import moze_intel.projecte.common.tag.PEItemTagsProvider;
+import moze_intel.projecte.common.tag.PEPotionsTagsProvider;
 import moze_intel.projecte.emc.EMCMappingHandler;
 import net.minecraft.core.HolderLookup.Provider;
 import net.minecraft.data.DataGenerator;
@@ -27,6 +30,9 @@ public class ProjectEDataGenerator {
 		CompletableFuture<Provider> lookupProvider = drProvider.getRegistryProvider();
 
 		gen.addProvider(event.includeClient(), new PESoundProvider(output, existingFileHelper));
+		PEBlockTagsProvider blockTagsProvider = gen.addProvider(event.includeServer(), new PEBlockTagsProvider(output, lookupProvider, existingFileHelper));
+		gen.addProvider(event.includeServer(), new PEItemTagsProvider(output, lookupProvider, blockTagsProvider.contentsGetter(), existingFileHelper));
+		gen.addProvider(event.includeServer(), new PEPotionsTagsProvider(output, lookupProvider, existingFileHelper));
 		gen.addProvider(event.includeServer(), new PECustomConversionProvider(output, lookupProvider));
 	}
 }

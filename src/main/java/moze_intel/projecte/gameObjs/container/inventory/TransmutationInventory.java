@@ -9,6 +9,7 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.function.Predicate;
 
+import eatawesome.inventoryexchange.gameObjs.InventoryExchangeTags;
 import eatawesome.inventoryexchange.gameObjs.registries.InventoryExchangeItems;
 import moze_intel.projecte.api.ItemInfo;
 import moze_intel.projecte.api.capabilities.IKnowledgeProvider;
@@ -39,10 +40,10 @@ public class TransmutationInventory extends CombinedInvWrapper {
 	public final IItemHandlerModifiable outputs;
 
 	private static final int MAX_MATTER_DISPLAY = 12;
-	private static final int MAX_FUEL_DISPLAY = 4;
+	private static final int MAX_MINERALS_DISPLAY = 4;
 
 	private static final int LOCK_INDEX = 8;
-	private static final int FUEL_START = MAX_MATTER_DISPLAY;
+	private static final int MINERALS_START = MAX_MATTER_DISPLAY;
 	public int learnFlag = 0;
 	public int unlearnFlag = 0;
 	public ISearchQuery filter = ISearchQuery.INVALID;
@@ -113,7 +114,17 @@ public class TransmutationInventory extends CombinedInvWrapper {
 			resetSearchPage();
 			updateClientTargets(false);
 		} else if (doesItemMatchFilter(learnedItem)) {
-			if (learnedItemEmc < IEMCProxy.INSTANCE.getValue(outputs.getStackInSlot(MAX_MATTER_DISPLAY - 1))) {
+			//Ensure the item matches the filter we currently are displaying, as if it doesn't then we don't have to update the display
+			boolean learnedMineral = learnedItem.getItem().is(InventoryExchangeTags.Items.MINERALS_PLUS);
+			//Check if our newly learned item is on a later page than the one we currently are on. We don't have to update it,
+			// but we do update the fact that we have a next page, in case we previously were on the last page
+			if (learnedMineral) {
+				long lastMineralEmc = IEMCProxy.INSTANCE.getValue(outputs.getStackInSlot(outputs.getSlots() - 1));
+				if (learnedItemEmc < lastMineralEmc) {
+					hasNextPage = true;
+					return;
+				}
+			} else if (learnedItemEmc < IEMCProxy.INSTANCE.getValue(outputs.getStackInSlot(MAX_MATTER_DISPLAY - 1))) {
 				hasNextPage = true;
 				return;
 			}
@@ -176,7 +187,11 @@ public class TransmutationInventory extends CombinedInvWrapper {
 			updateClientTargets(false);
 		} else if (doesItemMatchFilter(unlearnedItem)) {
 			//Ensure the item matches the filter we currently are displaying, as if it doesn't then we don't have to update the display
-			maybeUpdateClientTargets(unlearnedItem, unlearnedItemEmc, 0, MAX_MATTER_DISPLAY);
+			if (unlearnedItem.getItem().is(InventoryExchangeTags.Items.MINERALS_PLUS)) {
+				maybeUpdateClientTargets(unlearnedItem, unlearnedItemEmc, MINERALS_START, outputs.getSlots());
+			} else {
+				maybeUpdateClientTargets(unlearnedItem, unlearnedItemEmc, 0, MAX_MATTER_DISPLAY);
+			}
 		}
 	}
 
@@ -271,8 +286,8 @@ public class TransmutationInventory extends CombinedInvWrapper {
 	 */
 	private long getMaxDisplayedEmc() {
 		long matterEmc = IEMCProxy.INSTANCE.getValue(outputs.getStackInSlot(0));
-		long fuelEmc = IEMCProxy.INSTANCE.getValue(outputs.getStackInSlot(FUEL_START));
-		return Math.max(matterEmc, fuelEmc);
+		long mineralEmc = IEMCProxy.INSTANCE.getValue(outputs.getStackInSlot(MINERALS_START));
+		return Math.max(matterEmc, mineralEmc);
 	}
 
 	public void updateClientTargets(boolean checkForEmcChange) {
@@ -301,7 +316,7 @@ public class TransmutationInventory extends CombinedInvWrapper {
 		Predicate<EmcData> filterPredicate;
 		ItemStack lockStack = inputLocks.getStackInSlot(LOCK_INDEX);
 		int matterCounter = 0;
-		int fuelCounter = 0;
+		int mineralCounter = 0;
 		if (lockStack.isEmpty()) {
 			filterPredicate = data -> data.emc() > 0 && data.emc() <= availableEMC;
 		} else {
@@ -315,7 +330,11 @@ public class TransmutationInventory extends CombinedInvWrapper {
 				filterPredicate = data -> data.emc() > 0 && data.emc() <= availableEMC;
 			} else if (provider.hasKnowledge(lockInfo)) {
 				//Note: We can just check the tag, as we know it has an emc value
-				outputs.setStackInSlot(matterCounter++, lockInfo.createStack());
+				if (lockInfo.getItem().is(InventoryExchangeTags.Items.MINERALS_PLUS)) {
+					outputs.setStackInSlot(MINERALS_START + mineralCounter++, lockInfo.createStack());
+				} else {
+					outputs.setStackInSlot(matterCounter++, lockInfo.createStack());
+				}
 				//Otherwise, we need to filter based on the lower value emc target the user is filtering by,
 				// and exclude the lock item itself as we have already manually included that ourselves at the start
 				filterPredicate = data -> {
@@ -342,13 +361,30 @@ public class TransmutationInventory extends CombinedInvWrapper {
 				.map(EmcData::info)
 				.toList();
 
+		int mineralPageCounter = 0;
 		int matterPageCounter = 0;
-		//Take into account if the lock is being displayed at the top of each page for how many fuel/matter fits on a singular page
+		//Take into account if the lock is being displayed at the top of each page for how many minerals/matter fits on a singular page
+		int desiredMineralPage = searchPage * (MAX_MINERALS_DISPLAY - mineralCounter);
 		int desiredMatterPage = searchPage * (MAX_MATTER_DISPLAY - matterCounter);
 		hasNextPage = false;
 		for (ItemInfo info : knowledge) {
 			//Note: We can just check the tag, as we know it has an emc value
-			if (matterCounter < MAX_MATTER_DISPLAY) {
+			if (info.getItem().is(InventoryExchangeTags.Items.MINERALS_PLUS)) {
+				if (mineralCounter < MAX_MINERALS_DISPLAY) {
+					if (doesItemMatchFilter(info)) {
+						if (mineralPageCounter == desiredMineralPage) {
+							outputs.setStackInSlot(MINERALS_START + mineralCounter++, info.createStack());
+						} else {
+							mineralPageCounter++;
+						}
+					}
+				} else {
+					hasNextPage = true;
+					if (matterCounter == MAX_MATTER_DISPLAY) {//We have all the minerals and matter that we need to display
+						break;
+					}
+				}
+			} else if (matterCounter < MAX_MATTER_DISPLAY) {
 				if (doesItemMatchFilter(info)) {
 					if (matterPageCounter == desiredMatterPage) {
 						outputs.setStackInSlot(matterCounter++, info.createStack());
@@ -359,7 +395,7 @@ public class TransmutationInventory extends CombinedInvWrapper {
 				}
 			} else {
 				hasNextPage = true;
-				if (fuelCounter == MAX_FUEL_DISPLAY) {//We have all the fuel and matter that we need to display
+				if (mineralCounter == MAX_MINERALS_DISPLAY) {//We have all the minerals and matter that we need to display
 					break;
 				}
 			}
@@ -393,7 +429,6 @@ public class TransmutationInventory extends CombinedInvWrapper {
 			//Optimization to not look at the items if nothing will happen anyway
 			return;
 		} else if (value.signum() == -1) {//value < 0
-			//Make sure it is using the correct method so that it handles the klein stars properly
 			removeEmc(value.negate());
 			return;
 		}
@@ -433,7 +468,6 @@ public class TransmutationInventory extends CombinedInvWrapper {
 			//Optimization to not look at the items if nothing will happen anyway
 			return;
 		} else if (value.signum() == -1) {//value < 0
-			//Make sure it is using the correct method so that it handles the klein stars properly
 			addEmc(value.negate());
 			return;
 		}

@@ -1,0 +1,19 @@
+{
+  "values": [
+    "minecraft:coal",
+    "minecraft:diamond",
+    "minecraft:emerald",
+    "minecraft:iron_ingot",
+    "minecraft:gold_ingot",
+    "minecraft:copper_ingot",
+    "minecraft:redstone",
+    "minecraft:lapis_lazuli",
+    "minecraft:netherite_scrap",
+    "minecraft:netherite_ingot",
+    "inventoryexchange:ultima",
+    "minecraft:charcoal",
+    "minecraft:gunpowder",
+    "minecraft:glowstone_dust",
+    "minecraft:blaze_powder"
+  ]
+}
