@@ -3,11 +3,13 @@ package moze_intel.projecte.gameObjs.container.inventory;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import eatawesome.inventoryexchange.gameObjs.InventoryExchangeTags;
 import eatawesome.inventoryexchange.gameObjs.registries.InventoryExchangeItems;
@@ -354,50 +356,53 @@ public class TransmutationInventory extends CombinedInvWrapper {
 			}
 		}
 
-		List<ItemInfo> knowledge = provider.getKnowledge().stream()
+		List<ItemInfo> allItemInfo = provider.getKnowledge().stream()
 				.map(info -> new EmcData(info, IEMCProxy.INSTANCE.getValue(info)))
 				.filter(filterPredicate)
 				.sorted(Comparator.comparingLong(EmcData::emc).reversed())
 				.map(EmcData::info)
+			    .filter(info -> doesItemMatchFilter(info))
 				.toList();
+		List<ItemInfo> mineralsItemInfo = allItemInfo.stream()
+			    .filter(info -> info.getItem().is(InventoryExchangeTags.Items.MINERALS_PLUS))
+			    .collect(Collectors.toList());
+		List<ItemInfo> matterItemInfo = allItemInfo.stream()
+			    .filter(info -> !info.getItem().is(InventoryExchangeTags.Items.MINERALS_PLUS))
+			    .collect(Collectors.toList());
+		List<ItemInfo> sortedItemInfo = new ArrayList<>();
 
-		int mineralPageCounter = 0;
-		int matterPageCounter = 0;
-		//Take into account if the lock is being displayed at the top of each page for how many minerals/matter fits on a singular page
-		int desiredMineralPage = searchPage * (MAX_MINERALS_DISPLAY - mineralCounter);
-		int desiredMatterPage = searchPage * (MAX_MATTER_DISPLAY - matterCounter);
+		int matterIndex = 0;
+		int mineralIndex = 0;
+
+		while (mineralIndex < mineralsItemInfo.size() && matterIndex < matterItemInfo.size()) {
+		    for (int i = 0; i < MAX_MATTER_DISPLAY && matterIndex < matterItemInfo.size(); i++) {
+		    	sortedItemInfo.add(matterItemInfo.get(matterIndex++));
+		    }
+		    for (int i = 0; i < MAX_MINERALS_DISPLAY && mineralIndex < mineralsItemInfo.size(); i++) {
+		    	sortedItemInfo.add(mineralsItemInfo.get(mineralIndex++));
+		    }
+		}
+		while (matterIndex < matterItemInfo.size()) {
+			sortedItemInfo.add(matterItemInfo.get(matterIndex++));
+		}
+		while (mineralIndex < mineralsItemInfo.size()) {
+			sortedItemInfo.add(mineralsItemInfo.get(mineralIndex++));
+		}
+
+		int pageCount = 0;
+		int desiredPageCount = searchPage * (MAX_MATTER_DISPLAY + MAX_MINERALS_DISPLAY);
+		int counter = 0;
 		hasNextPage = false;
-		for (ItemInfo info : knowledge) {
-			//Note: We can just check the tag, as we know it has an emc value
-			if (info.getItem().is(InventoryExchangeTags.Items.MINERALS_PLUS)) {
-				if (mineralCounter < MAX_MINERALS_DISPLAY) {
-					if (doesItemMatchFilter(info)) {
-						if (mineralPageCounter == desiredMineralPage) {
-							outputs.setStackInSlot(MINERALS_START + mineralCounter++, info.createStack());
-						} else {
-							mineralPageCounter++;
-						}
-					}
+
+		for (ItemInfo info : sortedItemInfo) {
+			if (counter < MAX_MATTER_DISPLAY + MAX_MINERALS_DISPLAY) {
+				if (pageCount == desiredPageCount) {
+					outputs.setStackInSlot(counter++, info.createStack());
 				} else {
-					hasNextPage = true;
-					if (matterCounter == MAX_MATTER_DISPLAY) {//We have all the minerals and matter that we need to display
-						break;
-					}
-				}
-			} else if (matterCounter < MAX_MATTER_DISPLAY) {
-				if (doesItemMatchFilter(info)) {
-					if (matterPageCounter == desiredMatterPage) {
-						outputs.setStackInSlot(matterCounter++, info.createStack());
-					} else {
-						//Increment the page counter if the item would be in our filter
-						matterPageCounter++;
-					}
+					pageCount++;
 				}
 			} else {
 				hasNextPage = true;
-				if (mineralCounter == MAX_MINERALS_DISPLAY) {//We have all the minerals and matter that we need to display
-					break;
-				}
 			}
 		}
 	}
