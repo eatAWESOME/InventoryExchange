@@ -3,7 +3,6 @@ package moze_intel.projecte.gameObjs.container.inventory;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
 import java.math.BigInteger;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
@@ -17,8 +16,6 @@ import moze_intel.projecte.api.ItemInfo;
 import moze_intel.projecte.api.capabilities.IKnowledgeProvider;
 import moze_intel.projecte.api.capabilities.IKnowledgeProvider.TargetUpdateType;
 import moze_intel.projecte.api.capabilities.PECapabilities;
-import moze_intel.projecte.api.capabilities.block_entity.IEmcStorage.EmcAction;
-import moze_intel.projecte.api.capabilities.item.IItemEmcHolder;
 import moze_intel.projecte.api.event.PlayerAttemptLearnEvent;
 import moze_intel.projecte.api.proxy.IEMCProxy;
 import moze_intel.projecte.utils.MathUtils;
@@ -37,17 +34,15 @@ public class TransmutationInventory extends CombinedInvWrapper {
 
 	public final Player player;
 	public final IKnowledgeProvider provider;
-	private final IItemHandlerModifiable inputLocks;
 	private final IItemHandlerModifiable learning;
 	public final IItemHandlerModifiable outputs;
 
-	private static final int MAX_MATTER_DISPLAY = 12;
-	private static final int MAX_MINERALS_DISPLAY = 4;
+	private static final int MAX_MATTER_DISPLAY = 17;
+	private static final int MAX_MINERALS_DISPLAY = 12;
 
-	private static final int LOCK_INDEX = 8;
-	private static final int MINERALS_START = MAX_MATTER_DISPLAY;
+	private static final int MINERALS_START = 0;
+	private static final int MATTER_START = MINERALS_START + MAX_MINERALS_DISPLAY;
 	public int learnFlag = 0;
-	public int unlearnFlag = 0;
 	public ISearchQuery filter = ISearchQuery.INVALID;
 	private int searchPage = 0;
 	private boolean hasNextPage;
@@ -55,10 +50,9 @@ public class TransmutationInventory extends CombinedInvWrapper {
 
 	public TransmutationInventory(Player player) {
 		super((IItemHandlerModifiable) Objects.requireNonNull(player.getCapability(PECapabilities.KNOWLEDGE_CAPABILITY)).getInputAndLocks(),
-				new ItemStackHandler(2), new ItemStackHandler(16));
+				new ItemStackHandler(2), new ItemStackHandler(30));
 		this.player = player;
 		this.provider = Objects.requireNonNull(player.getCapability(PECapabilities.KNOWLEDGE_CAPABILITY));
-		this.inputLocks = itemHandler[0];
 		this.learning = itemHandler[1];
 		this.outputs = itemHandler[2];
 		if (isClient()) {
@@ -104,7 +98,6 @@ public class TransmutationInventory extends CombinedInvWrapper {
 	 */
 	public void itemLearned(ItemInfo learnedItem) {
 		learnFlag = 300;
-		unlearnFlag = 0;
 		if (isServer()) {
 			return;
 		}
@@ -134,144 +127,11 @@ public class TransmutationInventory extends CombinedInvWrapper {
 			//Ensure the learned item is in the emc range that we are even trying to display. If it requires more emc than we have available,
 			// we can't possibly have it end up in the targets after an update
 			if (learnedItemEmc <= availableEmc) {
-				ItemStack lockStack = inputLocks.getStackInSlot(LOCK_INDEX);
-				if (!lockStack.isEmpty()) {
-					ItemInfo lockInfo = IEMCProxy.INSTANCE.getPersistentInfo(ItemInfo.fromStack(lockStack));
-					long lockEmc = IEMCProxy.INSTANCE.getValue(lockInfo);
-					if (lockEmc != 0 && lockEmc < availableEmc && learnedItemEmc > lockEmc) {
-						//If we have a lock stack, and that lock stack limits the emc to an even lower level than the available emc,
-						// and the learned item has an emc value that is above the emc value that the lock is limiting it to:
-						// it doesn't get displayed because of the lock, so we can skip updating the displayed items
-						return;
-					}
-				}
 				updateClientTargets(availableEmc);
 			}
 		}
 	}
-
-	/**
-	 * @apiNote Call on server only
-	 * @implNote The passed stack will not be directly modified by this method.
-	 */
-	public void handleUnlearn(ItemStack stack) {
-		if (!stack.isEmpty()) {
-			handleUnlearn(ItemInfo.fromStack(stack));
-		}
-	}
-
-	/**
-	 * @apiNote Call on server only
-	 */
-	public void handleUnlearn(ItemInfo info) {
-		ItemInfo cleanedInfo = IEMCProxy.INSTANCE.getPersistentInfo(info);
-		if (provider.hasKnowledge(cleanedInfo) && provider.removeKnowledge(cleanedInfo)) {
-			//Only sync the knowledge changed if the provider successfully removed it
-			provider.syncKnowledgeChange((ServerPlayer) player, cleanedInfo, false);
-		}
-	}
-
-	/**
-	 * @apiNote Call on client only
-	 */
-	public void itemUnlearned(ItemInfo unlearnedItem) {
-		unlearnFlag = 300;
-		learnFlag = 0;
-		if (isServer()) {
-			return;
-		}
-		long unlearnedItemEmc = IEMCProxy.INSTANCE.getValue(unlearnedItem);
-		if (unlearnedItemEmc == 0 || unlearnedItem.getItem().is(InventoryExchangeItems.TOME_OF_KNOWLEDGE.getKey())) {
-			//The removed item has no EMC. As the most likely case that would happen is if it was a tome of knowledge
-			// we want to just update the client targets to be safe
-			// Note: We also reset the search page so that we don't accidentally end up on a page that no longer exists
-			resetSearchPage();
-			updateClientTargets(false);
-		} else if (doesItemMatchFilter(unlearnedItem)) {
-			//Ensure the item matches the filter we currently are displaying, as if it doesn't then we don't have to update the display
-			if (unlearnedItem.getItem().is(InventoryExchangeTags.Items.MINERALS_PLUS)) {
-				maybeUpdateClientTargets(unlearnedItem, unlearnedItemEmc, MINERALS_START, outputs.getSlots());
-			} else {
-				maybeUpdateClientTargets(unlearnedItem, unlearnedItemEmc, 0, MAX_MATTER_DISPLAY);
-			}
-		}
-	}
-
-	/**
-	 * @apiNote Call on client only
-	 */
-	private void maybeUpdateClientTargets(ItemInfo unlearnedItem, long unlearnedItemEmc, int slot, int slots) {
-		final long availableEmc = getAvailableEmcAsLong();
-		if (unlearnedItemEmc <= availableEmc) {
-			//Validate that the item has a chance of being displayed. If it costs more than the emc we have available, there is no chance it is being displayed
-			int firstNonLockSlot = slot;
-			ItemStack lockStack = inputLocks.getStackInSlot(LOCK_INDEX);
-			long lockEmc = 0;
-			if (!lockStack.isEmpty()) {
-				ItemInfo lockInfo = IEMCProxy.INSTANCE.getPersistentInfo(ItemInfo.fromStack(lockStack));
-				lockEmc = IEMCProxy.INSTANCE.getValue(lockInfo);
-				if (lockEmc > availableEmc) {//We don't have enough emc to display the lock stack, so it isn't in the gui
-					lockStack = ItemStack.EMPTY;
-				} else {
-					firstNonLockSlot++;
-				}
-			}
-			for (; slot < slots; slot++) {
-				ItemStack stack = outputs.getStackInSlot(slot);
-				if (stack.isEmpty()) {//We know later slots will also be empty
-					break;
-				} else if (stack.is(unlearnedItem.getItem()) && stack.getComponentsPatch().equals(unlearnedItem.getComponentsPatch())) {
-					//If the item was in our list of displayed stacks, then we definitely need to update the targets
-					if (hasPreviousPage()) {
-						if (!lockStack.isEmpty() && slot == firstNonLockSlot - 1) {
-							//We are removing the lock, just reset the search page
-							resetSearchPage();
-						} else if (slot == firstNonLockSlot && slot + 1 < slots) {
-							//We are removing the item in the first slot index that isn't the lock
-							ItemStack next = outputs.getStackInSlot(slot + 1);
-							if (next.isEmpty()) {
-								// if the next slot is empty, that means there are no more of this type, and we should go to the previous page
-								searchPage--;
-							}
-						}
-					}
-					updateClientTargets(availableEmc);
-					return;
-				}
-			}
-			if (lockStack.isEmpty()) {
-				//Just use the max emc value that we have being displayed
-				long maxDisplayedEmc = getMaxDisplayedEmc();
-				if (unlearnedItemEmc >= maxDisplayedEmc) {//If the removed item was potentially on an earlier page, update the targets
-					if (hasPreviousPage()) {
-						//Subtract one from the current slot as we break out after doing a slot++
-						// and this will let us know the last slot that had an item in it
-						if (slot - 1 == firstNonLockSlot) {
-							//If it was the first slot that didn't have a lock in it (our initial slot), we need to lower our search page,
-							// as this one will no longer have anything on it
-							searchPage--;
-						}
-					}
-					updateClientTargets(availableEmc);
-				}
-			} else if (lockEmc > 0 && unlearnedItemEmc == lockEmc) {
-				//If the item was potentially on an earlier page, we need to update our targets
-				// We only need to check exact equals rather than <=, as if the value was smaller than the lock
-				// and not on our current page, then it would be on a later page
-				if (hasPreviousPage()) {
-					//Subtract one from the current slot as we break out after doing a slot++
-					// and this will let us know the last slot that had an item in it
-					if (slot - 1 == firstNonLockSlot) {
-						//If it was the first slot that didn't have a lock in it, we need to lower our search page,
-						// as this one will no longer have anything on it
-						searchPage--;
-					}
-				}
-				updateClientTargets(availableEmc);
-			}
-		}
-	}
-
+	
 	/**
 	 * @apiNote Call on client only
 	 */
@@ -287,7 +147,7 @@ public class TransmutationInventory extends CombinedInvWrapper {
 	 * @apiNote Call on client only
 	 */
 	private long getMaxDisplayedEmc() {
-		long matterEmc = IEMCProxy.INSTANCE.getValue(outputs.getStackInSlot(0));
+		long matterEmc = IEMCProxy.INSTANCE.getValue(outputs.getStackInSlot(MATTER_START));
 		long mineralEmc = IEMCProxy.INSTANCE.getValue(outputs.getStackInSlot(MINERALS_START));
 		return Math.max(matterEmc, mineralEmc);
 	}
@@ -316,45 +176,7 @@ public class TransmutationInventory extends CombinedInvWrapper {
 		record EmcData(ItemInfo info, long emc) {
 		}
 		Predicate<EmcData> filterPredicate;
-		ItemStack lockStack = inputLocks.getStackInSlot(LOCK_INDEX);
-		int matterCounter = 0;
-		int mineralCounter = 0;
-		if (lockStack.isEmpty()) {
-			filterPredicate = data -> data.emc() > 0 && data.emc() <= availableEMC;
-		} else {
-			ItemInfo lockInfo = IEMCProxy.INSTANCE.getPersistentInfo(ItemInfo.fromStack(lockStack));
-			//Note: We look up using only the persistent information here, instead of all the data as
-			// we cannot replicate the extra data anyway since it cannot be learned. So we need to make
-			// sure that we only go off of the data that can be matched
-			long reqEmc = IEMCProxy.INSTANCE.getValue(lockInfo);
-			if (availableEMC < reqEmc || reqEmc == 0) {
-				//If we have less emc available than the item we are filtering by (or somehow our lock has no emc), just do the normal filtering as if we didn't have a lock
-				filterPredicate = data -> data.emc() > 0 && data.emc() <= availableEMC;
-			} else if (provider.hasKnowledge(lockInfo)) {
-				//Note: We can just check the tag, as we know it has an emc value
-				if (lockInfo.getItem().is(InventoryExchangeTags.Items.MINERALS_PLUS)) {
-					outputs.setStackInSlot(MINERALS_START + mineralCounter++, lockInfo.createStack());
-				} else {
-					outputs.setStackInSlot(matterCounter++, lockInfo.createStack());
-				}
-				//Otherwise, we need to filter based on the lower value emc target the user is filtering by,
-				// and exclude the lock item itself as we have already manually included that ourselves at the start
-				filterPredicate = data -> {
-					long emc = data.emc();
-					if (emc > 0) {
-						if (emc < reqEmc) {
-							return true;
-						} else if (emc == reqEmc) {
-							return !data.info().equals(lockInfo);
-						}
-					}
-					return false;
-				};
-			} else {
-				//Otherwise, we need to filter based on the lower value emc target the user is filtering by
-				filterPredicate = data -> data.emc() > 0 && data.emc() <= reqEmc;
-			}
-		}
+		filterPredicate = data -> data.emc() > 0 && data.emc() <= availableEMC;
 
 		List<ItemInfo> allItemInfo = provider.getKnowledge().stream()
 				.map(info -> new EmcData(info, IEMCProxy.INSTANCE.getValue(info)))
@@ -369,35 +191,22 @@ public class TransmutationInventory extends CombinedInvWrapper {
 		List<ItemInfo> matterItemInfo = allItemInfo.stream()
 			    .filter(info -> !info.getItem().is(InventoryExchangeTags.Items.MINERALS_PLUS))
 			    .collect(Collectors.toList());
-		List<ItemInfo> sortedItemInfo = new ArrayList<>();
-
-		int matterIndex = 0;
-		int mineralIndex = 0;
-
-		while (mineralIndex < mineralsItemInfo.size() && matterIndex < matterItemInfo.size()) {
-		    for (int i = 0; i < MAX_MATTER_DISPLAY && matterIndex < matterItemInfo.size(); i++) {
-		    	sortedItemInfo.add(matterItemInfo.get(matterIndex++));
-		    }
-		    for (int i = 0; i < MAX_MINERALS_DISPLAY && mineralIndex < mineralsItemInfo.size(); i++) {
-		    	sortedItemInfo.add(mineralsItemInfo.get(mineralIndex++));
-		    }
-		}
-		while (matterIndex < matterItemInfo.size()) {
-			sortedItemInfo.add(matterItemInfo.get(matterIndex++));
-		}
-		while (mineralIndex < mineralsItemInfo.size()) {
-			sortedItemInfo.add(mineralsItemInfo.get(mineralIndex++));
-		}
 
 		int pageCount = 0;
-		int desiredPageCount = searchPage * (MAX_MATTER_DISPLAY + MAX_MINERALS_DISPLAY);
-		int counter = 0;
+		int desiredPageCount = searchPage * (MAX_MATTER_DISPLAY);
+		int mineralsSlot = MINERALS_START;
+		int matterSlot = MATTER_START;
 		hasNextPage = false;
 
-		for (ItemInfo info : sortedItemInfo) {
-			if (counter < MAX_MATTER_DISPLAY + MAX_MINERALS_DISPLAY) {
+		for (ItemInfo info : mineralsItemInfo) {
+			if (mineralsSlot < MINERALS_START + MAX_MINERALS_DISPLAY) {
+				outputs.setStackInSlot(mineralsSlot++, info.createStack());
+			}
+		}
+		for (ItemInfo info : matterItemInfo) {
+			if (matterSlot < MATTER_START + MAX_MATTER_DISPLAY) {
 				if (pageCount == desiredPageCount) {
-					outputs.setStackInSlot(counter++, info.createStack());
+					outputs.setStackInSlot(matterSlot++, info.createStack());
 				} else {
 					pageCount++;
 				}
@@ -438,27 +247,6 @@ public class TransmutationInventory extends CombinedInvWrapper {
 			return;
 		}
 		IntList inputLocksChanged = new IntArrayList();
-		//Start by trying to add it to the EMC items on the left
-		for (int slotIndex = 0, slots = inputLocks.getSlots(); slotIndex < slots; slotIndex++) {
-			if (slotIndex == LOCK_INDEX) {
-				continue;
-			}
-			ItemStack stack = inputLocks.getStackInSlot(slotIndex);
-			IItemEmcHolder emcHolder = stack.getCapability(PECapabilities.EMC_HOLDER_ITEM_CAPABILITY);
-			if (emcHolder != null) {
-				long shrunkenValue = MathUtils.clampToLong(value);
-				long actualInserted = emcHolder.insertEmc(stack, shrunkenValue, EmcAction.EXECUTE);
-				if (actualInserted > 0) {
-					inputLocksChanged.add(slotIndex);
-					value = value.subtract(BigInteger.valueOf(actualInserted));
-					if (value.signum() == 0) {//value == 0
-						//If we fit it all then sync the changes to the client and exit
-						syncChangedSlots(inputLocksChanged, TargetUpdateType.ALL);
-						return;
-					}
-				}
-			}
-		}
 		syncChangedSlots(inputLocksChanged, TargetUpdateType.NONE);
 		//Note: We act as if there is no "max" EMC for the player given we use a BigInteger
 		// This means we don't have to try to put the overflow into the lock slot if there is an EMC storage item there
@@ -484,32 +272,8 @@ public class TransmutationInventory extends CombinedInvWrapper {
 			//This code runs first to simplify the logic
 			//But it simulates removal first by extracting the amount from value and then removing that excess from items
 			IntList inputLocksChanged = new IntArrayList();
-			BigInteger toRemove = value.subtract(currentEmc);
 			value = currentEmc;
-			for (int slotIndex = 0, slots = inputLocks.getSlots(); slotIndex < slots; slotIndex++) {
-				if (slotIndex == LOCK_INDEX) {
-					continue;
-				}
-				ItemStack stack = inputLocks.getStackInSlot(slotIndex);
-				IItemEmcHolder emcHolder = stack.getCapability(PECapabilities.EMC_HOLDER_ITEM_CAPABILITY);
-				if (emcHolder != null) {
-					long shrunkenToRemove = MathUtils.clampToLong(toRemove);
-					long actualExtracted = emcHolder.extractEmc(stack, shrunkenToRemove, EmcAction.EXECUTE);
-					if (actualExtracted > 0) {
-						inputLocksChanged.add(slotIndex);
-						toRemove = toRemove.subtract(BigInteger.valueOf(actualExtracted));
-						if (toRemove.signum() == 0) {//toRemove == 0
-							//The EMC that is being removed that the provider does not contain is satisfied by this IItemEMC
-							//Remove it and then stop checking other input slots as we were able to provide all that was needed
-							syncChangedSlots(inputLocksChanged, TargetUpdateType.IF_NEEDED);
-							if (currentEmc.signum() == 1) {//currentEmc > 0
-								updateEmcAndSync(BigInteger.ZERO);
-							}
-							return;
-						}
-					}
-				}
-			}
+			
 			//Sync the changed slots if any have changed
 			syncChangedSlots(inputLocksChanged, TargetUpdateType.NONE);
 		}
@@ -550,52 +314,17 @@ public class TransmutationInventory extends CombinedInvWrapper {
 	}
 
 	/**
-	 * @return EMC available from the Provider + any klein stars in the input slots clamped to max long.
+	 * @return EMC available from the Provider
 	 */
 	public long getAvailableEmcAsLong() {
-		long emc = MathUtils.clampToLong(provider.getEmc());
-		if (emc == Long.MAX_VALUE || inputLocks.getSlots() == 0) {
-			//If we already are at max or somehow don't have any slots
-			return emc;
-		}
-		long emcToMax = Long.MAX_VALUE - emc;
-		for (int i = 0, slots = inputLocks.getSlots(); i < slots; i++) {
-			if (i == LOCK_INDEX) {
-				//Skip it even though this technically could add to available EMC.
-				//This is because this case can only happen if the provider is already at max EMC
-				continue;
-			}
-			ItemStack stack = inputLocks.getStackInSlot(i);
-			IItemEmcHolder emcHolder = stack.getCapability(PECapabilities.EMC_HOLDER_ITEM_CAPABILITY);
-			if (emcHolder != null) {
-				long storedEmc = emcHolder.getStoredEmc(stack);
-				if (storedEmc >= emcToMax) {
-					return Long.MAX_VALUE;
-				}
-				emcToMax -= storedEmc;
-			}
-		}
-		return Long.MAX_VALUE - emcToMax;
+		return MathUtils.clampToLong(provider.getEmc());
 	}
 
 	/**
-	 * @return EMC available from the Provider + any klein stars in the input slots.
+	 * @return EMC available from the Provider
 	 */
 	public BigInteger getAvailableEmc() {
-		BigInteger emc = provider.getEmc();
-		for (int i = 0, slots = inputLocks.getSlots(); i < slots; i++) {
-			if (i == LOCK_INDEX) {
-				//Skip it even though this technically could add to available EMC.
-				//This is because this case can only happen if the provider is already at max EMC
-				continue;
-			}
-			ItemStack stack = inputLocks.getStackInSlot(i);
-			IItemEmcHolder emcHolder = stack.getCapability(PECapabilities.EMC_HOLDER_ITEM_CAPABILITY);
-			if (emcHolder != null) {
-				emc = emc.add(BigInteger.valueOf(emcHolder.getStoredEmc(stack)));
-			}
-		}
-		return emc;
+		return provider.getEmc();
 	}
 
 	public void updateFilter(String text) {

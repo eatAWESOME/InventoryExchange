@@ -1,7 +1,6 @@
 package moze_intel.projecte.gameObjs.gui;
 
 import java.math.BigInteger;
-import moze_intel.projecte.PECore;
 import moze_intel.projecte.gameObjs.container.TransmutationContainer;
 import moze_intel.projecte.gameObjs.container.inventory.TransmutationInventory;
 import moze_intel.projecte.utils.EMCHelper;
@@ -17,10 +16,12 @@ import net.minecraft.world.entity.player.Inventory;
 import org.jetbrains.annotations.NotNull;
 import org.lwjgl.glfw.GLFW;
 
+import eatawesome.inventoryexchange.InventoryExchange;
+
 public class GUITransmutation extends PEContainerScreen<TransmutationContainer> {
 
 	private static final BigInteger MAX_EXACT_TRANSMUTATION_DISPLAY = BigInteger.valueOf(1_000_000_000_000L);
-	private static final ResourceLocation texture = PECore.rl("textures/gui/transmute.png");
+	private static final ResourceLocation texture = InventoryExchange.rl("textures/gui/transmute.png");
 
 	private final TransmutationInventory inv;
 	private EditBox textBoxFilter;
@@ -103,19 +104,6 @@ public class GUITransmutation extends PEContainerScreen<TransmutationContainer> 
 			inv.learnFlag--;
 		}
 
-		if (inv.unlearnFlag > 0) {
-			graphics.drawString(font, PELang.TRANSMUTATION_UNLEARNED_1.translate(), 97, 22, 0x404040, false);
-			graphics.drawString(font, PELang.TRANSMUTATION_UNLEARNED_2.translate(), 98, 30, 0x404040, false);
-			graphics.drawString(font, PELang.TRANSMUTATION_UNLEARNED_3.translate(), 99, 38, 0x404040, false);
-			graphics.drawString(font, PELang.TRANSMUTATION_UNLEARNED_4.translate(), 100, 46, 0x404040, false);
-			graphics.drawString(font, PELang.TRANSMUTATION_UNLEARNED_5.translate(), 101, 54, 0x404040, false);
-			graphics.drawString(font, PELang.TRANSMUTATION_UNLEARNED_6.translate(), 102, 62, 0x404040, false);
-			graphics.drawString(font, PELang.TRANSMUTATION_UNLEARNED_7.translate(), 103, 70, 0x404040, false);
-			graphics.drawString(font, PELang.TRANSMUTATION_UNLEARNED_8.translate(), 104, 78, 0x404040, false);
-			graphics.drawString(font, PELang.TRANSMUTATION_UNLEARNED_9.translate(), 107, 86, 0x404040, false);
-
-			inv.unlearnFlag--;
-		}
 	}
 
 	@Override
@@ -152,7 +140,6 @@ public class GUITransmutation extends PEContainerScreen<TransmutationContainer> 
 	public void removed() {
 		super.removed();
 		inv.learnFlag = 0;
-		inv.unlearnFlag = 0;
 	}
 
 	@Override

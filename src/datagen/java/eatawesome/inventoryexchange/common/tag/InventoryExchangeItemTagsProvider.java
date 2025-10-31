@@ -34,13 +34,10 @@ public class InventoryExchangeItemTagsProvider extends ItemTagsProvider {
 				Items.COPPER_INGOT,
 				Items.REDSTONE,
 				Items.LAPIS_LAZULI,
-				Items.NETHERITE_SCRAP,
 				Items.NETHERITE_INGOT,
 				InventoryExchangeItems.ULTIMA.get(),
-				Items.CHARCOAL,
-				Items.GUNPOWDER,
 				Items.GLOWSTONE_DUST,
-				Items.BLAZE_POWDER
+				Items.CHARCOAL
 		);
 	}
 }

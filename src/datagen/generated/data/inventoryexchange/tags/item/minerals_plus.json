@@ -8,12 +8,9 @@
     "minecraft:copper_ingot",
     "minecraft:redstone",
     "minecraft:lapis_lazuli",
-    "minecraft:netherite_scrap",
     "minecraft:netherite_ingot",
     "inventoryexchange:ultima",
-    "minecraft:charcoal",
-    "minecraft:gunpowder",
     "minecraft:glowstone_dust",
-    "minecraft:blaze_powder"
+    "minecraft:charcoal"
   ]
 }
