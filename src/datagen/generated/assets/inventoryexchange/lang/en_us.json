@@ -36,6 +36,8 @@
   "configuration.inventoryexchange.enable_debug_logs.tooltip": "If true, enables debug logs.",
   "configuration.inventoryexchange.infinite_container_max_rows": "Infinite Container Max Rows",
   "configuration.inventoryexchange.infinite_container_max_rows.tooltip": "Maximum number of rows for the infinite container. Minimum 10.",
+  "configuration.inventoryexchange.mapping.mapper.custom.emc": "Pixelmon EMC Mapper",
+  "configuration.inventoryexchange.mapping.mapper.custom.emc.tooltip": "Adds Pixelmon item EMC values if pixelmon is installed.",
   "configuration.projecte.client.philo_overlay": "Pulsating Overlay",
   "configuration.projecte.client.philo_overlay.tooltip": "The Philosopher's Stone overlay softly pulsates.",
   "configuration.projecte.client.tooltips": "Tooltip Settings",

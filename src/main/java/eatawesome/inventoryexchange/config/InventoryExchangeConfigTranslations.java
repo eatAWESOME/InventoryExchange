@@ -10,8 +10,11 @@ public enum InventoryExchangeConfigTranslations implements IConfigTranslation {
 	CONFIG_HEADER("config_header", InventoryExchange.MODNAME + " Config", ""),
 	INFINITE_CONTAINER_MAX_ROWS("infinite_container_max_rows", "Infinite Container Max Rows", "Maximum number of rows for the infinite container. Minimum 10."),
 	ENABLE_DEBUG_LOGS("enable_debug_logs", "Enable Debug Logs", "If true, enables debug logs."),
-	ALLOW_ULTIMA_WATCH("allow_ultima_watch", "Allow Ultima Watch", "If true, allows use of the Ultima Watch.");
-
+	ALLOW_ULTIMA_WATCH("allow_ultima_watch", "Allow Ultima Watch", "If true, allows use of the Ultima Watch."),
+	
+	// Mapper
+	MAPPING_PIXELMON_EMC_MAPPER("mapping.mapper.custom.emc", "Pixelmon EMC Mapper", "Adds Pixelmon item EMC values if pixelmon is installed.");
+	
 	private final String key;
 	private final String title;
 	private final String tooltip;

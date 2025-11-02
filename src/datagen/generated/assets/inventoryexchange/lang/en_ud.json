@@ -35,6 +35,8 @@
   "configuration.inventoryexchange.enable_debug_logs.tooltip": "˙sᵷoꞁ ᵷnqǝp sǝꞁqɐuǝ 'ǝnɹʇ ɟI",
   "configuration.inventoryexchange.infinite_container_max_rows": "sʍoᴚ xɐW ɹǝuᴉɐʇuoƆ ǝʇᴉuᴉɟuI",
   "configuration.inventoryexchange.infinite_container_max_rows.tooltip": "˙0⥝ ɯnɯᴉuᴉW ˙ɹǝuᴉɐʇuoɔ ǝʇᴉuᴉɟuᴉ ǝɥʇ ɹoɟ sʍoɹ ɟo ɹǝqɯnu ɯnɯᴉxɐW",
+  "configuration.inventoryexchange.mapping.mapper.custom.emc": "ɹǝddɐW ƆWƎ uoɯꞁǝxᴉԀ",
+  "configuration.inventoryexchange.mapping.mapper.custom.emc.tooltip": "˙pǝꞁꞁɐʇsuᴉ sᴉ uoɯꞁǝxᴉd ɟᴉ sǝnꞁɐʌ ƆWƎ ɯǝʇᴉ uoɯꞁǝxᴉԀ sppⱯ",
   "configuration.projecte.client.philo_overlay": "ʎɐꞁɹǝʌO ᵷuᴉʇɐsꞁnԀ",
   "configuration.projecte.client.philo_overlay.tooltip": "˙sǝʇɐsꞁnd ʎꞁʇɟos ʎɐꞁɹǝʌo ǝuoʇS s,ɹǝɥdosoꞁᴉɥԀ ǝɥ⟘",
   "configuration.projecte.client.tooltips": "sᵷuᴉʇʇǝS dᴉʇꞁoo⟘",

@@ -15,7 +15,7 @@ import net.minecraft.core.RegistryAccess;
 import net.minecraft.server.ReloadableServerResources;
 import net.minecraft.server.packs.resources.ResourceManager;
 
-@EMCMapper
+@EMCMapper(priority = Integer.MIN_VALUE)
 public class CustomEMCMapper implements IEMCMapper<NormalizedSimpleStack, Long> {
 
 	@Override
