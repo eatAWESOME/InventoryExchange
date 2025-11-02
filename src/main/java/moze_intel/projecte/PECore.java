@@ -14,7 +14,6 @@ import moze_intel.projecte.api.nss.AbstractNSSTag;
 import moze_intel.projecte.config.CustomEMCParser;
 import moze_intel.projecte.config.ProjectEConfig;
 import moze_intel.projecte.emc.EMCMappingHandler;
-import moze_intel.projecte.gameObjs.items.IHasConditionalAttributes;
 import moze_intel.projecte.gameObjs.registries.PEAttachmentTypes;
 import moze_intel.projecte.gameObjs.registries.PEContainerTypes;
 import moze_intel.projecte.gameObjs.registries.PEDataComponentTypes;
@@ -43,7 +42,6 @@ import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.AddReloadListenerEvent;
-import net.neoforged.neoforge.event.ItemAttributeModifierEvent;
 import net.neoforged.neoforge.event.OnDatapackSyncEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import net.neoforged.neoforge.event.server.ServerStoppedEvent;
@@ -104,7 +102,6 @@ public class PECore {
 		NeoForge.EVENT_BUS.addListener(this::serverStarting);
 		NeoForge.EVENT_BUS.addListener(this::serverQuit);
 		NeoForge.EVENT_BUS.addListener(PEPermissions::registerPermissionNodes);
-		NeoForge.EVENT_BUS.addListener(this::onModifyItemAttributes);
 
 		//Register our config files
 		ProjectEConfig.register(modContainer);
@@ -174,12 +171,6 @@ public class PECore {
 		CustomEMCParser.flush(event.getServer().registryAccess());
 		TransmutationOffline.cleanAll();
 		EMCMappingHandler.clearEmcMap();
-	}
-
-	private void onModifyItemAttributes(ItemAttributeModifierEvent event) {
-		if (event.getItemStack().getItem() instanceof IHasConditionalAttributes item) {
-			item.adjustAttributes(event);
-		}
 	}
 
 	private void modifyRegistries(ModifyRegistriesEvent event) {

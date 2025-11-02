@@ -3,6 +3,9 @@ package moze_intel.projecte.network.commands.client;
 import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
+
+import eatawesome.inventoryexchange.gameObjs.items.Tome;
+
 import java.util.HashSet;
 import java.util.Set;
 import moze_intel.projecte.PECore;
@@ -12,7 +15,6 @@ import moze_intel.projecte.config.MappingConfig;
 import moze_intel.projecte.emc.mappers.OreBlacklistMapper;
 import moze_intel.projecte.emc.mappers.RawMaterialsBlacklistMapper;
 import moze_intel.projecte.gameObjs.PETags;
-import moze_intel.projecte.gameObjs.items.Tome;
 import moze_intel.projecte.integration.IntegrationHelper;
 import moze_intel.projecte.utils.text.PELang;
 import net.minecraft.client.Minecraft;

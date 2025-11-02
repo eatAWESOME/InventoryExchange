@@ -1,4 +1,4 @@
-package moze_intel.projecte.gameObjs.items;
+package eatawesome.inventoryexchange.gameObjs.items;
 
 import java.util.List;
 import moze_intel.projecte.utils.text.PELang;
@@ -8,7 +8,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import org.jetbrains.annotations.NotNull;
 
-public class Tome extends ItemPE {
+public class Tome extends Item {
 
 	public Tome(Properties props) {
 		super(props);

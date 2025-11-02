@@ -5,7 +5,6 @@ import moze_intel.projecte.api.proxy.IEMCProxy;
 import moze_intel.projecte.gameObjs.container.inventory.TransmutationInventory;
 import moze_intel.projecte.gameObjs.container.slots.transmutation.SlotConsume;
 import moze_intel.projecte.gameObjs.container.slots.transmutation.SlotOutput;
-import moze_intel.projecte.gameObjs.items.Tome;
 import moze_intel.projecte.gameObjs.registries.PEContainerTypes;
 import moze_intel.projecte.network.packets.to_server.SearchUpdatePKT;
 import moze_intel.projecte.utils.ItemHelper;
@@ -20,6 +19,8 @@ import net.neoforged.neoforge.capabilities.Capabilities.ItemHandler;
 import net.neoforged.neoforge.items.ItemHandlerHelper;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
+
+import eatawesome.inventoryexchange.gameObjs.items.Tome;
 
 public class TransmutationContainer extends PEHandContainer {
 

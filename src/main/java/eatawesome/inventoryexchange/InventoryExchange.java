@@ -55,7 +55,6 @@ public class InventoryExchange {
 		InventoryExchangeAttachmentTypes.ATTACHMENT_TYPES.register(modEventBus);
 		InventoryExchangeContainerTypes.CONTAINER_TYPES.register(modEventBus);
 		InventoryExchangeItems.ITEMS.register(modEventBus);
-		InventoryExchangeItems.PE_ITEMS.register(modEventBus);
 		InventoryExchangeCreativeTabs.CREATIVE_TABS.register(modEventBus);
 
 		this.packetHandler = new PacketHandler(modEventBus, modContainer.getModInfo().getVersion());

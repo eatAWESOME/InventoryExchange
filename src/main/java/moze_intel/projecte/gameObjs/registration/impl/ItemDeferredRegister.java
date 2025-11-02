@@ -3,13 +3,10 @@ package moze_intel.projecte.gameObjs.registration.impl;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
-import moze_intel.projecte.gameObjs.items.ICapabilityAware;
 import moze_intel.projecte.gameObjs.registration.PEDeferredRegister;
-import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.Item;
 import net.neoforged.bus.api.IEventBus;
-import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import org.jetbrains.annotations.NotNull;
 
 public class ItemDeferredRegister extends PEDeferredRegister<Item> {
@@ -21,16 +18,6 @@ public class ItemDeferredRegister extends PEDeferredRegister<Item> {
 	@Override
 	public void register(@NotNull IEventBus bus) {
 		super.register(bus);
-		bus.addListener(this::registerCapabilities);
-	}
-
-	private void registerCapabilities(RegisterCapabilitiesEvent event) {
-		for (Holder<Item> entry : getEntries()) {
-			Item item = entry.value();
-			if (item instanceof ICapabilityAware capabilityAware) {
-				capabilityAware.attachCapabilities(event);
-			}
-		}
 	}
 
 	public ItemRegistryObject<Item> register(String name) {
