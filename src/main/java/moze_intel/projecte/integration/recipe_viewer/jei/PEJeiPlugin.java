@@ -6,7 +6,6 @@ import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.ingredients.subtypes.ISubtypeInterpreter;
 import mezz.jei.api.ingredients.subtypes.UidContext;
 import moze_intel.projecte.PECore;
-import moze_intel.projecte.api.capabilities.item.IModeChanger;
 import moze_intel.projecte.gameObjs.registries.PEDataComponentTypes;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -24,9 +23,6 @@ public class PEJeiPlugin implements IModPlugin {
 		public Object getSubtypeData(@NotNull ItemStack stack, @NotNull UidContext context) {
 			if (context == UidContext.Ingredient) {
 				Object mode = null;
-				if (stack.getItem() instanceof IModeChanger<?> modeChanger) {
-					mode = modeChanger.getMode(stack);
-				}
 				Long stored = stack.get(PEDataComponentTypes.STORED_EMC);
 				if (stored != null && stored > 0) {
 					return mode == null ? stored : List.of(mode, stored);
@@ -41,14 +37,9 @@ public class PEJeiPlugin implements IModPlugin {
 		public String getLegacyStringSubtypeInfo(@NotNull ItemStack stack, @NotNull UidContext context) {
 			if (context == UidContext.Ingredient) {
 				Object mode = null;
-				if (stack.getItem() instanceof IModeChanger<?> modeChanger) {
-					mode = modeChanger.getMode(stack);
-				}
 				Long stored = stack.get(PEDataComponentTypes.STORED_EMC);
 				if (stored != null && stored > 0) {
 					return mode == null ? stored.toString() : mode + ";" + stored;
-				} else if (mode != null) {
-					return mode.toString();
 				}
 			}
 			return "";

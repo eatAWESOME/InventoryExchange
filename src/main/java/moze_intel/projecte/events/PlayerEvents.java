@@ -1,7 +1,6 @@
 package moze_intel.projecte.events;
 
 import moze_intel.projecte.PECore;
-import moze_intel.projecte.api.capabilities.IAlchBagProvider;
 import moze_intel.projecte.api.capabilities.IKnowledgeProvider;
 import moze_intel.projecte.api.capabilities.PECapabilities;
 import moze_intel.projecte.impl.TransmutationOffline;
@@ -26,10 +25,6 @@ public class PlayerEvents {
 			if (knowledge != null) {
 				knowledge.sync(player);
 			}
-			IAlchBagProvider bagProvider = player.getCapability(PECapabilities.ALCH_BAG_CAPABILITY);
-			if (bagProvider != null) {
-				bagProvider.syncAllBags(player);
-			}
 		}
 	}
 
@@ -42,10 +37,6 @@ public class PlayerEvents {
 			if (knowledge != null) {
 				knowledge.sync(serverPlayer);
 			}
-			IAlchBagProvider bagProvider = serverPlayer.getCapability(PECapabilities.ALCH_BAG_CAPABILITY);
-			if (bagProvider != null) {
-				bagProvider.syncAllBags(serverPlayer);
-			}
 		}
 	}
 
@@ -56,11 +47,6 @@ public class PlayerEvents {
 		if (knowledge != null) {
 			knowledge.sync(player);
 			PlayerHelper.updateScore(player, PlayerHelper.SCOREBOARD_EMC, knowledge.getEmc());
-		}
-
-		IAlchBagProvider alchBagProvider = player.getCapability(PECapabilities.ALCH_BAG_CAPABILITY);
-		if (alchBagProvider != null) {
-			alchBagProvider.syncAllBags(player);
 		}
 
 		PECore.debugLog("Sent knowledge and bag data to {}", player.getName());
