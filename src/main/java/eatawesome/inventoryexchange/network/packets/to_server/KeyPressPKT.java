@@ -2,9 +2,10 @@ package eatawesome.inventoryexchange.network.packets.to_server;
 
 import io.netty.buffer.ByteBuf;
 import eatawesome.inventoryexchange.InventoryExchange;
-import eatawesome.inventoryexchange.gameObjs.container.InfiniteContainer;
+import eatawesome.inventoryexchange.gameObjs.container.InfiniteContainerMenu;
 import eatawesome.inventoryexchange.gameObjs.container.PortableCraftingMenu;
 import eatawesome.inventoryexchange.gameObjs.container.PortableFurnaceMenu;
+import eatawesome.inventoryexchange.gameObjs.container.TransmutationContainerMenu;
 import eatawesome.inventoryexchange.network.packets.IInventoryExchangePacket;
 import eatawesome.inventoryexchange.utils.FeedToggle;
 import eatawesome.inventoryexchange.utils.InfiniteContainerHelper;
@@ -12,7 +13,6 @@ import eatawesome.inventoryexchange.utils.InventoryExchangeKeybind;
 import eatawesome.inventoryexchange.utils.RepairToggle;
 import eatawesome.inventoryexchange.utils.UltimaToolMode;
 import eatawesome.inventoryexchange.utils.text.InventoryExchangeLang;
-import moze_intel.projecte.gameObjs.container.TransmutationContainer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
@@ -80,7 +80,7 @@ public record KeyPressPKT(InventoryExchangeKeybind key) implements IInventoryExc
                     @Override
                     public AbstractContainerMenu createMenu(int windowId, Inventory inv, Player player) {
                         IItemHandlerModifiable infiniteInventory = InfiniteContainerHelper.getInventory(player);
-                        return new InfiniteContainer(windowId, inv, infiniteInventory);
+                        return new InfiniteContainerMenu(windowId, inv, infiniteInventory);
                     }
 
                     @Override
@@ -100,7 +100,7 @@ public record KeyPressPKT(InventoryExchangeKeybind key) implements IInventoryExc
 				player.openMenu(new MenuProvider() {
 					@Override
 					public AbstractContainerMenu createMenu(int windowId, Inventory inv, Player player) {
-						return new TransmutationContainer(windowId, inv);
+						return new TransmutationContainerMenu(windowId, inv);
 					}
 
 					@Override

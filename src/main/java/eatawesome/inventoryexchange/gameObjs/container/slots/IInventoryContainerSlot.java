@@ -1,4 +1,4 @@
-package moze_intel.projecte.gameObjs.container.slots;
+package eatawesome.inventoryexchange.gameObjs.container.slots;
 
 public interface IInventoryContainerSlot extends IInsertableSlot {
 }

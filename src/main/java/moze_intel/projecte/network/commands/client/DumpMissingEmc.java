@@ -4,7 +4,7 @@ import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 
-import eatawesome.inventoryexchange.gameObjs.items.Tome;
+import eatawesome.inventoryexchange.gameObjs.items.TomeOfKnowledge;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -58,7 +58,7 @@ public class DumpMissingEmc {
 		if (switch (holder.value()) {
 			//Assume unbreakable blocks won't have an EMC value by default
 			case BlockItem blockItem when blockItem.getBlock().defaultDestroyTime() == Block.INDESTRUCTIBLE -> true;
-			case Tome tome when !false -> true;
+			case TomeOfKnowledge tome when !false -> true;
 			case BundleItem bundleItem when !enabledFeatures.contains(FeatureFlags.BUNDLE) -> true;
 			default -> false;
 		}) {

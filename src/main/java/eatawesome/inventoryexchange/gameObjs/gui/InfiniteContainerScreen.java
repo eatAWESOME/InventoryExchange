@@ -2,7 +2,7 @@ package eatawesome.inventoryexchange.gameObjs.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import eatawesome.inventoryexchange.InventoryExchange;
-import eatawesome.inventoryexchange.gameObjs.container.InfiniteContainer;
+import eatawesome.inventoryexchange.gameObjs.container.InfiniteContainerMenu;
 import eatawesome.inventoryexchange.network.packets.to_server.InfiniteContainerScrollPKT;
 import eatawesome.inventoryexchange.network.packets.to_server.InfiniteContainerSortPKT;
 import eatawesome.inventoryexchange.utils.text.InventoryExchangeLang;
@@ -15,7 +15,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.neoforged.neoforge.network.PacketDistributor;
 
-public class InfiniteContainerScreen extends AbstractContainerScreen<InfiniteContainer> {
+public class InfiniteContainerScreen extends AbstractContainerScreen<InfiniteContainerMenu> {
 
     private static final ResourceLocation TEXTURE =
         ResourceLocation.fromNamespaceAndPath(InventoryExchange.MODID, "textures/gui/infinitecontainer.png");
@@ -32,10 +32,10 @@ public class InfiniteContainerScreen extends AbstractContainerScreen<InfiniteCon
     // Controls
     private Button sortButton;
 
-    public InfiniteContainerScreen(InfiniteContainer menu, Inventory playerInv, Component title) {
+    public InfiniteContainerScreen(InfiniteContainerMenu menu, Inventory playerInv, Component title) {
         super(menu, playerInv, title);
         this.imageWidth = Math.max(256,
-            InfiniteContainer.CHEST_START_X + InfiniteContainer.COLS * InfiniteContainer.SLOT_SPACING + 8);
+            InfiniteContainerMenu.CHEST_START_X + InfiniteContainerMenu.COLS * InfiniteContainerMenu.SLOT_SPACING + 8);
         this.imageHeight = 256;
         this.localRowOffset = menu.getRowOffset();
     }
@@ -44,17 +44,17 @@ public class InfiniteContainerScreen extends AbstractContainerScreen<InfiniteCon
     protected void init() {
         super.init();
         this.scrollbarX = this.imageWidth - SCROLLBAR_RIGHT_MARGIN - SCROLLBAR_WIDTH;
-        this.scrollbarTopY = InfiniteContainer.CHEST_START_Y;
-        this.scrollbarBottomY = InfiniteContainer.CHEST_START_Y +
-            (InfiniteContainer.VISIBLE_ROWS * InfiniteContainer.SLOT_SPACING) - 2;
+        this.scrollbarTopY = InfiniteContainerMenu.CHEST_START_Y;
+        this.scrollbarBottomY = InfiniteContainerMenu.CHEST_START_Y +
+            (InfiniteContainerMenu.VISIBLE_ROWS * InfiniteContainerMenu.SLOT_SPACING) - 2;
 
         // Button
-        int btnBase = InfiniteContainer.SLOT_SPACING;
+        int btnBase = InfiniteContainerMenu.SLOT_SPACING;
         int btnWidth = btnBase + 15;
         int btnHeight = btnBase;
         int btnRight = this.leftPos + this.imageWidth - 4;
         int btnX = (btnRight - btnWidth) - 2;
-        int btnY = (this.topPos + InfiniteContainer.PLAYER_INV_START_Y) - 1;
+        int btnY = (this.topPos + InfiniteContainerMenu.PLAYER_INV_START_Y) - 1;
         this.sortButton = Button.builder(InventoryExchangeLang.INFINITE_CONTAINER_SORT.translate(), b -> {
             PacketDistributor.sendToServer(new InfiniteContainerSortPKT());
             this.setFocused(null);
@@ -68,13 +68,13 @@ public class InfiniteContainerScreen extends AbstractContainerScreen<InfiniteCon
     private int potentialRows() {
         int rows = menu.getClientPotentialRows();
         if (rows < 10) rows = 10;
-        int configured = InfiniteContainer.configMaxRows();
+        int configured = InfiniteContainerMenu.configMaxRows();
         if (rows > configured) rows = configured;
         return rows;
     }
 
     private int maxOffset() {
-        return Math.max(0, potentialRows() - InfiniteContainer.VISIBLE_ROWS);
+        return Math.max(0, potentialRows() - InfiniteContainerMenu.VISIBLE_ROWS);
     }
 
     private void clampLocalOffset() {
@@ -110,12 +110,12 @@ public class InfiniteContainerScreen extends AbstractContainerScreen<InfiniteCon
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double deltaX, double deltaY) {
         boolean overGrid =
-            mouseX >= this.leftPos + InfiniteContainer.CHEST_START_X &&
-            mouseX < this.leftPos + InfiniteContainer.CHEST_START_X +
-                InfiniteContainer.COLS * InfiniteContainer.SLOT_SPACING &&
-            mouseY >= this.topPos + InfiniteContainer.CHEST_START_Y &&
-            mouseY < this.topPos + InfiniteContainer.CHEST_START_Y +
-                InfiniteContainer.VISIBLE_ROWS * InfiniteContainer.SLOT_SPACING;
+            mouseX >= this.leftPos + InfiniteContainerMenu.CHEST_START_X &&
+            mouseX < this.leftPos + InfiniteContainerMenu.CHEST_START_X +
+                InfiniteContainerMenu.COLS * InfiniteContainerMenu.SLOT_SPACING &&
+            mouseY >= this.topPos + InfiniteContainerMenu.CHEST_START_Y &&
+            mouseY < this.topPos + InfiniteContainerMenu.CHEST_START_Y +
+                InfiniteContainerMenu.VISIBLE_ROWS * InfiniteContainerMenu.SLOT_SPACING;
 
         if (overScrollbar(mouseX, mouseY) || overGrid) {
             int step = deltaY > 0 ? -1 : 1;
@@ -148,7 +148,7 @@ public class InfiniteContainerScreen extends AbstractContainerScreen<InfiniteCon
 
         int rows = potentialRows();
         int handleH = Math.max(10,
-            Math.min(trackH, Math.round(trackH * (InfiniteContainer.VISIBLE_ROWS / (float) rows))));
+            Math.min(trackH, Math.round(trackH * (InfiniteContainerMenu.VISIBLE_ROWS / (float) rows))));
         int handleY = trackY + Math.round((trackH - handleH) * scrollFraction());
 
         gui.fill(trackX, trackY, trackX + SCROLLBAR_WIDTH, trackY + trackH, 0x60202020);

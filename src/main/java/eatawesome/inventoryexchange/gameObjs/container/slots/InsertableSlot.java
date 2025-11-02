@@ -1,4 +1,4 @@
-package moze_intel.projecte.gameObjs.container.slots;
+package eatawesome.inventoryexchange.gameObjs.container.slots;
 
 import net.minecraft.world.Container;
 import net.minecraft.world.inventory.Slot;

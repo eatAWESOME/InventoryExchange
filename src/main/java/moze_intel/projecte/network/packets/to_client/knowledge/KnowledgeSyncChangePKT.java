@@ -4,7 +4,6 @@ import moze_intel.projecte.PECore;
 import moze_intel.projecte.api.ItemInfo;
 import moze_intel.projecte.api.capabilities.IKnowledgeProvider;
 import moze_intel.projecte.api.capabilities.PECapabilities;
-import moze_intel.projecte.gameObjs.container.TransmutationContainer;
 import moze_intel.projecte.network.packets.IPEPacket;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -13,6 +12,8 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import org.jetbrains.annotations.NotNull;
+
+import eatawesome.inventoryexchange.gameObjs.container.TransmutationContainerMenu;
 
 public record KnowledgeSyncChangePKT(ItemInfo change, boolean learned) implements IPEPacket {
 
@@ -35,7 +36,7 @@ public record KnowledgeSyncChangePKT(ItemInfo change, boolean learned) implement
 		IKnowledgeProvider knowledge = player.getCapability(PECapabilities.KNOWLEDGE_CAPABILITY);
 		if (knowledge != null) {
 			if (learned) {
-				if (!knowledge.hasKnowledge(change) && knowledge.addKnowledge(change) && player.containerMenu instanceof TransmutationContainer container) {
+				if (!knowledge.hasKnowledge(change) && knowledge.addKnowledge(change) && player.containerMenu instanceof TransmutationContainerMenu container) {
 					container.transmutationInventory.itemLearned(change);
 				}
 			}

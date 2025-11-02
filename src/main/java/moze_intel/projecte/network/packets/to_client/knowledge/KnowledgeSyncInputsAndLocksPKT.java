@@ -6,8 +6,6 @@ import moze_intel.projecte.PECore;
 import moze_intel.projecte.api.capabilities.IKnowledgeProvider;
 import moze_intel.projecte.api.capabilities.IKnowledgeProvider.TargetUpdateType;
 import moze_intel.projecte.api.capabilities.PECapabilities;
-import moze_intel.projecte.gameObjs.container.TransmutationContainer;
-import moze_intel.projecte.gameObjs.container.inventory.TransmutationInventory;
 import moze_intel.projecte.network.packets.IPEPacket;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -17,6 +15,9 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import org.jetbrains.annotations.NotNull;
+
+import eatawesome.inventoryexchange.gameObjs.container.TransmutationContainerMenu;
+import eatawesome.inventoryexchange.gameObjs.container.inventory.TransmutationInventory;
 
 public record KnowledgeSyncInputsAndLocksPKT(Int2ObjectMap<ItemStack> stacksToSync, TargetUpdateType updateTargets) implements IPEPacket {
 
@@ -39,7 +40,7 @@ public record KnowledgeSyncInputsAndLocksPKT(Int2ObjectMap<ItemStack> stacksToSy
 		IKnowledgeProvider knowledge = player.getCapability(PECapabilities.KNOWLEDGE_CAPABILITY);
 		if (knowledge != null) {
 			knowledge.receiveInputsAndLocks(stacksToSync);
-			if (updateTargets != TargetUpdateType.NONE && player.containerMenu instanceof TransmutationContainer container) {
+			if (updateTargets != TargetUpdateType.NONE && player.containerMenu instanceof TransmutationContainerMenu container) {
 				//Update targets in case total available EMC is now different
 				TransmutationInventory transmutationInventory = container.transmutationInventory;
 				if (updateTargets == TargetUpdateType.ALL) {

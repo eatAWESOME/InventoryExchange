@@ -1,8 +1,7 @@
-package moze_intel.projecte.gameObjs.gui;
+package eatawesome.inventoryexchange.gameObjs.gui;
 
 import java.math.BigInteger;
-import moze_intel.projecte.gameObjs.container.TransmutationContainer;
-import moze_intel.projecte.gameObjs.container.inventory.TransmutationInventory;
+
 import moze_intel.projecte.utils.EMCHelper;
 import moze_intel.projecte.utils.TransmutationEMCFormatter;
 import moze_intel.projecte.utils.text.PELang;
@@ -10,6 +9,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
@@ -17,8 +17,10 @@ import org.jetbrains.annotations.NotNull;
 import org.lwjgl.glfw.GLFW;
 
 import eatawesome.inventoryexchange.InventoryExchange;
+import eatawesome.inventoryexchange.gameObjs.container.TransmutationContainerMenu;
+import eatawesome.inventoryexchange.gameObjs.container.inventory.TransmutationInventory;
 
-public class GUITransmutation extends PEContainerScreen<TransmutationContainer> {
+public class TransmutationScreen extends AbstractContainerScreen<TransmutationContainerMenu> {
 
 	private static final BigInteger MAX_EXACT_TRANSMUTATION_DISPLAY = BigInteger.valueOf(1_000_000_000_000L);
 	private static final ResourceLocation texture = InventoryExchange.rl("textures/gui/transmute.png");
@@ -26,8 +28,9 @@ public class GUITransmutation extends PEContainerScreen<TransmutationContainer> 
 	private final TransmutationInventory inv;
 	private EditBox textBoxFilter;
 	private Button previous, next;
+	public boolean switchingToJEI;
 
-	public GUITransmutation(TransmutationContainer container, Inventory invPlayer, Component title) {
+	public TransmutationScreen(TransmutationContainerMenu container, Inventory invPlayer, Component title) {
 		super(container, invPlayer, title);
 		this.inv = container.transmutationInventory;
 		this.imageWidth = 228;
@@ -38,6 +41,7 @@ public class GUITransmutation extends PEContainerScreen<TransmutationContainer> 
 
 	@Override
 	public void init() {
+		switchingToJEI = false;
 		super.init();
 
 		this.textBoxFilter = addWidget(new EditBox(this.font, leftPos + 83, topPos + 8, 55, 10, Component.empty()));
@@ -138,8 +142,16 @@ public class GUITransmutation extends PEContainerScreen<TransmutationContainer> 
 
 	@Override
 	public void removed() {
-		super.removed();
+		if (!switchingToJEI) {
+			super.removed();
+		}
 		inv.learnFlag = 0;
+	}
+
+	@Override
+	public void render(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+		super.render(graphics, mouseX, mouseY, partialTicks);
+		this.renderTooltip(graphics, mouseX, mouseY);
 	}
 
 	@Override

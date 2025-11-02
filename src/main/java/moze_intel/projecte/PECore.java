@@ -15,8 +15,6 @@ import moze_intel.projecte.config.CustomEMCParser;
 import moze_intel.projecte.config.ProjectEConfig;
 import moze_intel.projecte.emc.EMCMappingHandler;
 import moze_intel.projecte.gameObjs.registries.PEAttachmentTypes;
-import moze_intel.projecte.gameObjs.registries.PEContainerTypes;
-import moze_intel.projecte.gameObjs.registries.PEDataComponentTypes;
 import moze_intel.projecte.gameObjs.registries.PENormalizedSimpleStacks;
 import moze_intel.projecte.gameObjs.registries.PESoundEvents;
 import moze_intel.projecte.impl.TransmutationOffline;
@@ -93,8 +91,6 @@ public class PECore {
 		modEventBus.addListener(this::registerRegistries);
 		modEventBus.addListener(this::modifyRegistries);
 		PEAttachmentTypes.ATTACHMENT_TYPES.register(modEventBus);
-		PEContainerTypes.CONTAINER_TYPES.register(modEventBus);
-		PEDataComponentTypes.DATA_COMPONENT_TYPES.register(modEventBus);
 		PENormalizedSimpleStacks.NSS_SERIALIZERS.register(modEventBus);
 		PESoundEvents.SOUND_EVENTS.register(modEventBus);
 		NeoForge.EVENT_BUS.addListener(this::addReloadListeners);

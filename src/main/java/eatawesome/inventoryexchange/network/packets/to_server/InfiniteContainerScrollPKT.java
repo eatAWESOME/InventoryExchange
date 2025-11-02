@@ -1,7 +1,7 @@
 package eatawesome.inventoryexchange.network.packets.to_server;
 
 import eatawesome.inventoryexchange.InventoryExchange;
-import eatawesome.inventoryexchange.gameObjs.container.InfiniteContainer;
+import eatawesome.inventoryexchange.gameObjs.container.InfiniteContainerMenu;
 import eatawesome.inventoryexchange.network.packets.IInventoryExchangePacket;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -30,7 +30,7 @@ public record InfiniteContainerScrollPKT(int windowId, int rowOffset) implements
     public void handle(IPayloadContext context) {
         var player = context.player();
         if (player == null || player.level().isClientSide) return;
-        if (player.containerMenu instanceof InfiniteContainer menu && player.containerMenu.containerId == windowId) {
+        if (player.containerMenu instanceof InfiniteContainerMenu menu && player.containerMenu.containerId == windowId) {
             menu.setRowOffset(rowOffset);
             menu.broadcastChanges();
         }

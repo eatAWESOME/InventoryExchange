@@ -1,12 +1,12 @@
-package moze_intel.projecte.gameObjs.container.slots.transmutation;
+package eatawesome.inventoryexchange.gameObjs.container.slots.transmutation;
 
 import java.math.BigInteger;
 import moze_intel.projecte.api.proxy.IEMCProxy;
-import moze_intel.projecte.gameObjs.container.inventory.TransmutationInventory;
-import moze_intel.projecte.gameObjs.container.slots.InventoryContainerSlot;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
+import eatawesome.inventoryexchange.gameObjs.container.inventory.TransmutationInventory;
+import eatawesome.inventoryexchange.gameObjs.container.slots.InventoryContainerSlot;
 import eatawesome.inventoryexchange.gameObjs.registries.InventoryExchangeItems;
 
 public class SlotConsume extends InventoryContainerSlot {

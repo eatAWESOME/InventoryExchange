@@ -8,9 +8,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import org.jetbrains.annotations.NotNull;
 
-public class Tome extends Item {
+public class TomeOfKnowledge extends Item {
 
-	public Tome(Properties props) {
+	public TomeOfKnowledge(Properties props) {
 		super(props);
 	}
 

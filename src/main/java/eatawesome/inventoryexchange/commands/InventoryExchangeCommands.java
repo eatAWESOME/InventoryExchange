@@ -6,7 +6,7 @@ import com.mojang.brigadier.arguments.BoolArgumentType;
 import eatawesome.inventoryexchange.InventoryExchange;
 import eatawesome.inventoryexchange.capabilities.IInfiniteContainerProvider;
 import eatawesome.inventoryexchange.capabilities.InventoryExchangeCapabilities;
-import eatawesome.inventoryexchange.gameObjs.container.InfiniteContainer;
+import eatawesome.inventoryexchange.gameObjs.container.InfiniteContainerMenu;
 import eatawesome.inventoryexchange.gameObjs.container.PortableFurnaceMenu;
 import eatawesome.inventoryexchange.impl.capability.PortableFurnaceImpl;
 import eatawesome.inventoryexchange.utils.FeedToggle;
@@ -148,7 +148,7 @@ public class InventoryExchangeCommands {
 
 	private static void openInfinite(ServerPlayer viewer, ServerPlayer target) {
 		viewer.openMenu(new SimpleMenuProvider(
-			(id, inv, p) -> new InfiniteContainer(id, inv, InfiniteContainerHelper.getInventory(target)),
+			(id, inv, p) -> new InfiniteContainerMenu(id, inv, InfiniteContainerHelper.getInventory(target)),
 			InventoryExchangeLang.INFINITE_CONTAINER_CONTAINER.translate()
 		));
 		IInfiniteContainerProvider provider = target.getCapability(InventoryExchangeCapabilities.INFINITE_CONTAINER_CAPABILITY);

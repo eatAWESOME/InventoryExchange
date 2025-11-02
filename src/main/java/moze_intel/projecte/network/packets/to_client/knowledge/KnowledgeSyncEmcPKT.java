@@ -5,7 +5,6 @@ import java.math.BigInteger;
 import moze_intel.projecte.PECore;
 import moze_intel.projecte.api.capabilities.IKnowledgeProvider;
 import moze_intel.projecte.api.capabilities.PECapabilities;
-import moze_intel.projecte.gameObjs.container.TransmutationContainer;
 import moze_intel.projecte.network.PEStreamCodecs;
 import moze_intel.projecte.network.packets.IPEPacket;
 import net.minecraft.network.codec.StreamCodec;
@@ -13,6 +12,8 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import org.jetbrains.annotations.NotNull;
+
+import eatawesome.inventoryexchange.gameObjs.container.TransmutationContainerMenu;
 
 public record KnowledgeSyncEmcPKT(BigInteger emc) implements IPEPacket {
 
@@ -33,7 +34,7 @@ public record KnowledgeSyncEmcPKT(BigInteger emc) implements IPEPacket {
 		IKnowledgeProvider knowledge = player.getCapability(PECapabilities.KNOWLEDGE_CAPABILITY);
 		if (knowledge != null) {
 			knowledge.setEmc(emc);
-			if (player.containerMenu instanceof TransmutationContainer container) {
+			if (player.containerMenu instanceof TransmutationContainerMenu container) {
 				container.transmutationInventory.updateClientTargets(true);
 			}
 		}

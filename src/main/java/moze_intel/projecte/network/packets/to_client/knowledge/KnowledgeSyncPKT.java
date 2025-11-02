@@ -1,7 +1,6 @@
 package moze_intel.projecte.network.packets.to_client.knowledge;
 
 import moze_intel.projecte.PECore;
-import moze_intel.projecte.gameObjs.container.TransmutationContainer;
 import moze_intel.projecte.gameObjs.registries.PEAttachmentTypes;
 import moze_intel.projecte.impl.capability.KnowledgeImpl.KnowledgeAttachment;
 import moze_intel.projecte.network.packets.IPEPacket;
@@ -12,6 +11,8 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import org.jetbrains.annotations.NotNull;
+
+import eatawesome.inventoryexchange.gameObjs.container.TransmutationContainerMenu;
 
 public record KnowledgeSyncPKT(KnowledgeAttachment data) implements IPEPacket {
 
@@ -34,7 +35,7 @@ public record KnowledgeSyncPKT(KnowledgeAttachment data) implements IPEPacket {
 		LocalPlayer player = Minecraft.getInstance().player;
 		if (player != null) {
 			player.setData(PEAttachmentTypes.KNOWLEDGE, data);
-			if (player.containerMenu instanceof TransmutationContainer container) {
+			if (player.containerMenu instanceof TransmutationContainerMenu container) {
 				container.transmutationInventory.updateClientTargets(false);
 			}
 		}

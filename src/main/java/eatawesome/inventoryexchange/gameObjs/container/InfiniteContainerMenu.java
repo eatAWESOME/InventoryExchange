@@ -12,7 +12,7 @@ import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.items.IItemHandlerModifiable;
 import net.neoforged.neoforge.items.ItemStackHandler;
 
-public class InfiniteContainer extends AbstractContainerMenu {
+public class InfiniteContainerMenu extends AbstractContainerMenu {
 
     public static final int COLS = 13;
     public static final int VISIBLE_ROWS = 8;
@@ -31,11 +31,11 @@ public class InfiniteContainer extends AbstractContainerMenu {
     private int rowOffset = 0;
     private int clientPotentialRows = 10;
 
-    public InfiniteContainer(int id, Inventory playerInventory) {
+    public InfiniteContainerMenu(int id, Inventory playerInventory) {
         this(id, playerInventory, InfiniteContainerHelper.getInventory(playerInventory.player));
     }
 
-    public InfiniteContainer(int id, Inventory playerInventory, IItemHandlerModifiable handler) {
+    public InfiniteContainerMenu(int id, Inventory playerInventory, IItemHandlerModifiable handler) {
         super(InventoryExchangeContainerTypes.INFINITE_CONTAINER.get(), id);
         this.handler = handler != null ? handler : new ItemStackHandler(totalSlotCount());
         this.serverSide = !playerInventory.player.level().isClientSide;

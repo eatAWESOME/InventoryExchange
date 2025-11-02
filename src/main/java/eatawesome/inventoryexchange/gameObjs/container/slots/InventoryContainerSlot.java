@@ -1,4 +1,4 @@
-package moze_intel.projecte.gameObjs.container.slots;
+package eatawesome.inventoryexchange.gameObjs.container.slots;
 
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.items.IItemHandler;

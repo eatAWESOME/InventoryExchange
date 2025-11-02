@@ -1,7 +1,7 @@
 package eatawesome.inventoryexchange.gameObjs.registries;
 
 import eatawesome.inventoryexchange.InventoryExchange;
-import eatawesome.inventoryexchange.gameObjs.items.Tome;
+import eatawesome.inventoryexchange.gameObjs.items.TomeOfKnowledge;
 import eatawesome.inventoryexchange.gameObjs.items.UltimaArmor;
 import eatawesome.inventoryexchange.gameObjs.items.UltimaTool;
 import eatawesome.inventoryexchange.gameObjs.items.UltimaWatch;
@@ -21,5 +21,5 @@ public class InventoryExchangeItems {
 	public static final ItemRegistryObject<Item> ULTIMA_CHESTPLATE = ITEMS.register("ultima_chestplate", () -> new UltimaArmor(ArmorItem.Type.CHESTPLATE));
 	public static final ItemRegistryObject<Item> ULTIMA_LEGGINGS = ITEMS.register("ultima_leggings", () -> new UltimaArmor(ArmorItem.Type.LEGGINGS));
 	public static final ItemRegistryObject<Item> ULTIMA_BOOTS = ITEMS.register("ultima_boots", () -> new UltimaArmor(ArmorItem.Type.BOOTS));
-	public static final ItemRegistryObject<Item> TOME_OF_KNOWLEDGE = ITEMS.registerSimple("tome_of_knowledge", properties -> new Tome(properties.rarity(Rarity.EPIC).stacksTo(1)));
+	public static final ItemRegistryObject<Item> TOME_OF_KNOWLEDGE = ITEMS.registerSimple("tome_of_knowledge", properties -> new TomeOfKnowledge(properties.rarity(Rarity.EPIC).stacksTo(1)));
 }

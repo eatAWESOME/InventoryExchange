@@ -2,7 +2,7 @@ package eatawesome.inventoryexchange.utils;
 
 import eatawesome.inventoryexchange.capabilities.IInfiniteContainerProvider;
 import eatawesome.inventoryexchange.capabilities.InventoryExchangeCapabilities;
-import eatawesome.inventoryexchange.gameObjs.container.InfiniteContainer;
+import eatawesome.inventoryexchange.gameObjs.container.InfiniteContainerMenu;
 import eatawesome.inventoryexchange.gameObjs.registries.InventoryExchangeAttachmentTypes;
 import eatawesome.inventoryexchange.utils.text.InventoryExchangeLang;
 import net.minecraft.server.level.ServerPlayer;
@@ -23,7 +23,7 @@ public class InfiniteContainerHelper {
     public static void openForPlayer(ServerPlayer player) {
         IItemHandlerModifiable inv = getInventory(player);
         player.openMenu(new SimpleMenuProvider((id, playerInv, serverPlayer) ->
-            new InfiniteContainer(id, playerInv, inv),
+            new InfiniteContainerMenu(id, playerInv, inv),
             InventoryExchangeLang.INFINITE_CONTAINER_CONTAINER.translate()
         ));
         IInfiniteContainerProvider provider = player.getCapability(InventoryExchangeCapabilities.INFINITE_CONTAINER_CAPABILITY);

@@ -1,4 +1,4 @@
-package moze_intel.projecte.gameObjs.container.inventory;
+package eatawesome.inventoryexchange.gameObjs.container.inventory;
 
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 
 import eatawesome.inventoryexchange.gameObjs.InventoryExchangeTags;
 import eatawesome.inventoryexchange.gameObjs.registries.InventoryExchangeItems;
+import eatawesome.inventoryexchange.utils.PlayerHelper;
 import moze_intel.projecte.api.ItemInfo;
 import moze_intel.projecte.api.capabilities.IKnowledgeProvider;
 import moze_intel.projecte.api.capabilities.IKnowledgeProvider.TargetUpdateType;
@@ -19,7 +20,6 @@ import moze_intel.projecte.api.capabilities.PECapabilities;
 import moze_intel.projecte.api.event.PlayerAttemptLearnEvent;
 import moze_intel.projecte.api.proxy.IEMCProxy;
 import moze_intel.projecte.utils.MathUtils;
-import moze_intel.projecte.utils.PlayerHelper;
 import moze_intel.projecte.utils.text.SearchQueryParser;
 import moze_intel.projecte.utils.text.SearchQueryParser.ISearchQuery;
 import net.minecraft.server.level.ServerPlayer;

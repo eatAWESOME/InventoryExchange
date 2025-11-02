@@ -5,7 +5,7 @@ import java.math.BigInteger;
 import eatawesome.inventoryexchange.InventoryExchange;
 import eatawesome.inventoryexchange.capabilities.IAbilityEMCProvider;
 import eatawesome.inventoryexchange.capabilities.InventoryExchangeCapabilities;
-import moze_intel.projecte.gameObjs.container.TransmutationContainer;
+import eatawesome.inventoryexchange.gameObjs.container.TransmutationContainerMenu;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.world.entity.player.Player;
@@ -34,7 +34,7 @@ public record AbilityEMCSyncPKT(BigInteger emc) implements IInventoryExchangePac
 		IAbilityEMCProvider knowledge = player.getCapability(InventoryExchangeCapabilities.ABILITY_EMC_CAPABILITY);
 		if (knowledge != null) {
 			knowledge.setEmc(emc);
-			if (player.containerMenu instanceof TransmutationContainer container) {
+			if (player.containerMenu instanceof TransmutationContainerMenu container) {
 				container.transmutationInventory.updateClientTargets(true);
 			}
 		}

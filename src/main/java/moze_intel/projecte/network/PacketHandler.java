@@ -3,7 +3,6 @@ package moze_intel.projecte.network;
 import moze_intel.projecte.PECore;
 import moze_intel.projecte.api.capabilities.IKnowledgeProvider;
 import moze_intel.projecte.api.capabilities.PECapabilities;
-import moze_intel.projecte.gameObjs.container.TransmutationContainer;
 import moze_intel.projecte.network.packets.IPEPacket;
 import moze_intel.projecte.network.packets.to_client.SyncEmcPKT;
 import moze_intel.projecte.network.packets.to_client.container.SyncOffhandPkt;
@@ -25,6 +24,8 @@ import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.handling.IPayloadHandler;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 import org.apache.maven.artifact.versioning.ArtifactVersion;
+
+import eatawesome.inventoryexchange.gameObjs.container.TransmutationContainerMenu;
 
 /**
  * Heavily based off of Mekanism's packet handler
@@ -55,7 +56,7 @@ public final class PacketHandler {
 			IKnowledgeProvider knowledge = player.getCapability(PECapabilities.KNOWLEDGE_CAPABILITY);
 			if (knowledge != null) {
 				knowledge.clearKnowledge();
-				if (player.containerMenu instanceof TransmutationContainer container) {
+				if (player.containerMenu instanceof TransmutationContainerMenu container) {
 					container.transmutationInventory.updateClientTargets(false);
 				}
 			}
@@ -67,7 +68,7 @@ public final class PacketHandler {
 		registrar.play(SyncEmcPKT.TYPE, SyncEmcPKT.STREAM_CODEC);
 		registrar.play(SyncOffhandPkt.TYPE, SyncOffhandPkt.STREAM_CODEC);
 		updateTransmutationTargets = registrar.playInstanced(PECore.rl("update_transmutation_targets"), (ignored, context) -> {
-			if (context.player().containerMenu instanceof TransmutationContainer container) {
+			if (context.player().containerMenu instanceof TransmutationContainerMenu container) {
 				container.transmutationInventory.updateClientTargets(false);
 			}
 		});

@@ -1,6 +1,6 @@
 package eatawesome.inventoryexchange.handlers;
 
-import eatawesome.inventoryexchange.gameObjs.container.InfiniteContainer;
+import eatawesome.inventoryexchange.gameObjs.container.InfiniteContainerMenu;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.Slot;
@@ -10,13 +10,13 @@ import net.neoforged.neoforge.items.IItemHandlerModifiable;
 
 public class ScrollingSlotItemHandler extends Slot {
 
-    private final InfiniteContainer menu;
+    private final InfiniteContainerMenu menu;
     private final IItemHandler handler;
     private final int col;
     private final int visibleRow;
     private final boolean clientSide;
 
-    public ScrollingSlotItemHandler(InfiniteContainer menu, IItemHandler handler, int col, int visibleRow, int x, int y, boolean clientSide) {
+    public ScrollingSlotItemHandler(InfiniteContainerMenu menu, IItemHandler handler, int col, int visibleRow, int x, int y, boolean clientSide) {
         super(new OneSlotContainer(), 0, x, y);
         this.menu = menu;
         this.handler = handler;
@@ -28,7 +28,7 @@ public class ScrollingSlotItemHandler extends Slot {
 
     private int realIndex() {
         int row = menu.getRowOffset() + visibleRow;
-        return col + row * InfiniteContainer.COLS;
+        return col + row * InfiniteContainerMenu.COLS;
     }
 
     private boolean inBounds(int idx) {

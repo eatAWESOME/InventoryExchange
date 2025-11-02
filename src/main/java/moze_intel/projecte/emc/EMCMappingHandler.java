@@ -1,6 +1,8 @@
 package moze_intel.projecte.emc;
 
 import com.mojang.logging.LogUtils;
+
+import eatawesome.inventoryexchange.gameObjs.container.TransmutationContainerMenu;
 import it.unimi.dsi.fastutil.objects.Object2LongMap;
 import it.unimi.dsi.fastutil.objects.Object2LongMaps;
 import it.unimi.dsi.fastutil.objects.Object2LongOpenHashMap;
@@ -30,7 +32,6 @@ import moze_intel.projecte.emc.components.DataComponentManager;
 import moze_intel.projecte.emc.generator.BigFractionToLongGenerator;
 import moze_intel.projecte.emc.mappers.TagMapper;
 import moze_intel.projecte.emc.pregenerated.PregeneratedEMC;
-import moze_intel.projecte.gameObjs.container.TransmutationContainer;
 import moze_intel.projecte.impl.capability.KnowledgeImpl;
 import moze_intel.projecte.network.packets.to_client.SyncEmcPKT;
 import moze_intel.projecte.utils.AnnotationHelper;
@@ -132,7 +133,7 @@ public final class EMCMappingHandler {
 				if (knowledge != null) {
 					if (knowledge instanceof KnowledgeImpl impl && impl.pruneStaleKnowledge()) {
 						knowledge.sync(player);
-					} else if (player.containerMenu instanceof TransmutationContainer) {
+					} else if (player.containerMenu instanceof TransmutationContainerMenu) {
 						//If knowledge didn't get trimmed due to pruning, tell clients that have the transmutation gui open
 						// that they should update targets anyway, as it is possible EMC values changed and the order things
 						// are drawn needs to be changed

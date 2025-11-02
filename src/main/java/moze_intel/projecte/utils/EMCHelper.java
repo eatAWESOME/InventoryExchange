@@ -6,7 +6,6 @@ import it.unimi.dsi.fastutil.objects.Object2IntMaps;
 import java.math.BigInteger;
 import java.text.NumberFormat;
 import moze_intel.projecte.api.proxy.IEMCProxy;
-import moze_intel.projecte.gameObjs.registries.PEDataComponentTypes;
 import moze_intel.projecte.utils.text.ILangEntry;
 import moze_intel.projecte.utils.text.PELang;
 import net.minecraft.ChatFormatting;
@@ -118,23 +117,5 @@ public final class EMCHelper {
 			return Math.max(emc, 1);
 		}
 		return 1;
-	}
-
-	/**
-	 * Adds the given amount to the amount of unprocessed EMC the stack has. The amount returned should be used for figuring out how much EMC actually gets removed. While
-	 * the remaining fractional EMC will be stored in UnprocessedEMC.
-	 *
-	 * @param stack  The stack to set the UnprocessedEMC tag to.
-	 * @param amount The partial amount of EMC to add with the current UnprocessedEMC
-	 *
-	 * @return The amount of non fractional EMC no longer being stored in UnprocessedEMC.
-	 */
-	public static long removeFractionalEMC(ItemStack stack, double amount) {
-		double unprocessedEMC = stack.getOrDefault(PEDataComponentTypes.UNPROCESSED_EMC, 0.0);
-		unprocessedEMC += amount;
-		long toRemove = (long) unprocessedEMC;
-		unprocessedEMC -= toRemove;
-		stack.set(PEDataComponentTypes.UNPROCESSED_EMC, unprocessedEMC);
-		return toRemove;
 	}
 }
