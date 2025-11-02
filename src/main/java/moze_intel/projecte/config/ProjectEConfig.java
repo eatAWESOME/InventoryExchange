@@ -15,7 +15,7 @@ import net.neoforged.fml.loading.FMLPaths;
 
 public class ProjectEConfig {
 
-	public static final Path CONFIG_DIR = FMLPaths.getOrCreateGameRelativePath(FMLPaths.CONFIGDIR.get().resolve(PECore.MODID + "/" + PECore.PEID));
+	public static final Path CONFIG_DIR = FMLPaths.getOrCreateGameRelativePath(FMLPaths.CONFIGDIR.get().resolve(PECore.MODID + "/emc"));
 	private static final Map<IConfigSpec, IPEConfig> KNOWN_CONFIGS = new HashMap<>();
 
 	//public static final ServerConfig server = new ServerConfig();
@@ -36,7 +36,7 @@ public class ProjectEConfig {
 	 * Creates and register a mod config, and track it so that we can properly clear cached values.
 	 */
 	public static void registerConfig(ModContainer modContainer, IPEConfig config) {
-		modContainer.registerConfig(config.getConfigType(), config.getConfigSpec(), PECore.MODID + "/" + PECore.PEID + "/" + config.getFileName() + ".toml");
+		modContainer.registerConfig(config.getConfigType(), config.getConfigSpec(), PECore.MODID + "/emc/" + config.getFileName() + ".toml");
 		KNOWN_CONFIGS.put(config.getConfigSpec(), config);
 	}
 
