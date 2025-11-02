@@ -19,6 +19,9 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.DamageTypeTags;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Inventory;
@@ -157,7 +160,10 @@ public class PlayerEvents {
 	@SubscribeEvent
 	public static void onLivingDamagePre(LivingDamageEvent.Pre event) {
 		if (event.getEntity() instanceof Player player && PlayerHelper.hasFullUltimaSet(player)) {
-			event.setNewDamage(0.0F);
+			DamageSource src = event.getSource();
+			if (!(src.is(DamageTypes.GENERIC_KILL) || src.is(DamageTypeTags.BYPASSES_INVULNERABILITY))) {
+				event.setNewDamage(0.0F);
+			}
 		}
 	}
 	
