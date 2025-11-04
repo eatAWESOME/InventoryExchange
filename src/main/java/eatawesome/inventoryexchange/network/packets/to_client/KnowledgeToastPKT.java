@@ -1,9 +1,7 @@
 package eatawesome.inventoryexchange.network.packets.to_client;
 
 import eatawesome.inventoryexchange.InventoryExchange;
-import eatawesome.inventoryexchange.client.toast.KnowledgeToast;
 import eatawesome.inventoryexchange.network.packets.IInventoryExchangePacket;
-import net.minecraft.client.Minecraft;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
@@ -25,10 +23,23 @@ public record KnowledgeToastPKT(ItemStack stack) implements IInventoryExchangePa
 	@Override
 	public void handle(IPayloadContext ctx) {
 		ctx.enqueueWork(() -> {
-			Minecraft mc = Minecraft.getInstance();
-			if (mc != null) {
-				mc.getToasts().addToast(new KnowledgeToast(stack.copyWithCount(1)));
+			if (isClientPresent()) {
+				try {
+					Class<?> hooks = Class.forName("eatawesome.inventoryexchange.client.ClientHooks");
+					hooks.getMethod("showKnowledgeToast", ItemStack.class)
+						.invoke(null, stack.copyWithCount(1));
+				} catch (Throwable ignored) {
+				}
 			}
 		});
+	}
+
+	private static boolean isClientPresent() {
+		try {
+			Class.forName("net.minecraft.client.Minecraft");
+			return true;
+		} catch (Throwable t) {
+			return false;
+		}
 	}
 }
