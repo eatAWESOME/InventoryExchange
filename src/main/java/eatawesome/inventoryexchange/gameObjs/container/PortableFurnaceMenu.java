@@ -8,7 +8,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.neoforged.neoforge.items.IItemHandlerModifiable;
 import net.neoforged.neoforge.items.SlotItemHandler;
 
@@ -40,6 +39,7 @@ public class PortableFurnaceMenu extends AbstractContainerMenu {
 			@Override public boolean mayPlace(@NotNull ItemStack s) { return false; }
 			@Override public boolean mayPickup(Player p) { return false; }
 			@Override public boolean isHighlightable() { return false; }
+			@Override public @NotNull ItemStack getItem() { return ItemStack.EMPTY; }
 		});
 		this.addSlot(new SlotItemHandler(handler, 2, 116, 35) {
 			@Override public boolean mayPlace(@NotNull ItemStack s) { return false; }
@@ -48,8 +48,6 @@ public class PortableFurnaceMenu extends AbstractContainerMenu {
 
 		for (int r = 0; r < 3; ++r) for (int c = 0; c < 9; ++c) this.addSlot(new Slot(inv, c + r * 9 + 9, 8 + c * 18, 84 + r * 18));
 		for (int c = 0; c < 9; ++c) this.addSlot(new Slot(inv, c, 8 + c * 18, 142));
-
-		if (!viewer.level().isClientSide) setRemoteSlot(1, new ItemStack(Items.COAL));
 	}
 
 	@Override
@@ -61,7 +59,6 @@ public class PortableFurnaceMenu extends AbstractContainerMenu {
 				setRemoteSlot(2, handler.getStackInSlot(2));
 				PortableFurnaceHelper.sync(owner);
 			}
-			setRemoteSlot(1, new ItemStack(Items.COAL));
 		}
 		super.broadcastChanges();
 	}
@@ -94,5 +91,7 @@ public class PortableFurnaceMenu extends AbstractContainerMenu {
 	}
 
 	@Override
-	public boolean stillValid(@NotNull Player p) { return true; }
+	public boolean stillValid(@NotNull Player p) {
+		return true;
+	}
 }

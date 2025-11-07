@@ -10,6 +10,8 @@ import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 
 public class PortableFurnaceScreen extends AbstractContainerScreen<PortableFurnaceMenu> {
 
@@ -34,9 +36,13 @@ public class PortableFurnaceScreen extends AbstractContainerScreen<PortableFurna
 
 		// Base background
 		gui.blit(FURNACE_TEX, x, y, 0, 0, this.imageWidth, this.imageHeight);
-
+		
 		// Flame: always lit and full
 		gui.blitSprite(LIT_PROGRESS_SPRITE, x + 56, y + 36, 14, 14);
+		
+		// Coal
+		gui.renderItem(new ItemStack(Items.COAL), this.leftPos + 56, this.topPos + 53);
+		gui.renderItemDecorations(this.font, ItemStack.EMPTY, this.leftPos + 56, this.topPos + 53, "");
 
 		// Burn progress: full when input present
 		boolean hasInput = this.menu.getSlot(0) != null && this.menu.getSlot(0).hasItem();
@@ -58,9 +64,13 @@ public class PortableFurnaceScreen extends AbstractContainerScreen<PortableFurna
 	}
 
 	private BigInteger getClientEmc() {
-		IKnowledgeProvider kp = this.minecraft.player.getCapability(PECapabilities.KNOWLEDGE_CAPABILITY);
-		if (kp == null) return BigInteger.ZERO;
-		try { return kp.getEmc(); } catch (Throwable t) { return BigInteger.ZERO; }
+		IKnowledgeProvider knowledge = this.minecraft.player.getCapability(PECapabilities.KNOWLEDGE_CAPABILITY);
+		if (knowledge == null) return BigInteger.ZERO;
+		try {
+			return knowledge.getEmc();
+		} catch (Throwable t) {
+			return BigInteger.ZERO;
+		}
 	}
 	
 	@Override
@@ -68,5 +78,15 @@ public class PortableFurnaceScreen extends AbstractContainerScreen<PortableFurna
 		this.renderBackground(graphics, mouseX, mouseY, partialTick);
 		super.render(graphics, mouseX, mouseY, partialTick);
 		this.renderTooltip(graphics, mouseX, mouseY);
+	}
+	
+	@Override
+	protected void renderTooltip(GuiGraphics graphics, int mouseX, int mouseY) {
+		int fuelX = this.leftPos + 55;
+		int fuelY = this.topPos + 52;
+		if (mouseX >= fuelX && mouseX < fuelX + 18 && mouseY >= fuelY && mouseY < fuelY + 18) {
+			return;
+		}
+		super.renderTooltip(graphics, mouseX, mouseY);
 	}
 }
