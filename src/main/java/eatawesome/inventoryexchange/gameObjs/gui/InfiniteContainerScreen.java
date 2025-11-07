@@ -133,6 +133,12 @@ public class InfiniteContainerScreen extends AbstractContainerScreen<InfiniteCon
         clampLocalOffset();
         sendOffsetToServer();
     }
+    
+    @Override
+    public void render(GuiGraphics gui, int mouseX, int mouseY, float partialTicks) {
+        super.render(gui, mouseX, mouseY, partialTicks);
+        this.renderTooltip(gui, mouseX, mouseY);
+    }
 
     @Override
     protected void renderBg(GuiGraphics gui, float partialTicks, int mouseX, int mouseY) {
