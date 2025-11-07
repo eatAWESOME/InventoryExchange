@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import eatawesome.inventoryexchange.gameObjs.registries.InventoryExchangeItems;
+import eatawesome.inventoryexchange.utils.PlayerHelper;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMaps;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
@@ -30,7 +31,6 @@ import moze_intel.projecte.network.packets.to_client.knowledge.KnowledgeSyncChan
 import moze_intel.projecte.network.packets.to_client.knowledge.KnowledgeSyncEmcPKT;
 import moze_intel.projecte.network.packets.to_client.knowledge.KnowledgeSyncInputsAndLocksPKT;
 import moze_intel.projecte.network.packets.to_client.knowledge.KnowledgeSyncPKT;
-import moze_intel.projecte.utils.PlayerHelper;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -225,6 +225,7 @@ public class KnowledgeImpl implements IKnowledgeProvider {
 	@Override
 	public void sync(@NotNull ServerPlayer player) {
 		PacketDistributor.sendToPlayer(player, new KnowledgeSyncPKT(attachment()));
+		PlayerHelper.updateScore(player, PlayerHelper.SCOREBOARD_EMC, getEmc());
 	}
 
 	@Override

@@ -10,6 +10,7 @@ import eatawesome.inventoryexchange.network.packets.to_client.KnowledgeToastPKT;
 import eatawesome.inventoryexchange.utils.InfiniteContainerHelper;
 import eatawesome.inventoryexchange.utils.PlayerHelper;
 import eatawesome.inventoryexchange.utils.PortableFurnaceHelper;
+import moze_intel.projecte.PECore;
 import moze_intel.projecte.api.ItemInfo;
 import moze_intel.projecte.api.capabilities.IKnowledgeProvider;
 import moze_intel.projecte.api.capabilities.PECapabilities;
@@ -121,22 +122,46 @@ public class PlayerEvents {
 	    ItemStack itemStack = event.getSmelting();
 	    knowledgeCheck(player, itemStack);
 	}
+	
+	// Respawn capability sync
+	@SubscribeEvent
+	public static void respawnEvent(PlayerEvent.PlayerRespawnEvent event) {
+		if (event.getEntity() instanceof ServerPlayer serverPlayer) {
+			PlayerHelper.syncCapabilities(serverPlayer);
+		}
+	}
+
+	// Dimension change capability sync
+	@SubscribeEvent
+	public static void playerChangeDimension(PlayerEvent.PlayerChangedDimensionEvent event) {
+		if (event.getEntity() instanceof ServerPlayer serverPlayer) {
+			PlayerHelper.syncCapabilities(serverPlayer);
+		}
+	}
+	
+	// Player connect capability sync
+	@SubscribeEvent
+	public static void playerConnect(PlayerEvent.PlayerLoggedInEvent event) {
+		if (event.getEntity() instanceof ServerPlayer serverPlayer) {
+			PlayerHelper.syncCapabilities(serverPlayer);
+		}
+	}
 
 	// Drop items on death
 	@SubscribeEvent
 	public static void onPlayerClone(PlayerEvent.Clone event) {
-		if (event.isWasDeath()) {
-			Player oldPlayer = event.getOriginal();
-			Player newPlayer = event.getEntity();
-			if (newPlayer instanceof ServerPlayer newServerPlayer && !newPlayer.level().getGameRules().getBoolean(GameRules.RULE_KEEPINVENTORY)) {
+		Player oldPlayer = event.getOriginal();
+		Player newPlayer = event.getEntity();
+		if (newPlayer instanceof ServerPlayer newServerPlayer) {
+			if (event.isWasDeath() && !newPlayer.level().getGameRules().getBoolean(GameRules.RULE_KEEPINVENTORY)) {
 				IItemHandlerModifiable oldInfinite = InfiniteContainerHelper.getInventory(oldPlayer);
 				IItemHandlerModifiable oldFurnace = PortableFurnaceHelper.getInventory(oldPlayer);
 				IItemHandlerModifiable newInfinite = InfiniteContainerHelper.getInventory(newPlayer);
 				IItemHandlerModifiable newFurnace = PortableFurnaceHelper.getInventory(newPlayer);
-
+	
 				dropAndClearHandler(oldPlayer, oldInfinite, false);
 				dropAndClearHandler(oldPlayer, oldFurnace, true);
-
+	
 				clearHandler(newInfinite, false);
 				clearHandler(newFurnace, true);
 				
@@ -144,16 +169,16 @@ public class PlayerEvents {
 				IAbilityEMCProvider oldAbilityEMC = oldPlayer.getCapability(InventoryExchangeCapabilities.ABILITY_EMC_CAPABILITY);
 				IKnowledgeProvider newKnowledge = newPlayer.getCapability(PECapabilities.KNOWLEDGE_CAPABILITY);
 				IAbilityEMCProvider newAbilityEMC = newPlayer.getCapability(InventoryExchangeCapabilities.ABILITY_EMC_CAPABILITY);
-
+	
 				oldKnowledge.setEmc(BigInteger.valueOf(0));
 				oldKnowledge.syncEmc((ServerPlayer) oldPlayer);
 				oldAbilityEMC.setEmc(BigInteger.valueOf(0));
 				oldAbilityEMC.sync((ServerPlayer) oldPlayer);
 				newKnowledge.setEmc(BigInteger.valueOf(0));
-				newKnowledge.syncEmc(newServerPlayer);
 				newAbilityEMC.setEmc(BigInteger.valueOf(0));
-				newAbilityEMC.sync(newServerPlayer);
+				PECore.debugLog("Reset knowledge and EMC for {}", newServerPlayer.getName());
 			}
+			PlayerHelper.syncCapabilities(newServerPlayer);
 		}
 	}
 	
@@ -214,6 +239,7 @@ public class PlayerEvents {
 	        } catch (IllegalArgumentException e) {
 	            System.err.println("Error retrieving knowledge provider: " + e.getMessage());
 	        }
+			PECore.debugLog("Checked {}'s knowledge for {}", itemStack, serverPlayer.getName());
 	    }
 	}
 	

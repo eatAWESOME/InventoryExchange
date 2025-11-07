@@ -5,8 +5,12 @@ import java.util.List;
 import java.util.function.BiPredicate;
 
 import eatawesome.inventoryexchange.InventoryExchange;
+import eatawesome.inventoryexchange.capabilities.IAbilityEMCProvider;
+import eatawesome.inventoryexchange.capabilities.InventoryExchangeCapabilities;
 import eatawesome.inventoryexchange.gameObjs.registries.InventoryExchangeItems;
 import moze_intel.projecte.PECore;
+import moze_intel.projecte.api.capabilities.IKnowledgeProvider;
+import moze_intel.projecte.api.capabilities.PECapabilities;
 import moze_intel.projecte.integration.IntegrationHelper;
 import moze_intel.projecte.utils.Constants;
 import moze_intel.projecte.utils.MathUtils;
@@ -98,8 +102,8 @@ public final class PlayerHelper {
 		return !eventResult;
 	}
 
-	public static boolean checkedReplaceBlock(ServerPlayer player, Level level, BlockPos pos, BlockState state) {
-		return hasBreakPermission(player, level, pos) && partiallyCheckedPlaceBlock(player, level, pos, state);
+	public static boolean checkedReplaceBlock(ServerPlayer serverPlayer, Level level, BlockPos pos, BlockState state) {
+		return hasBreakPermission(serverPlayer, level, pos) && partiallyCheckedPlaceBlock(serverPlayer, level, pos, state);
 	}
 
 	public static ItemStack findFirstItem(Player player, Holder<Item> consumeFrom) {
@@ -153,12 +157,12 @@ public final class PlayerHelper {
 		return player.getEyePosition().add(lookAngle.x * maxDistance, lookAngle.y * maxDistance, lookAngle.z * maxDistance);
 	}
 
-	public static boolean hasBreakPermission(ServerPlayer player, Level level, BlockPos pos) {
-		return hasEditPermission(player, level, pos) && checkBreakPermission(player, level, pos);
+	public static boolean hasBreakPermission(ServerPlayer serverPlayer, Level level, BlockPos pos) {
+		return hasEditPermission(serverPlayer, level, pos) && checkBreakPermission(serverPlayer, level, pos);
 	}
 
-	public static boolean checkBreakPermission(ServerPlayer player, Level level, BlockPos pos) {
-		return !CommonHooks.fireBlockBreak(level, player.gameMode.getGameModeForPlayer(), player, pos, level.getBlockState(pos)).isCanceled();
+	public static boolean checkBreakPermission(ServerPlayer serverPlayer, Level level, BlockPos pos) {
+		return !CommonHooks.fireBlockBreak(level, serverPlayer.gameMode.getGameModeForPlayer(), serverPlayer, pos, level.getBlockState(pos)).isCanceled();
 	}
 
 	public static boolean hasEditPermission(Player player, Level level, BlockPos pos) {
@@ -173,12 +177,12 @@ public final class PlayerHelper {
 		return true;
 	}
 
-	public static void updateScore(ServerPlayer player, ObjectiveCriteria objective, BigInteger value) {
-		updateScore(player, objective, MathUtils.clampToInt(value));
+	public static void updateScore(ServerPlayer serverPlayer, ObjectiveCriteria objective, BigInteger value) {
+		updateScore(serverPlayer, objective, MathUtils.clampToInt(value));
 	}
 
-	public static void updateScore(ServerPlayer player, ObjectiveCriteria objective, int value) {
-		player.getScoreboard().forAllObjectives(objective, player, score -> score.set(value));
+	public static void updateScore(ServerPlayer serverPlayer, ObjectiveCriteria objective, int value) {
+		serverPlayer.getScoreboard().forAllObjectives(objective, serverPlayer, score -> score.set(value));
 	}
 	
 	public static boolean hasFullUltimaSet(Player player) {
@@ -208,4 +212,13 @@ public final class PlayerHelper {
 		player.removeEffect(MobEffects.FIRE_RESISTANCE);
 		player.removeEffect(MobEffects.MOVEMENT_SPEED);
 	}
+
+	public static void syncCapabilities(ServerPlayer serverPlayer) {
+		IKnowledgeProvider knowledge = serverPlayer.getCapability(PECapabilities.KNOWLEDGE_CAPABILITY);
+		IAbilityEMCProvider abilityEMC = serverPlayer.getCapability(InventoryExchangeCapabilities.ABILITY_EMC_CAPABILITY);
+		knowledge.sync(serverPlayer);
+		abilityEMC.sync(serverPlayer);
+		PECore.debugLog("Synced knowledge and EMC for {}", serverPlayer.getName());
+	}
+
 }
