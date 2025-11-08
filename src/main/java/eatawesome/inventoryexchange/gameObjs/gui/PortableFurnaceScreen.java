@@ -3,6 +3,7 @@ package eatawesome.inventoryexchange.gameObjs.gui;
 import java.math.BigInteger;
 import java.text.NumberFormat;
 import eatawesome.inventoryexchange.gameObjs.container.PortableFurnaceMenu;
+import eatawesome.inventoryexchange.utils.PortableFurnaceHelper;
 import moze_intel.projecte.api.capabilities.IKnowledgeProvider;
 import moze_intel.projecte.api.capabilities.PECapabilities;
 import net.minecraft.client.gui.GuiGraphics;
@@ -12,6 +13,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.SingleRecipeInput;
 
 public class PortableFurnaceScreen extends AbstractContainerScreen<PortableFurnaceMenu> {
 
@@ -37,8 +40,11 @@ public class PortableFurnaceScreen extends AbstractContainerScreen<PortableFurna
 		// Base background
 		gui.blit(FURNACE_TEX, x, y, 0, 0, this.imageWidth, this.imageHeight);
 		
-		// Flame: always lit and full
-		gui.blitSprite(LIT_PROGRESS_SPRITE, x + 56, y + 36, 14, 14);
+		// Flame
+		boolean canAfford = PortableFurnaceHelper.canAfford(this.minecraft.player);
+		if (canAfford) {
+			gui.blitSprite(LIT_PROGRESS_SPRITE, x + 56, y + 36, 14, 14);
+		}
 		
 		// Coal
 		gui.renderItem(new ItemStack(Items.COAL), this.leftPos + 56, this.topPos + 53);
@@ -46,8 +52,13 @@ public class PortableFurnaceScreen extends AbstractContainerScreen<PortableFurna
 
 		// Burn progress: full when input present
 		boolean hasInput = this.menu.getSlot(0) != null && this.menu.getSlot(0).hasItem();
-		if (hasInput) {
-			gui.blitSprite(BURN_PROGRESS_SPRITE, x + 79, y + 34, 24, 16);
+		if (hasInput && canAfford) {
+			boolean inputSmeltable = this.minecraft.level.getRecipeManager()
+					.getRecipeFor(RecipeType.SMELTING, new SingleRecipeInput(this.menu.getSlot(0).getItem().copyWithCount(1)), this.minecraft.level)
+					.isPresent();
+			if (inputSmeltable) {
+				gui.blitSprite(BURN_PROGRESS_SPRITE, x + 79, y + 34, 24, 16);
+			}
 		}
 	}
 

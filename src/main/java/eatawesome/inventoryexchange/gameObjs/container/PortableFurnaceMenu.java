@@ -64,7 +64,7 @@ public class PortableFurnaceMenu extends AbstractContainerMenu {
 	}
 
 	@Override
-	public @NotNull ItemStack quickMoveStack(@NotNull Player p, int index) {
+	public @NotNull ItemStack quickMoveStack(@NotNull Player player, int index) {
 		if (readOnly) return ItemStack.EMPTY;
 		ItemStack empty = ItemStack.EMPTY;
 		Slot slot = slots.get(index);
@@ -82,6 +82,7 @@ public class PortableFurnaceMenu extends AbstractContainerMenu {
 		} else if (index == 1) {
 			return empty;
 		} else {
+			transferOutputIfPresent(player);
 			if (!moveItemStackTo(stack, 0, 1, false)) return empty;
 		}
 
@@ -89,9 +90,27 @@ public class PortableFurnaceMenu extends AbstractContainerMenu {
 		else slot.setChanged();
 		return original;
 	}
-
+	
 	@Override
-	public boolean stillValid(@NotNull Player p) {
+	public boolean stillValid(@NotNull Player player) {
 		return true;
+	}
+	
+	private void transferOutputIfPresent(Player player) {
+		Slot outputSlot = this.getSlot(2);
+		ItemStack output = outputSlot.getItem();
+		if (output.isEmpty()) return;
+
+		ItemStack moving = output.copy();
+		boolean fullyAdded = player.getInventory().add(moving);
+		int moved = output.getCount() - moving.getCount();
+		if (moved > 0) {
+			output.shrink(moved);
+			if (output.isEmpty() || fullyAdded) {
+				outputSlot.set(ItemStack.EMPTY);
+			} else {
+				outputSlot.setChanged();
+			}
+		}
 	}
 }

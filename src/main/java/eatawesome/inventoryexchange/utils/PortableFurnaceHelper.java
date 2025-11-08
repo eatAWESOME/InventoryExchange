@@ -65,7 +65,12 @@ public final class PortableFurnaceHelper {
         return ItemStack.EMPTY;
     }
 
-    private static boolean canAfford(Player player, int count) {
+    public static boolean canAfford(Player player) {
+        BigInteger have = getEmc(player);
+        return have.compareTo(BigInteger.valueOf(PortableFurnaceMenu.EMC_PER)) >= 0;
+    }
+
+    public static boolean canAfford(Player player, int count) {
         BigInteger have = getEmc(player);
         return have.compareTo(BigInteger.valueOf((long) count * PortableFurnaceMenu.EMC_PER)) >= 0;
     }
