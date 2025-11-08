@@ -25,6 +25,7 @@ public enum InventoryExchangeLang implements ILangEntry {
 	FURNACE("key", "furnace"),
 	INFINITE_CONTAINER("key", "infinite_container"),
 	REPAIR_TOGGLE("key", "repair_toggle"),
+	SMELT_TOGGLE("key", "smelt_toggle"),
 	TRANSMUTATION("key", "transmutation"),
 	ULTIMA_TOOL_MODE("key", "ultima_tool_mode"),
 	
