@@ -94,17 +94,19 @@ public class PlayerEvents {
 	// Knowledge from container open
 	@SubscribeEvent
     public static void onContainerOpen(PlayerContainerEvent.Open event) {
-		Player player = event.getEntity();
-        AbstractContainerMenu container = event.getContainer();
-        containerKnowledgeCheck(player, container);
+        if (event.getEntity() instanceof ServerPlayer serverPlayer) {
+            containerKnowledgeCheck(serverPlayer, event.getContainer());
+            PlayerHelper.syncCapabilities(serverPlayer);
+        }
     }
 
 	// Knowledge from container close
     @SubscribeEvent
     public static void onContainerClose(PlayerContainerEvent.Close event) {
-    	Player player = event.getEntity();
-        AbstractContainerMenu container = event.getContainer();
-        containerKnowledgeCheck(player, container);
+        if (event.getEntity() instanceof ServerPlayer serverPlayer) {
+            containerKnowledgeCheck(serverPlayer, event.getContainer());
+            PlayerHelper.syncCapabilities(serverPlayer);
+        }
     }
 	
     // Knowledge from crafting
