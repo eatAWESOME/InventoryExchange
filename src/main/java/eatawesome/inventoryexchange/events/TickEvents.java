@@ -62,7 +62,7 @@ public class TickEvents {
 			IAbilityEMCProvider abilityEMC = player.getCapability(InventoryExchangeCapabilities.ABILITY_EMC_CAPABILITY);
 			
 			// Flying via EMC
-			if (isFlying) {
+			if (isFlying && !player.isCreative() && !player.isSpectator()) {
 				if (abilityEMC.getEmc().intValue() >= FLYING_COST) {
 					int emc = abilityEMC.getEmc().intValue() - FLYING_COST;
 					abilityEMC.setEmc(BigInteger.valueOf(emc));
@@ -85,7 +85,7 @@ public class TickEvents {
 			}
 		
 			// Eating via EMC
-			if (FeedToggle.isEnabled(player) && player.getFoodData().getFoodLevel() <= 16) {
+			if (FeedToggle.isEnabled(player) && player.getFoodData().getFoodLevel() <= 16 && !player.isCreative() && !player.isSpectator()) {
 				if (knowledge.getEmc().intValue() >= FEED_COST) {
 					player.getFoodData().eat(FEED_POINTS, FEED_SATURATION);
 					player.level().playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.GENERIC_EAT, SoundSource.PLAYERS, 0.8F, 1.0F);
