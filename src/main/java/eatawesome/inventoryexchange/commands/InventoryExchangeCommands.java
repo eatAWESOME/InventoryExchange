@@ -13,6 +13,7 @@ import eatawesome.inventoryexchange.utils.FeedToggle;
 import eatawesome.inventoryexchange.utils.InfiniteContainerHelper;
 import eatawesome.inventoryexchange.utils.PermissionHelper;
 import eatawesome.inventoryexchange.utils.RepairToggle;
+import eatawesome.inventoryexchange.utils.SmeltToggle;
 import eatawesome.inventoryexchange.utils.text.InventoryExchangeLang;
 import moze_intel.projecte.network.commands.EMCCMD;
 import moze_intel.projecte.network.commands.KnowledgeCMD;
@@ -96,6 +97,14 @@ public class InventoryExchangeCommands {
 							return 1;
 						})
 					)
+					.then(Commands.literal("smelting")
+							.requires(src -> PermissionHelper.has(src, CommandPermissions.TOGGLE_SMELTING, PermissionHelper.BASE))
+							.executes(ctx -> {
+								ServerPlayer self = ctx.getSource().getPlayerOrException();
+								SmeltToggle.toggleValue(self);
+								return 1;
+							})
+						)
 				)
 				.then(Commands.literal("set")
 					.then(Commands.literal("feeding")
@@ -120,6 +129,17 @@ public class InventoryExchangeCommands {
 							})
 						)
 					)
+					.then(Commands.literal("smelting")
+							.requires(src -> PermissionHelper.has(src, CommandPermissions.SET_SMELTING, PermissionHelper.BASE))
+							.then(Commands.argument("value", BoolArgumentType.bool())
+								.executes(ctx -> {
+									ServerPlayer self = ctx.getSource().getPlayerOrException();
+									boolean value = BoolArgumentType.getBool(ctx, "value");
+									SmeltToggle.setValue(self, value);
+									return 1;
+								})
+							)
+						)
 				)
 				.then(RemoveEmcCMD.register(context))
 				.then(ResetEmcCMD.register(context))

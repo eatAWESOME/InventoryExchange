@@ -13,6 +13,7 @@ import eatawesome.inventoryexchange.utils.FeedToggle;
 import eatawesome.inventoryexchange.utils.PlayerHelper;
 import eatawesome.inventoryexchange.utils.PortableFurnaceHelper;
 import eatawesome.inventoryexchange.utils.RepairToggle;
+import eatawesome.inventoryexchange.utils.SmeltToggle;
 import moze_intel.projecte.api.capabilities.IKnowledgeProvider;
 import moze_intel.projecte.api.capabilities.PECapabilities;
 import moze_intel.projecte.api.proxy.IEMCProxy;
@@ -22,8 +23,12 @@ import eatawesome.inventoryexchange.impl.capability.PortableFurnaceImpl;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.SingleRecipeInput;
+import net.minecraft.world.level.Level;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
@@ -118,9 +123,36 @@ public class TickEvents {
 			if (!player.isSpectator()) {
 		        if (player.containerMenu instanceof PortableFurnaceMenu) return;
 	
+		        // Portable Furnace Smelting
 		        IItemHandlerModifiable handler = new PortableFurnaceImpl(player).getInventory();
 		        if (PortableFurnaceHelper.smeltOneIfPossible(player, handler)) {
 		            PortableFurnaceHelper.sync(player);
+		        }
+		        
+		        // Auto Smelting in Inventory
+		        if (SmeltToggle.isEnabled(player) && PortableFurnaceHelper.canAfford(player) && !player.isCreative()) {
+		        	Level level = player.level();
+		    		Inventory inv = player.getInventory();
+
+		    		for (int i = 0; i < inv.items.size(); i++) {
+		    			ItemStack itemStack = inv.items.get(i);
+		    			if (itemStack.isEmpty()) continue;
+		    			if (IEMCProxy.INSTANCE.getValue(itemStack) > 0) continue;
+		    			ItemStack one = itemStack.copyWithCount(1);
+		    			var opt = level.getRecipeManager().getRecipeFor(RecipeType.SMELTING, new SingleRecipeInput(one), level);
+		    			if (opt.isEmpty()) continue;
+		    			ItemStack result = opt.get().value().assemble(new SingleRecipeInput(one), level.registryAccess());
+		    			if (result.isEmpty()) continue;
+		    			if (IEMCProxy.INSTANCE.getValue(result) <= 0) continue;
+		    			ItemStack toInsert = result.copy();
+		    			boolean fullyAdded = inv.add(toInsert);
+		    			if (fullyAdded) {
+			    			PortableFurnaceHelper.withdrawEmc(player);
+		    				itemStack.shrink(1);
+		    				if (itemStack.isEmpty()) inv.items.set(i, ItemStack.EMPTY);
+		    			}
+		    			break;
+		    		}
 		        }
 			}
 			

@@ -75,7 +75,13 @@ public final class PortableFurnaceHelper {
         return have.compareTo(BigInteger.valueOf((long) count * PortableFurnaceMenu.EMC_PER)) >= 0;
     }
 
-    private static void withdrawEmc(Player player, int count) {
+    public static void withdrawEmc(Player player) {
+        BigInteger cur = getEmc(player);
+        BigInteger cost = BigInteger.valueOf(PortableFurnaceMenu.EMC_PER);
+        if (cur.compareTo(cost) >= 0) setEmc(player, cur.subtract(cost));
+    }
+
+    public static void withdrawEmc(Player player, int count) {
         BigInteger cur = getEmc(player);
         BigInteger cost = BigInteger.valueOf((long) count * PortableFurnaceMenu.EMC_PER);
         if (cur.compareTo(cost) >= 0) setEmc(player, cur.subtract(cost));

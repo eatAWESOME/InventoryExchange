@@ -8,5 +8,7 @@ public final class CommandPermissions {
 	public static final String SET_FEEDING = "inventoryexchange.command.set.feeding";
 	public static final String TOGGLE_REPAIRING = "inventoryexchange.command.toggle.repairing";
 	public static final String SET_REPAIRING = "inventoryexchange.command.set.repairing";
+	public static final String TOGGLE_SMELTING = "inventoryexchange.command.toggle.smelting";
+	public static final String SET_SMELTING = "inventoryexchange.command.set.smelting";
 	private CommandPermissions() {}
 }

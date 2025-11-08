@@ -33,6 +33,8 @@ public enum InventoryExchangeLang implements ILangEntry {
 	FEEDING_DISABLED("message", "feeding_disabled"),
 	REPAIR_ENABLED("message", "repair_enabled"),
 	REPAIR_DISABLED("message", "repair_disabled"),
+	SMELTING_ENABLED("message", "smelt_enabled"),
+	SMELTING_DISABLED("message", "smelt_disabled"),
 	ULTIMA_TOOL_SINGLE("message", "ultima_tool_single"),
 	ULTIMA_TOOL_WIDE("message", "ultima_tool_wide"),
 	ULTIMA_TOOL_TALL("message", "ultima_tool_tall"),

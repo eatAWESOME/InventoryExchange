@@ -330,6 +330,8 @@
   "message.inventoryexchange.knowledge_learned": "¡pǝuɹɐǝꞀ ǝᵷpǝꞁʍouꞰ uoᴉʇɐʇnɯsuɐɹ⟘",
   "message.inventoryexchange.repair_disabled": "pǝꞁqɐsᴉᗡ :ƆWƎ ɐᴉʌ sɯǝʇI ᵷuᴉɹᴉɐdǝᴚ",
   "message.inventoryexchange.repair_enabled": "pǝꞁqɐuƎ :ƆWƎ ɐᴉʌ sɯǝʇI ᵷuᴉɹᴉɐdǝᴚ",
+  "message.inventoryexchange.smelt_disabled": "pǝꞁqɐsᴉᗡ :ƆWƎ ɐᴉʌ ᵷuᴉʇꞁǝɯS oʇnⱯ",
+  "message.inventoryexchange.smelt_enabled": "pǝꞁqɐuƎ :ƆWƎ ɐᴉʌ ᵷuᴉʇꞁǝɯS oʇnⱯ",
   "message.inventoryexchange.ultima_tool_deep": "(xƐ) ǝpoW dǝǝᗡ oʇ ʇǝs ꞁoo⟘ ɐɯᴉʇꞁ∩",
   "message.inventoryexchange.ultima_tool_single": "ǝpoW ǝꞁᵷuᴉS oʇ ʇǝs ꞁoo⟘ ɐɯᴉʇꞁ∩",
   "message.inventoryexchange.ultima_tool_tall": "(xƐ) ǝpoW ꞁꞁɐ⟘ oʇ ʇǝs ꞁoo⟘ ɐɯᴉʇꞁ∩",

@@ -331,6 +331,8 @@
   "message.inventoryexchange.knowledge_learned": "Transmutation Knowledge Learned!",
   "message.inventoryexchange.repair_disabled": "Repairing Items via EMC: Disabled",
   "message.inventoryexchange.repair_enabled": "Repairing Items via EMC: Enabled",
+  "message.inventoryexchange.smelt_disabled": "Auto Smelting via EMC: Disabled",
+  "message.inventoryexchange.smelt_enabled": "Auto Smelting via EMC: Enabled",
   "message.inventoryexchange.ultima_tool_deep": "Ultima Tool set to Deep Mode (3x)",
   "message.inventoryexchange.ultima_tool_single": "Ultima Tool set to Single Mode",
   "message.inventoryexchange.ultima_tool_tall": "Ultima Tool set to Tall Mode (3x)",

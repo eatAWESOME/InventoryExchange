@@ -83,6 +83,8 @@ public class InventoryExchangeLangProvider extends BaseLanguageProvider {
 		add(InventoryExchangeLang.FEEDING_DISABLED, "Feeding via EMC: Disabled");
 		add(InventoryExchangeLang.REPAIR_ENABLED, "Repairing Items via EMC: Enabled");
 		add(InventoryExchangeLang.REPAIR_DISABLED, "Repairing Items via EMC: Disabled");
+		add(InventoryExchangeLang.SMELTING_ENABLED, "Auto Smelting via EMC: Enabled");
+		add(InventoryExchangeLang.SMELTING_DISABLED, "Auto Smelting via EMC: Disabled");
 		
 		// Items
 		add(InventoryExchangeItems.ULTIMA, "Ultima");
