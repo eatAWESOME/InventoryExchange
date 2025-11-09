@@ -16,23 +16,17 @@ import eatawesome.inventoryexchange.utils.RepairToggle;
 import eatawesome.inventoryexchange.utils.SmeltToggle;
 import moze_intel.projecte.api.capabilities.IKnowledgeProvider;
 import moze_intel.projecte.api.capabilities.PECapabilities;
-import moze_intel.projecte.api.proxy.IEMCProxy;
 import moze_intel.projecte.gameObjs.registries.PESoundEvents;
 import eatawesome.inventoryexchange.handlers.InternalAbilities;
 import eatawesome.inventoryexchange.impl.capability.PortableFurnaceImpl;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraft.world.item.crafting.SingleRecipeInput;
-import net.minecraft.world.level.Level;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
-import net.neoforged.neoforge.items.IItemHandlerModifiable;
 
 @EventBusSubscriber(modid = InventoryExchange.MODID)
 public class TickEvents {
@@ -105,9 +99,9 @@ public class TickEvents {
 				double availableEMC = (double) knowledge.getEmc().intValue() + ((double) abilityEMC.getEmc().intValue()) / 100;
 				double spentEMC = 0;
 
-				for (ItemStack itemStack : player.getInventory().items) spentEMC += repairItem(player, itemStack, availableEMC - spentEMC);
-				for (ItemStack itemStack : player.getInventory().armor) spentEMC += repairItem(player, itemStack, availableEMC - spentEMC);
-				for (ItemStack itemStack : player.getInventory().offhand) spentEMC += repairItem(player, itemStack, availableEMC - spentEMC);
+				for (ItemStack itemStack : player.getInventory().items) spentEMC += PlayerHelper.repairItem(player, itemStack, availableEMC - spentEMC);
+				for (ItemStack itemStack : player.getInventory().armor) spentEMC += PlayerHelper.repairItem(player, itemStack, availableEMC - spentEMC);
+				for (ItemStack itemStack : player.getInventory().offhand) spentEMC += PlayerHelper.repairItem(player, itemStack, availableEMC - spentEMC);
 
 				if (spentEMC > 0) {
 					int totalEmc = (int) Math.floor(availableEMC - spentEMC);
@@ -121,55 +115,16 @@ public class TickEvents {
 			
 			// Smelting via EMC
 			if (!player.isSpectator()) {
-		        if (player.containerMenu instanceof PortableFurnaceMenu) return;
-	
-		        // Portable Furnace Smelting
-		        IItemHandlerModifiable handler = new PortableFurnaceImpl(player).getInventory();
-		        if (PortableFurnaceHelper.smeltOneIfPossible(player, handler)) {
-		            PortableFurnaceHelper.sync(player);
-		        }
-		        
-		        // Auto Smelting in Inventory
-		        if (SmeltToggle.isEnabled(player) && PortableFurnaceHelper.canAfford(player) && !player.isCreative()) {
-		        	Level level = player.level();
-		    		Inventory inv = player.getInventory();
-
-		    		for (int i = 0; i < inv.items.size(); i++) {
-		    			ItemStack itemStack = inv.items.get(i);
-		    			if (itemStack.isEmpty()) continue;
-		    			if (IEMCProxy.INSTANCE.getValue(itemStack) > 0) continue;
-		    			ItemStack one = itemStack.copyWithCount(1);
-		    			var opt = level.getRecipeManager().getRecipeFor(RecipeType.SMELTING, new SingleRecipeInput(one), level);
-		    			if (opt.isEmpty()) continue;
-		    			ItemStack result = opt.get().value().assemble(new SingleRecipeInput(one), level.registryAccess());
-		    			if (result.isEmpty()) continue;
-		    			if (IEMCProxy.INSTANCE.getValue(result) <= 0) continue;
-		    			ItemStack toInsert = result.copy();
-		    			boolean fullyAdded = inv.add(toInsert);
-		    			if (fullyAdded) {
-			    			PortableFurnaceHelper.withdrawEmc(player);
-		    				itemStack.shrink(1);
-		    				if (itemStack.isEmpty()) inv.items.set(i, ItemStack.EMPTY);
-		    			}
-		    			break;
-		    		}
+		        if (!(player.containerMenu instanceof PortableFurnaceMenu)) {
+		        	// Portable Furnace Smelting
+			        PortableFurnaceHelper.smeltOneIfPossible(player, new PortableFurnaceImpl(player).getInventory());
+			        
+			        // Auto Smelting in Inventory
+			        if (SmeltToggle.isEnabled(player) && !player.isCreative()) {
+			        	PortableFurnaceHelper.smeltOneIfPossible(player);
+			        }
 		        }
 			}
-			
 		}
-	}
-	
-	private static double repairItem(Player player, ItemStack itemStack, double availableEMC) {
-		if (availableEMC <= 0 || itemStack.isEmpty() || !itemStack.isDamageableItem() || !itemStack.isDamaged()) return 0;
-
-		ItemStack stackCopy = itemStack.copy();
-		stackCopy.setDamageValue(0);
-		double cost = IEMCProxy.INSTANCE.getValue(stackCopy) / (double) itemStack.getMaxDamage();
-
-		if (cost <= availableEMC) {
-			itemStack.setDamageValue(Math.max(0, itemStack.getDamageValue() - 1));
-			return cost;
-		}
-		return 0;
 	}
 }

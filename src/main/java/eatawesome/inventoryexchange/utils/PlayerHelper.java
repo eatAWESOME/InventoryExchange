@@ -8,9 +8,12 @@ import eatawesome.inventoryexchange.InventoryExchange;
 import eatawesome.inventoryexchange.capabilities.IAbilityEMCProvider;
 import eatawesome.inventoryexchange.capabilities.InventoryExchangeCapabilities;
 import eatawesome.inventoryexchange.gameObjs.registries.InventoryExchangeItems;
+import eatawesome.inventoryexchange.network.packets.to_client.KnowledgeToastPKT;
 import moze_intel.projecte.PECore;
+import moze_intel.projecte.api.ItemInfo;
 import moze_intel.projecte.api.capabilities.IKnowledgeProvider;
 import moze_intel.projecte.api.capabilities.PECapabilities;
+import moze_intel.projecte.api.proxy.IEMCProxy;
 import moze_intel.projecte.integration.IntegrationHelper;
 import moze_intel.projecte.utils.Constants;
 import moze_intel.projecte.utils.MathUtils;
@@ -18,13 +21,19 @@ import moze_intel.projecte.utils.ReadOnlyScoreCriteria;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.ExperienceOrb;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -42,6 +51,8 @@ import net.neoforged.neoforge.common.util.BlockSnapshot;
 import net.neoforged.neoforge.event.level.BlockEvent;
 import net.neoforged.neoforge.event.level.BlockEvent.EntityMultiPlaceEvent;
 import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.items.IItemHandlerModifiable;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 /**
  * Helper class for player-related methods. Notice: Please try to keep methods tidy and alphabetically ordered. Thanks!
@@ -221,4 +232,142 @@ public final class PlayerHelper {
 		PECore.debugLog("Synced knowledge and EMC for {}", serverPlayer.getName());
 	}
 
+	public static void containerKnowledgeCheck(Player player, AbstractContainerMenu container) {
+		for (ItemStack itemStack : container.getItems()) {
+			knowledgeCheck(player, itemStack);
+	    }
+		for (ItemStack itemStack : player.inventoryMenu.getItems()) {
+			knowledgeCheck(player, itemStack);
+	    }
+	}
+	
+	public static void knowledgeCheck(Player player, ItemStack itemStack) {
+		if (player instanceof ServerPlayer serverPlayer) {
+	        try {
+	        	IKnowledgeProvider knowledge = player.getCapability(PECapabilities.KNOWLEDGE_CAPABILITY);
+	            if (!itemStack.isEmpty() && IEMCProxy.INSTANCE.getValue(itemStack) > 0) {
+	                if (!knowledge.hasKnowledge(itemStack)) {
+	                	knowledge.addKnowledge(itemStack);
+	                	knowledge.syncKnowledgeChange(serverPlayer, ItemInfo.fromStack(itemStack), true);
+	                	ItemStack icon = itemStack.copy();
+						icon.setCount(1);
+						PacketDistributor.sendToPlayer(serverPlayer, new KnowledgeToastPKT(icon));
+	                }
+	            }
+	        } catch (IllegalArgumentException e) {
+	            System.err.println("Error retrieving knowledge provider: " + e.getMessage());
+	        }
+			PECore.debugLog("Checked {}'s knowledge for {}", itemStack, serverPlayer.getName());
+	    }
+	}
+	
+	public static boolean canInventoryAccept(Inventory inv, ItemStack stack) {
+		if (stack.isEmpty()) return true;
+		for (ItemStack cur : inv.items) {
+			if (cur.isEmpty()) {
+				return true;
+			}
+			if (ItemStack.isSameItemSameComponents(cur, stack)) {
+				int limit = Math.min(cur.getMaxStackSize(), 64);
+				if (cur.getCount() < limit) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	public static boolean insertIntoHandler(IItemHandlerModifiable handler, ItemStack stack) {
+		if (stack.isEmpty()) return false;
+		boolean changed = false;
+		int slots = handler.getSlots();
+
+		// Merge into existing stacks
+		for (int i = 0; i < slots && !stack.isEmpty(); i++) {
+			ItemStack cur = handler.getStackInSlot(i);
+			if (cur.isEmpty()) continue;
+			if (!ItemStack.isSameItemSameComponents(cur, stack)) continue;
+
+			int limit = Math.min(cur.getMaxStackSize(), handler.getSlotLimit(i));
+			if (cur.getCount() >= limit) continue;
+
+			int canAdd = Math.min(limit - cur.getCount(), stack.getCount());
+			if (canAdd <= 0) continue;
+
+			ItemStack newStack = cur.copy();
+			newStack.grow(canAdd);
+			handler.setStackInSlot(i, newStack);
+			stack.shrink(canAdd);
+			changed = true;
+		}
+
+		// Fill empty slots
+		for (int i = 0; i < slots && !stack.isEmpty(); i++) {
+			ItemStack cur = handler.getStackInSlot(i);
+			if (!cur.isEmpty()) continue;
+			if (!handler.isItemValid(i, stack)) continue;
+
+			int toMove = Math.min(stack.getCount(), Math.min(stack.getMaxStackSize(), handler.getSlotLimit(i)));
+			if (toMove <= 0) continue;
+
+			ItemStack place = stack.copy();
+			place.setCount(toMove);
+			handler.setStackInSlot(i, place);
+			stack.shrink(toMove);
+			changed = true;
+		}
+		return changed;
+	}
+	
+	public static void playPickupSound(Player player) {
+        float vol = 0.2F;
+        float pitch = ((player.getRandom().nextFloat() - player.getRandom().nextFloat()) * 0.7F + 1.0F) * 2.0F;
+        player.level().playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ITEM_PICKUP, SoundSource.PLAYERS, vol, pitch);
+    }
+
+	public static void dropAndClearHandler(Player source, IItemHandlerModifiable handler, boolean isPortableFurnace) {
+		if (handler == null) return;
+		for (int i = 0; i < handler.getSlots(); i++) {
+			if (isPortableFurnace && i == 1) continue;
+			ItemStack stack = handler.getStackInSlot(i);
+			if (!stack.isEmpty()) {
+				ItemStack toDrop = stack.copy();
+				handler.setStackInSlot(i, ItemStack.EMPTY);
+				ItemEntity entity = new ItemEntity(source.level(), source.getX(), source.getY() + 0.5, source.getZ(), toDrop);
+				source.level().addFreshEntity(entity);
+			}
+		}
+	}
+
+	public static void clearHandler(IItemHandlerModifiable handler, boolean isPortableFurnace) {
+		if (handler == null) return;
+		for (int i = 0; i < handler.getSlots(); i++) {
+			if (isPortableFurnace && i == 1) continue;
+			handler.setStackInSlot(i, ItemStack.EMPTY);
+		}
+	}
+	
+	public static double repairItem(Player player, ItemStack itemStack, double availableEMC) {
+		if (availableEMC <= 0 || itemStack.isEmpty() || !itemStack.isDamageableItem() || !itemStack.isDamaged()) return 0;
+
+		ItemStack stackCopy = itemStack.copy();
+		stackCopy.setDamageValue(0);
+		double cost = IEMCProxy.INSTANCE.getValue(stackCopy) / (double) itemStack.getMaxDamage();
+
+		if (cost <= availableEMC) {
+			itemStack.setDamageValue(Math.max(0, itemStack.getDamageValue() - 1));
+			return cost;
+		}
+		return 0;
+	}
+	
+	public static void awardExp(Player player, float exp) {
+    	if (player.level() instanceof ServerLevel serverLevel) {
+    		if (exp <= 0F) return;
+            int outputExp = net.minecraft.util.Mth.floor(exp);
+            float fractionalExp = exp - outputExp;
+            if (fractionalExp > 0F && player.getRandom().nextFloat() < fractionalExp) outputExp++;
+            ExperienceOrb.award(serverLevel, player.position(), outputExp);
+    	}
+    }
 }

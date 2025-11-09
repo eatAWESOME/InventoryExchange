@@ -6,28 +6,20 @@ import java.util.List;
 import eatawesome.inventoryexchange.InventoryExchange;
 import eatawesome.inventoryexchange.capabilities.IAbilityEMCProvider;
 import eatawesome.inventoryexchange.capabilities.InventoryExchangeCapabilities;
-import eatawesome.inventoryexchange.network.packets.to_client.KnowledgeToastPKT;
 import eatawesome.inventoryexchange.utils.InfiniteContainerHelper;
 import eatawesome.inventoryexchange.utils.PlayerHelper;
 import eatawesome.inventoryexchange.utils.PortableFurnaceHelper;
 import moze_intel.projecte.PECore;
-import moze_intel.projecte.api.ItemInfo;
 import moze_intel.projecte.api.capabilities.IKnowledgeProvider;
 import moze_intel.projecte.api.capabilities.PECapabilities;
-import moze_intel.projecte.api.proxy.IEMCProxy;
 import net.minecraft.advancements.AdvancementRewards;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameRules;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -39,7 +31,6 @@ import net.neoforged.neoforge.event.entity.player.ItemEntityPickupEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerContainerEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.items.IItemHandlerModifiable;
-import net.neoforged.neoforge.network.PacketDistributor;
 
 @EventBusSubscriber(modid = InventoryExchange.MODID)
 public class PlayerEvents {
@@ -49,15 +40,15 @@ public class PlayerEvents {
 	public static void onEntityItemPickupPre(ItemEntityPickupEvent.Pre event) {
 		Player player = event.getPlayer();
 	    ItemStack itemStack = event.getItemEntity().getItem();
-	    knowledgeCheck(player, itemStack);
+	    PlayerHelper.knowledgeCheck(player, itemStack);
 	    if (!player.level().isClientSide && !itemStack.isEmpty() && !event.getItemEntity().hasPickUpDelay()) {
-	    	if (!canInventoryAccept(player.getInventory(), itemStack)) {
+	    	if (!PlayerHelper.canInventoryAccept(player.getInventory(), itemStack)) {
 	        	IItemHandlerModifiable infinite = InfiniteContainerHelper.getInventory(player);
 		        ItemStack insertStack = itemStack.copy();
 		        int preInsertCount = insertStack.getCount();
-		        if (insertIntoHandler(infinite, insertStack)) {
+		        if (PlayerHelper.insertIntoHandler(infinite, insertStack)) {
 		        	if (preInsertCount - insertStack.getCount() > 0) {
-		        		playPickupSound(player);
+		        		PlayerHelper.playPickupSound(player);
 		        	}
 		        	if (insertStack.isEmpty()) {
 			            event.getItemEntity().discard();
@@ -78,9 +69,9 @@ public class PlayerEvents {
         	IItemHandlerModifiable infinite = InfiniteContainerHelper.getInventory(player);
 	        ItemStack insertStack = itemStack.copy();
 	        int preInsertCount = insertStack.getCount();
-	        if (insertIntoHandler(infinite, insertStack)) {
+	        if (PlayerHelper.insertIntoHandler(infinite, insertStack)) {
 	        	if (preInsertCount - insertStack.getCount() > 0) {
-	        		playPickupSound(player);
+	        		PlayerHelper.playPickupSound(player);
 	        	}
 	        	if (insertStack.isEmpty()) {
 		            event.getItemEntity().discard();
@@ -95,7 +86,7 @@ public class PlayerEvents {
 	@SubscribeEvent
     public static void onContainerOpen(PlayerContainerEvent.Open event) {
         if (event.getEntity() instanceof ServerPlayer serverPlayer) {
-            containerKnowledgeCheck(serverPlayer, event.getContainer());
+            PlayerHelper.containerKnowledgeCheck(serverPlayer, event.getContainer());
             PlayerHelper.syncCapabilities(serverPlayer);
         }
     }
@@ -104,7 +95,7 @@ public class PlayerEvents {
     @SubscribeEvent
     public static void onContainerClose(PlayerContainerEvent.Close event) {
         if (event.getEntity() instanceof ServerPlayer serverPlayer) {
-            containerKnowledgeCheck(serverPlayer, event.getContainer());
+            PlayerHelper.containerKnowledgeCheck(serverPlayer, event.getContainer());
             PlayerHelper.syncCapabilities(serverPlayer);
         }
     }
@@ -114,7 +105,7 @@ public class PlayerEvents {
 	public static void onItemCrafted(PlayerEvent.ItemCraftedEvent event) {
 		Player player = event.getEntity();
 	    ItemStack itemStack = event.getCrafting();
-	    knowledgeCheck(player, itemStack);
+	    PlayerHelper.knowledgeCheck(player, itemStack);
 	}
 	
 	// Knowledge from smelting
@@ -122,7 +113,7 @@ public class PlayerEvents {
 	public static void onItemSmelted(PlayerEvent.ItemSmeltedEvent event) {
 		Player player = event.getEntity();
 	    ItemStack itemStack = event.getSmelting();
-	    knowledgeCheck(player, itemStack);
+	    PlayerHelper.knowledgeCheck(player, itemStack);
 	}
 	
 	// Respawn capability sync
@@ -161,11 +152,11 @@ public class PlayerEvents {
 				IItemHandlerModifiable newInfinite = InfiniteContainerHelper.getInventory(newPlayer);
 				IItemHandlerModifiable newFurnace = PortableFurnaceHelper.getInventory(newPlayer);
 	
-				dropAndClearHandler(oldPlayer, oldInfinite, false);
-				dropAndClearHandler(oldPlayer, oldFurnace, true);
+				PlayerHelper.dropAndClearHandler(oldPlayer, oldInfinite, false);
+				PlayerHelper.dropAndClearHandler(oldPlayer, oldFurnace, true);
 	
-				clearHandler(newInfinite, false);
-				clearHandler(newFurnace, true);
+				PlayerHelper.clearHandler(newInfinite, false);
+				PlayerHelper.clearHandler(newFurnace, true);
 				
 				IKnowledgeProvider oldKnowledge = oldPlayer.getCapability(PECapabilities.KNOWLEDGE_CAPABILITY);
 				IAbilityEMCProvider oldAbilityEMC = oldPlayer.getCapability(InventoryExchangeCapabilities.ABILITY_EMC_CAPABILITY);
@@ -213,121 +204,6 @@ public class PlayerEvents {
 			if (recipeIds == null || recipeIds.isEmpty()) return;
 
 			serverPlayer.awardRecipesByKey(recipeIds);
-		}
-	}
-
-	public static void containerKnowledgeCheck(Player player, AbstractContainerMenu container) {
-		for (ItemStack itemStack : container.getItems()) {
-			knowledgeCheck(player, itemStack);
-	    }
-		for (ItemStack itemStack : player.inventoryMenu.getItems()) {
-			knowledgeCheck(player, itemStack);
-	    }
-	}
-	
-	public static void knowledgeCheck(Player player, ItemStack itemStack) {
-		if (player instanceof ServerPlayer serverPlayer) {
-	        try {
-	        	IKnowledgeProvider knowledge = player.getCapability(PECapabilities.KNOWLEDGE_CAPABILITY);
-	            if (!itemStack.isEmpty() && IEMCProxy.INSTANCE.getValue(itemStack) > 0) {
-	                if (!knowledge.hasKnowledge(itemStack)) {
-	                	knowledge.addKnowledge(itemStack);
-	                	knowledge.syncKnowledgeChange(serverPlayer, ItemInfo.fromStack(itemStack), true);
-	                	ItemStack icon = itemStack.copy();
-						icon.setCount(1);
-						PacketDistributor.sendToPlayer(serverPlayer, new KnowledgeToastPKT(icon));
-	                }
-	            }
-	        } catch (IllegalArgumentException e) {
-	            System.err.println("Error retrieving knowledge provider: " + e.getMessage());
-	        }
-			PECore.debugLog("Checked {}'s knowledge for {}", itemStack, serverPlayer.getName());
-	    }
-	}
-	
-	private static boolean canInventoryAccept(Inventory inv, ItemStack stack) {
-		if (stack.isEmpty()) return true;
-		for (ItemStack cur : inv.items) {
-			if (cur.isEmpty()) {
-				return true;
-			}
-			if (ItemStack.isSameItemSameComponents(cur, stack)) {
-				int limit = Math.min(cur.getMaxStackSize(), 64);
-				if (cur.getCount() < limit) {
-					return true;
-				}
-			}
-		}
-		return false;
-	}
-
-	private static boolean insertIntoHandler(IItemHandlerModifiable handler, ItemStack stack) {
-		if (stack.isEmpty()) return false;
-		boolean changed = false;
-		int slots = handler.getSlots();
-
-		// Merge into existing stacks
-		for (int i = 0; i < slots && !stack.isEmpty(); i++) {
-			ItemStack cur = handler.getStackInSlot(i);
-			if (cur.isEmpty()) continue;
-			if (!ItemStack.isSameItemSameComponents(cur, stack)) continue;
-
-			int limit = Math.min(cur.getMaxStackSize(), handler.getSlotLimit(i));
-			if (cur.getCount() >= limit) continue;
-
-			int canAdd = Math.min(limit - cur.getCount(), stack.getCount());
-			if (canAdd <= 0) continue;
-
-			ItemStack newStack = cur.copy();
-			newStack.grow(canAdd);
-			handler.setStackInSlot(i, newStack);
-			stack.shrink(canAdd);
-			changed = true;
-		}
-
-		// Fill empty slots
-		for (int i = 0; i < slots && !stack.isEmpty(); i++) {
-			ItemStack cur = handler.getStackInSlot(i);
-			if (!cur.isEmpty()) continue;
-			if (!handler.isItemValid(i, stack)) continue;
-
-			int toMove = Math.min(stack.getCount(), Math.min(stack.getMaxStackSize(), handler.getSlotLimit(i)));
-			if (toMove <= 0) continue;
-
-			ItemStack place = stack.copy();
-			place.setCount(toMove);
-			handler.setStackInSlot(i, place);
-			stack.shrink(toMove);
-			changed = true;
-		}
-		return changed;
-	}
-	
-	private static void playPickupSound(Player player) {
-        float vol = 0.2F;
-        float pitch = ((player.getRandom().nextFloat() - player.getRandom().nextFloat()) * 0.7F + 1.0F) * 2.0F;
-        player.level().playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ITEM_PICKUP, SoundSource.PLAYERS, vol, pitch);
-    }
-
-	private static void dropAndClearHandler(Player source, IItemHandlerModifiable handler, boolean isPortableFurnace) {
-		if (handler == null) return;
-		for (int i = 0; i < handler.getSlots(); i++) {
-			if (isPortableFurnace && i == 1) continue;
-			ItemStack stack = handler.getStackInSlot(i);
-			if (!stack.isEmpty()) {
-				ItemStack toDrop = stack.copy();
-				handler.setStackInSlot(i, ItemStack.EMPTY);
-				ItemEntity entity = new ItemEntity(source.level(), source.getX(), source.getY() + 0.5, source.getZ(), toDrop);
-				source.level().addFreshEntity(entity);
-			}
-		}
-	}
-
-	private static void clearHandler(IItemHandlerModifiable handler, boolean isPortableFurnace) {
-		if (handler == null) return;
-		for (int i = 0; i < handler.getSlots(); i++) {
-			if (isPortableFurnace && i == 1) continue;
-			handler.setStackInSlot(i, ItemStack.EMPTY);
 		}
 	}
 }

@@ -13,6 +13,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ClipContext;
@@ -23,6 +24,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult.Type;
+import net.minecraft.world.phys.Vec3;
 
 public class ToolHelper {
 
@@ -43,9 +45,20 @@ public class ToolHelper {
 	public static <DATA> InteractionResult harvestVein(Level level, Player player, BlockPos dropPos, ItemStack stack, AABB area, DATA data,
 			BiPredicate<BlockState, DATA> stateChecker, DropSpawner spawnDrops) {
 		List<ItemStack> drops = new ArrayList<>();
-		if (WorldHelper.harvestVein(level, player, stack, area, drops, data, stateChecker) > 0) {
-			if (!level.isClientSide) {
+		int mined = WorldHelper.harvestVein(level, player, stack, area, drops, data, stateChecker);
+		if (mined > 0) {
+			if (level instanceof ServerLevel serverLevel) {
+				int expTotal = 0;
+				if (data instanceof Block block) {
+					BlockState sample = block.defaultBlockState();
+					for (int i = 0; i < mined; i++) {
+						expTotal += block.getExpDrop(sample, serverLevel, dropPos, null, player, stack);
+					}
+				}
 				spawnDrops.drop(drops, level, dropPos);
+				if (expTotal > 0) {
+					ExperienceOrb.award(serverLevel, Vec3.atCenterOf(dropPos), expTotal);
+				}
 			}
 			return InteractionResult.sidedSuccess(level.isClientSide);
 		}
@@ -55,7 +68,6 @@ public class ToolHelper {
 
 	@FunctionalInterface
 	public interface DropSpawner {
-
 		void drop(List<ItemStack> drops, Level level, BlockPos pos);
 	}
 	
@@ -68,17 +80,24 @@ public class ToolHelper {
 			return;
 		}
 		List<ItemStack> drops = new ArrayList<>();
+		int expTotal = 0;
 		for (BlockPos digPos : getTargets(pos, serverPlayer, result.getDirection(), mode)) {
 			BlockState state = level.getBlockState(digPos);
 			if (!state.isAir() && state.getDestroySpeed(level, digPos) != Block.INDESTRUCTIBLE && stack.isCorrectToolForDrops(state)) {
 				digPos = digPos.immutable();
 				if (PlayerHelper.hasBreakPermission((ServerPlayer) serverPlayer, level, digPos)) {
+					if (level instanceof ServerLevel serverLevel) {
+						expTotal += state.getBlock().getExpDrop(state, serverLevel, digPos, WorldHelper.getBlockEntity(level, digPos), serverPlayer, stack);
+					}
 					drops.addAll(Block.getDrops(state, (ServerLevel) level, digPos, WorldHelper.getBlockEntity(level, digPos), serverPlayer, stack));
 					level.removeBlock(digPos, false);
 				}
 			}
 		}
 		WorldHelper.createLootDrop(drops, level, pos);
+		if (expTotal > 0 && level instanceof ServerLevel serverLevel) {
+			ExperienceOrb.award(serverLevel, Vec3.atCenterOf(pos), expTotal);
+		}
 	}
 	
 	public static Iterable<BlockPos> getTargets(BlockPos pos, Player player, Direction sideHit, int mode) {
