@@ -11,6 +11,7 @@ import net.minecraft.data.tags.TagsProvider;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
+import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -25,19 +26,38 @@ public class InventoryExchangeItemTagsProvider extends ItemTagsProvider {
 	@Override
 	protected void addTags(@NotNull HolderLookup.Provider provider) {
 		tag(ItemTags.BOOKSHELF_BOOKS).add(InventoryExchangeItems.TOME_OF_KNOWLEDGE.get());
+		tag(ItemTags.HEAD_ARMOR).add(InventoryExchangeItems.ULTIMA_HELMET.get());
+		tag(ItemTags.CHEST_ARMOR).add(InventoryExchangeItems.ULTIMA_CHESTPLATE.get());
+		tag(ItemTags.LEG_ARMOR).add(InventoryExchangeItems.ULTIMA_LEGGINGS.get());
+		tag(ItemTags.FOOT_ARMOR).add(InventoryExchangeItems.ULTIMA_BOOTS.get());
+		tag(ItemTags.AXES).add(InventoryExchangeItems.ULTIMA_TOOL.get());
+		tag(ItemTags.PICKAXES).add(InventoryExchangeItems.ULTIMA_TOOL.get());
+		tag(ItemTags.SHOVELS).add(InventoryExchangeItems.ULTIMA_TOOL.get());
+		
+		tag(Tags.Items.TOOLS).add(
+			InventoryExchangeItems.ULTIMA_TOOL.get(),
+			InventoryExchangeItems.ULTIMA_WATCH.get()
+		);
+		tag(Tags.Items.ARMORS).add(
+			InventoryExchangeItems.ULTIMA_HELMET.get(),
+			InventoryExchangeItems.ULTIMA_CHESTPLATE.get(),
+			InventoryExchangeItems.ULTIMA_LEGGINGS.get(),
+			InventoryExchangeItems.ULTIMA_BOOTS.get()
+		);
+		
 		tag(InventoryExchangeTags.Items.MINERALS_PLUS).add(
-				Items.COAL,
-				Items.DIAMOND,
-				Items.EMERALD,
-				Items.IRON_INGOT,
-				Items.GOLD_INGOT,
-				Items.COPPER_INGOT,
-				Items.REDSTONE,
-				Items.LAPIS_LAZULI,
-				Items.NETHERITE_INGOT,
-				InventoryExchangeItems.ULTIMA.get(),
-				Items.GLOWSTONE_DUST,
-				Items.CHARCOAL
+			Items.COAL,
+			Items.DIAMOND,
+			Items.EMERALD,
+			Items.IRON_INGOT,
+			Items.GOLD_INGOT,
+			Items.COPPER_INGOT,
+			Items.REDSTONE,
+			Items.LAPIS_LAZULI,
+			Items.NETHERITE_INGOT,
+			InventoryExchangeItems.ULTIMA.get(),
+			Items.GLOWSTONE_DUST,
+			Items.CHARCOAL
 		);
 	}
 }

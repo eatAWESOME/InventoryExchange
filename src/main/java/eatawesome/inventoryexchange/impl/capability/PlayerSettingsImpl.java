@@ -8,6 +8,7 @@ import net.neoforged.neoforge.attachment.IAttachmentHolder;
 public final class PlayerSettingsImpl {
 
 	public static final Codec<PlayerSettingsAttachment> CODEC = RecordCodecBuilder.create(inst -> inst.group(
+		Codec.BOOL.fieldOf("condenseEnabled").orElse(true).forGetter(att -> att.condenseEnabled),
 		Codec.BOOL.fieldOf("feedEnabled").orElse(true).forGetter(att -> att.feedEnabled),
 		Codec.BOOL.fieldOf("repairEnabled").orElse(false).forGetter(att -> att.repairEnabled),
 		Codec.BOOL.fieldOf("smeltEnabled").orElse(false).forGetter(att -> att.smeltEnabled),
@@ -16,14 +17,16 @@ public final class PlayerSettingsImpl {
 	).apply(inst, PlayerSettingsAttachment::new));
 
 	public static class PlayerSettingsAttachment {
+		public boolean condenseEnabled;
 		public boolean feedEnabled;
 		public boolean repairEnabled;
 		public boolean smeltEnabled;
 		public int ultimaToolMode;
 		public int ultimaWatchMode;
 
-		public PlayerSettingsAttachment() { this(true, false, false, 0, 0); }
-		public PlayerSettingsAttachment(boolean feedEnabled, boolean repairEnabled, boolean smeltEnabled, int ultimaToolMode, int ultimaWatchMode) {
+		public PlayerSettingsAttachment() { this(false, true, false, false, 0, 0); }
+		public PlayerSettingsAttachment(boolean condenseEnabled, boolean feedEnabled, boolean repairEnabled, boolean smeltEnabled, int ultimaToolMode, int ultimaWatchMode) {
+			this.condenseEnabled = condenseEnabled;
 			this.feedEnabled = feedEnabled;
 			this.repairEnabled = repairEnabled;
 			this.smeltEnabled = smeltEnabled;
@@ -32,7 +35,7 @@ public final class PlayerSettingsImpl {
 		}
 
 		public PlayerSettingsAttachment copy(IAttachmentHolder holder, HolderLookup.Provider registries) {
-			return new PlayerSettingsAttachment(feedEnabled, repairEnabled, smeltEnabled, ultimaToolMode, ultimaWatchMode);
+			return new PlayerSettingsAttachment(condenseEnabled, feedEnabled, repairEnabled, smeltEnabled, ultimaToolMode, ultimaWatchMode);
 		}
 	}
 

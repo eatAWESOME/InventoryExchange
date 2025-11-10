@@ -47,6 +47,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.scores.criteria.ObjectiveCriteria;
 import net.neoforged.neoforge.common.CommonHooks;
 import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.util.BlockSnapshot;
 import net.neoforged.neoforge.event.level.BlockEvent;
 import net.neoforged.neoforge.event.level.BlockEvent.EntityMultiPlaceEvent;
@@ -370,4 +371,47 @@ public final class PlayerHelper {
             ExperienceOrb.award(serverLevel, player.position(), outputExp);
     	}
     }
+	
+	public static void condenseFirstItem(Player player) {
+		if (player instanceof ServerPlayer serverPlayer) {
+			Inventory inventory = player.getInventory();
+			for (ItemStack itemStack : inventory.items) {
+				if (itemStack.isEmpty()) continue;
+				if (itemStack.is(Tags.Items.TOOLS) || itemStack.is(Tags.Items.ARMORS) || itemStack.is(Tags.Items.BUCKETS)) continue;
+				
+			    long emcValue = IEMCProxy.INSTANCE.getValue(itemStack.copyWithCount(1));
+			    if (emcValue <= 0) continue;
+			    
+			    knowledgeCheck(player, itemStack);
+			    
+			    IKnowledgeProvider knowledge = player.getCapability(PECapabilities.KNOWLEDGE_CAPABILITY);
+			    BigInteger current = knowledge.getEmc();
+		        knowledge.setEmc(current.add(BigInteger.valueOf(emcValue)));
+		        knowledge.syncEmc(serverPlayer);
+		        
+		        itemStack.shrink(1);
+		        return;
+			}
+			IItemHandlerModifiable handler = InfiniteContainerHelper.getInventory(player);
+			for (int i = 0; i < handler.getSlots(); i++) {
+				ItemStack itemStack = handler.getStackInSlot(i);
+				if (itemStack.isEmpty()) continue;
+				if (itemStack.is(Tags.Items.TOOLS) || itemStack.is(Tags.Items.ARMORS) || itemStack.is(Tags.Items.BUCKETS)) continue;
+				
+			    long emcValue = IEMCProxy.INSTANCE.getValue(itemStack.copyWithCount(1));
+			    if (emcValue <= 0) continue;
+			    
+			    knowledgeCheck(player, itemStack);
+			    
+			    IKnowledgeProvider knowledge = player.getCapability(PECapabilities.KNOWLEDGE_CAPABILITY);
+			    BigInteger current = knowledge.getEmc();
+		        knowledge.setEmc(current.add(BigInteger.valueOf(emcValue)));
+		        knowledge.syncEmc(serverPlayer);
+		        
+		        itemStack.shrink(1);
+		        handler.setStackInSlot(i, itemStack.isEmpty() ? ItemStack.EMPTY : itemStack);
+		        return;
+			}
+		}
+	}
 }

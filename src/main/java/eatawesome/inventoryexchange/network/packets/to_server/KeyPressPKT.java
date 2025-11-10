@@ -7,6 +7,7 @@ import eatawesome.inventoryexchange.gameObjs.container.PortableCraftingMenu;
 import eatawesome.inventoryexchange.gameObjs.container.PortableFurnaceMenu;
 import eatawesome.inventoryexchange.gameObjs.container.TransmutationContainerMenu;
 import eatawesome.inventoryexchange.network.packets.IInventoryExchangePacket;
+import eatawesome.inventoryexchange.utils.CondenseToggle;
 import eatawesome.inventoryexchange.utils.FeedToggle;
 import eatawesome.inventoryexchange.utils.InfiniteContainerHelper;
 import eatawesome.inventoryexchange.utils.InventoryExchangeKeybind;
@@ -58,6 +59,11 @@ public record KeyPressPKT(InventoryExchangeKeybind key) implements IInventoryExc
 		        });
 			}
 		    return;
+		} else if (key == InventoryExchangeKeybind.CONDENSE_TOGGLE) {
+			if (player instanceof ServerPlayer serverPlayer) {
+				CondenseToggle.toggleValue(serverPlayer);
+			}
+			return;
 		} else if (key == InventoryExchangeKeybind.FEED_TOGGLE) {
 			if (player instanceof ServerPlayer serverPlayer) {
 				FeedToggle.toggleValue(serverPlayer);

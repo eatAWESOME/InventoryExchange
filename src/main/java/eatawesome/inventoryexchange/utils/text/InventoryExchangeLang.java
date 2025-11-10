@@ -20,6 +20,7 @@ public enum InventoryExchangeLang implements ILangEntry {
 	WATCH_OF_FLOWING_TIME("item", "watch_of_flowing_time"),
 	
 	// Keys
+	CONDENSING("key", "condense_toggle"),
 	CRAFTING("key", "crafting"),
 	FEED_TOGGLE("key", "feed_toggle"),
 	FURNACE("key", "furnace"),
@@ -30,6 +31,8 @@ public enum InventoryExchangeLang implements ILangEntry {
 	ULTIMA_TOOL_MODE("key", "ultima_tool_mode"),
 	
 	// Messages
+	CONDENSING_ENABLED("message", "condensing_enabled"),
+	CONDENSING_DISABLED("message", "condensing_disabled"),
 	FEEDING_ENABLED("message", "feeding_enabled"),
 	FEEDING_DISABLED("message", "feeding_disabled"),
 	REPAIR_ENABLED("message", "repair_enabled"),

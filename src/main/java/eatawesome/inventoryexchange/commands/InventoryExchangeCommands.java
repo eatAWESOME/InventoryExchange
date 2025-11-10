@@ -9,6 +9,7 @@ import eatawesome.inventoryexchange.capabilities.InventoryExchangeCapabilities;
 import eatawesome.inventoryexchange.gameObjs.container.InfiniteContainerMenu;
 import eatawesome.inventoryexchange.gameObjs.container.PortableFurnaceMenu;
 import eatawesome.inventoryexchange.impl.capability.PortableFurnaceImpl;
+import eatawesome.inventoryexchange.utils.CondenseToggle;
 import eatawesome.inventoryexchange.utils.FeedToggle;
 import eatawesome.inventoryexchange.utils.InfiniteContainerHelper;
 import eatawesome.inventoryexchange.utils.PermissionHelper;
@@ -81,6 +82,14 @@ public class InventoryExchangeCommands {
 					)
 				)
 				.then(Commands.literal("toggle")
+					.then(Commands.literal("condensing")
+						.requires(src -> PermissionHelper.has(src, CommandPermissions.TOGGLE_CONDENSING, PermissionHelper.BASE))
+						.executes(ctx -> {
+							ServerPlayer self = ctx.getSource().getPlayerOrException();
+							CondenseToggle.toggleValue(self);
+							return 1;
+						})
+					)
 					.then(Commands.literal("feeding")
 						.requires(src -> PermissionHelper.has(src, CommandPermissions.TOGGLE_FEEDING, PermissionHelper.BASE))
 						.executes(ctx -> {
@@ -98,13 +107,13 @@ public class InventoryExchangeCommands {
 						})
 					)
 					.then(Commands.literal("smelting")
-							.requires(src -> PermissionHelper.has(src, CommandPermissions.TOGGLE_SMELTING, PermissionHelper.BASE))
-							.executes(ctx -> {
-								ServerPlayer self = ctx.getSource().getPlayerOrException();
-								SmeltToggle.toggleValue(self);
-								return 1;
-							})
-						)
+						.requires(src -> PermissionHelper.has(src, CommandPermissions.TOGGLE_SMELTING, PermissionHelper.BASE))
+						.executes(ctx -> {
+							ServerPlayer self = ctx.getSource().getPlayerOrException();
+							SmeltToggle.toggleValue(self);
+							return 1;
+						})
+					)	
 				)
 				.then(Commands.literal("set")
 					.then(Commands.literal("feeding")
@@ -114,6 +123,17 @@ public class InventoryExchangeCommands {
 								ServerPlayer self = ctx.getSource().getPlayerOrException();
 								boolean value = BoolArgumentType.getBool(ctx, "value");
 								FeedToggle.setValue(self, value);
+								return 1;
+							})
+						)
+					)
+					.then(Commands.literal("condensing")
+						.requires(src -> PermissionHelper.has(src, CommandPermissions.SET_CONDENSING, PermissionHelper.BASE))
+						.then(Commands.argument("value", BoolArgumentType.bool())
+							.executes(ctx -> {
+								ServerPlayer self = ctx.getSource().getPlayerOrException();
+								boolean value = BoolArgumentType.getBool(ctx, "value");
+								CondenseToggle.setValue(self, value);
 								return 1;
 							})
 						)
@@ -130,16 +150,16 @@ public class InventoryExchangeCommands {
 						)
 					)
 					.then(Commands.literal("smelting")
-							.requires(src -> PermissionHelper.has(src, CommandPermissions.SET_SMELTING, PermissionHelper.BASE))
-							.then(Commands.argument("value", BoolArgumentType.bool())
-								.executes(ctx -> {
-									ServerPlayer self = ctx.getSource().getPlayerOrException();
-									boolean value = BoolArgumentType.getBool(ctx, "value");
-									SmeltToggle.setValue(self, value);
-									return 1;
-								})
-							)
+						.requires(src -> PermissionHelper.has(src, CommandPermissions.SET_SMELTING, PermissionHelper.BASE))
+						.then(Commands.argument("value", BoolArgumentType.bool())
+							.executes(ctx -> {
+								ServerPlayer self = ctx.getSource().getPlayerOrException();
+								boolean value = BoolArgumentType.getBool(ctx, "value");
+								SmeltToggle.setValue(self, value);
+								return 1;
+							})
 						)
+					)
 				)
 				.then(RemoveEmcCMD.register(context))
 				.then(ResetEmcCMD.register(context))

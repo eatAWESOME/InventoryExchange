@@ -13,6 +13,7 @@ import net.minecraft.util.ByIdMap;
 
 public enum InventoryExchangeKeybind implements IHasEnumNameTranslationKey {
 	CRAFTING,
+	CONDENSE_TOGGLE,
 	FEED_TOGGLE,
 	FURNACE,
 	INFINITE_CONTAINER,

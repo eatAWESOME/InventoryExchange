@@ -9,6 +9,7 @@ import eatawesome.inventoryexchange.InventoryExchange;
 import eatawesome.inventoryexchange.capabilities.IAbilityEMCProvider;
 import eatawesome.inventoryexchange.capabilities.InventoryExchangeCapabilities;
 import eatawesome.inventoryexchange.gameObjs.container.PortableFurnaceMenu;
+import eatawesome.inventoryexchange.utils.CondenseToggle;
 import eatawesome.inventoryexchange.utils.FeedToggle;
 import eatawesome.inventoryexchange.utils.PlayerHelper;
 import eatawesome.inventoryexchange.utils.PortableFurnaceHelper;
@@ -81,6 +82,11 @@ public class TickEvents {
 			} else if (wasFlying && !isFlying) {
 				player.level().playSound(null, player.getX(), player.getY(), player.getZ(), PESoundEvents.UNCHARGE.get(), SoundSource.PLAYERS, 0.8F, 1.0F);
 				wasFlyingMap.put(player.getUUID(), isFlying);
+			}
+		
+			// Inventory Condensing
+			if (CondenseToggle.isEnabled(player)) {
+				PlayerHelper.condenseFirstItem(player);
 			}
 		
 			// Eating via EMC

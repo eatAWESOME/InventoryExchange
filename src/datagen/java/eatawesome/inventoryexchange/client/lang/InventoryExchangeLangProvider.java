@@ -42,6 +42,7 @@ public class InventoryExchangeLangProvider extends BaseLanguageProvider {
 		
 		// Keybinds
 		add(InventoryExchangeKeybind.CRAFTING, "Open Crafting");
+		add(InventoryExchangeKeybind.CONDENSE_TOGGLE, "Toggle Inventory Condensing");
 		add(InventoryExchangeKeybind.FEED_TOGGLE, "Toggle Feeding via EMC");
 		add(InventoryExchangeKeybind.FURNACE, "Open Furnace");
 		add(InventoryExchangeKeybind.INFINITE_CONTAINER, "Open Infinite Inventory");
@@ -80,6 +81,8 @@ public class InventoryExchangeLangProvider extends BaseLanguageProvider {
 		add(PELang.COMMAND_KNOWLEDGE_TEST_FAIL, "%1$s does not have knowledge of %2$s.");
 		add(PELang.COMMAND_PROVIDER_FAIL, "Failed to get provider for %1$s.");
 		add(PELang.RELOAD_NOTICE, "Restart or use \"/reload\" when all changes are complete.");
+		add(InventoryExchangeLang.CONDENSING_ENABLED, "Inventory Condensing: Enabled");
+		add(InventoryExchangeLang.CONDENSING_DISABLED, "Inventory Condensing: Disabled");
 		add(InventoryExchangeLang.FEEDING_ENABLED, "Feeding via EMC: Enabled");
 		add(InventoryExchangeLang.FEEDING_DISABLED, "Feeding via EMC: Disabled");
 		add(InventoryExchangeLang.REPAIR_ENABLED, "Repairing Items via EMC: Enabled");
