@@ -16,6 +16,7 @@ public class InventoryExchangeTags {
 		}
 
 		public static final TagKey<Item> MINERALS_PLUS = tag("minerals_plus");
+		public static final TagKey<Item> NO_INVENTORY_CONDENSING = tag("no_inventory_condensing");
 		
 		private static TagKey<Item> tag(String name) {
 			return ItemTags.create(InventoryExchange.rl(name));

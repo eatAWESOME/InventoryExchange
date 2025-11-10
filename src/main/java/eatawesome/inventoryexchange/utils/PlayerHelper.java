@@ -7,6 +7,7 @@ import java.util.function.BiPredicate;
 import eatawesome.inventoryexchange.InventoryExchange;
 import eatawesome.inventoryexchange.capabilities.IAbilityEMCProvider;
 import eatawesome.inventoryexchange.capabilities.InventoryExchangeCapabilities;
+import eatawesome.inventoryexchange.gameObjs.InventoryExchangeTags;
 import eatawesome.inventoryexchange.gameObjs.registries.InventoryExchangeItems;
 import eatawesome.inventoryexchange.network.packets.to_client.KnowledgeToastPKT;
 import moze_intel.projecte.PECore;
@@ -47,7 +48,6 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.scores.criteria.ObjectiveCriteria;
 import net.neoforged.neoforge.common.CommonHooks;
 import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.util.BlockSnapshot;
 import net.neoforged.neoforge.event.level.BlockEvent;
 import net.neoforged.neoforge.event.level.BlockEvent.EntityMultiPlaceEvent;
@@ -59,7 +59,7 @@ import net.neoforged.neoforge.network.PacketDistributor;
  * Helper class for player-related methods. Notice: Please try to keep methods tidy and alphabetically ordered. Thanks!
  */
 public final class PlayerHelper {
-
+	
 	public final static ObjectiveCriteria SCOREBOARD_EMC = new ReadOnlyScoreCriteria(PECore.PEID + ":emc_score");
 	public final static ObjectiveCriteria SCOREBOARD_ABILITY_EMC = new ReadOnlyScoreCriteria(InventoryExchange.MODID + ":ability_emc_score");
 
@@ -377,7 +377,7 @@ public final class PlayerHelper {
 			Inventory inventory = player.getInventory();
 			for (ItemStack itemStack : inventory.items) {
 				if (itemStack.isEmpty()) continue;
-				if (itemStack.is(Tags.Items.TOOLS) || itemStack.is(Tags.Items.ARMORS) || itemStack.is(Tags.Items.BUCKETS)) continue;
+				if (itemStack.is(InventoryExchangeTags.Items.NO_INVENTORY_CONDENSING)) continue;
 				
 			    long emcValue = IEMCProxy.INSTANCE.getValue(itemStack.copyWithCount(1));
 			    if (emcValue <= 0) continue;
@@ -396,7 +396,7 @@ public final class PlayerHelper {
 			for (int i = 0; i < handler.getSlots(); i++) {
 				ItemStack itemStack = handler.getStackInSlot(i);
 				if (itemStack.isEmpty()) continue;
-				if (itemStack.is(Tags.Items.TOOLS) || itemStack.is(Tags.Items.ARMORS) || itemStack.is(Tags.Items.BUCKETS)) continue;
+				if (itemStack.is(InventoryExchangeTags.Items.NO_INVENTORY_CONDENSING)) continue;
 				
 			    long emcValue = IEMCProxy.INSTANCE.getValue(itemStack.copyWithCount(1));
 			    if (emcValue <= 0) continue;

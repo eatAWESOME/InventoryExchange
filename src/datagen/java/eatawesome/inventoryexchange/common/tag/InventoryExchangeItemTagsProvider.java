@@ -8,6 +8,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.ItemTagsProvider;
 import net.minecraft.data.tags.TagsProvider;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
@@ -23,6 +24,7 @@ public class InventoryExchangeItemTagsProvider extends ItemTagsProvider {
 		super(output, lookupProvider, blockTags, InventoryExchange.MODID, existingFileHelper);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	protected void addTags(@NotNull HolderLookup.Provider provider) {
 		tag(ItemTags.BOOKSHELF_BOOKS).add(InventoryExchangeItems.TOME_OF_KNOWLEDGE.get());
@@ -35,8 +37,7 @@ public class InventoryExchangeItemTagsProvider extends ItemTagsProvider {
 		tag(ItemTags.SHOVELS).add(InventoryExchangeItems.ULTIMA_TOOL.get());
 		
 		tag(Tags.Items.TOOLS).add(
-			InventoryExchangeItems.ULTIMA_TOOL.get(),
-			InventoryExchangeItems.ULTIMA_WATCH.get()
+			InventoryExchangeItems.ULTIMA_TOOL.get()
 		);
 		tag(Tags.Items.ARMORS).add(
 			InventoryExchangeItems.ULTIMA_HELMET.get(),
@@ -58,6 +59,32 @@ public class InventoryExchangeItemTagsProvider extends ItemTagsProvider {
 			InventoryExchangeItems.ULTIMA.get(),
 			Items.GLOWSTONE_DUST,
 			Items.CHARCOAL
+		);
+		tag(InventoryExchangeTags.Items.NO_INVENTORY_CONDENSING).add(
+			InventoryExchangeItems.ULTIMA_WATCH.get(),
+			Items.CLOCK,
+			Items.COMPASS,
+			Items.ELYTRA,
+			Items.FILLED_MAP,
+			Items.MAP,
+			Items.MINECART,
+			Items.SPYGLASS,
+			Items.WRITABLE_BOOK,
+			Items.WRITTEN_BOOK
+		).addOptional(
+			ResourceLocation.fromNamespaceAndPath("pixelmon", "poke_ball")
+		).addTags(
+			ItemTags.ARROWS,
+			ItemTags.BOATS,
+			ItemTags.BOOKSHELF_BOOKS,
+			ItemTags.COMPASSES,
+			Tags.Items.ARMORS,
+			Tags.Items.BUCKETS,
+			Tags.Items.ENCHANTABLES,
+			Tags.Items.MELEE_WEAPON_TOOLS,
+			Tags.Items.RANGED_WEAPON_TOOLS,
+			Tags.Items.POTIONS,
+			Tags.Items.TOOLS
 		);
 	}
 }
