@@ -48,12 +48,10 @@ public class PixelmonEMCMapper implements IEMCMapper {
 		collector.setValueBefore(NSSItem.createItem(ResourceLocation.fromNamespaceAndPath("pixelmon", "dusk_stone_shard")), 1_024L);
 		collector.setValueBefore(NSSItem.createItem(ResourceLocation.fromNamespaceAndPath("pixelmon", "ice_stone_shard")), 1_024L);
 		collector.setValueBefore(NSSItem.createItem(ResourceLocation.fromNamespaceAndPath("pixelmon", "shiny_stone_shard")), 1_024L);
-		collector.setValueBefore(NSSItem.createItem(ResourceLocation.fromNamespaceAndPath("pixelmon", "crystal")), 1_024L);
 		collector.setValueBefore(NSSItem.createItem(ResourceLocation.fromNamespaceAndPath("pixelmon", "ruby")), 1_024L);
 		collector.setValueBefore(NSSItem.createItem(ResourceLocation.fromNamespaceAndPath("pixelmon", "sapphire")), 1_024L);
 		collector.setValueBefore(NSSItem.createItem(ResourceLocation.fromNamespaceAndPath("pixelmon", "aluminum_ingot")), 256L);
 		collector.setValueBefore(NSSItem.createItem(ResourceLocation.fromNamespaceAndPath("pixelmon", "platinum_ingot")), 4_096L);
-		collector.setValueBefore(NSSItem.createItem(ResourceLocation.fromNamespaceAndPath("pixelmon", "silver_ingot")), 2_048L);
 		collector.setValueBefore(NSSItem.createItem(ResourceLocation.fromNamespaceAndPath("pixelmon", "silver_ingot")), 2_048L);
 		collector.setValueBefore(NSSItem.createItem(ResourceLocation.fromNamespaceAndPath("pixelmon", "tumblestone")), 256L);
 		collector.setValueBefore(NSSItem.createItem(ResourceLocation.fromNamespaceAndPath("pixelmon", "sky_tumblestone")), 256L);
