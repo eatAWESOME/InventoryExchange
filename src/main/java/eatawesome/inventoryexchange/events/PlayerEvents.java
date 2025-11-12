@@ -25,6 +25,7 @@ import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.common.util.TriState;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.neoforge.event.entity.living.LivingEquipmentChangeEvent;
 import net.neoforged.neoforge.event.entity.player.AdvancementEvent;
@@ -32,12 +33,11 @@ import net.neoforged.neoforge.event.entity.player.ItemEntityPickupEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerContainerEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent.RightClickBlock;
-import net.neoforged.neoforge.items.IItemHandlerModifiable;
 
 @EventBusSubscriber(modid = InventoryExchange.MODID)
 public class PlayerEvents {
 
-    // Learn knowledge on item pickup and insert items into infinite container if inventory full
+    // Learn knowledge on item pickup and insert items into infinite container if inventory full or insert items into partial stacks first
     @SubscribeEvent
     public static void onEntityItemPickupPre(ItemEntityPickupEvent.Pre event) {
         if (event.getPlayer() instanceof ServerPlayer serverPlayer) {
@@ -45,18 +45,32 @@ public class PlayerEvents {
             PlayerHelper.knowledgeCheck(serverPlayer, itemStack);
             if (!itemStack.isEmpty() && !event.getItemEntity().hasPickUpDelay()) {
                 if (!PlayerHelper.canInventoryAccept(serverPlayer.getInventory(), itemStack)) {
-                    IItemHandlerModifiable infinite = InfiniteContainerHelper.getInventory(serverPlayer);
                     ItemStack insertStack = itemStack.copy();
                     int preInsertCount = insertStack.getCount();
-                    if (PlayerHelper.insertIntoHandler(infinite, insertStack)) {
+                    if (PlayerHelper.insertIntoHandler(InfiniteContainerHelper.getInventory(serverPlayer), insertStack)) {
                         if (preInsertCount - insertStack.getCount() > 0) {
                             PlayerHelper.playPickupSound(serverPlayer);
                         }
                         if (insertStack.isEmpty()) {
                             event.getItemEntity().discard();
+                            event.setCanPickup(TriState.FALSE);
                         } else {
                             event.getItemEntity().setItem(insertStack);
                         }
+                    }
+                } else {
+                    ItemStack insertStack = itemStack.copy();
+                    int preInsertCount = insertStack.getCount();
+                    insertStack = PlayerHelper.insertIntoInventoryMergeOnly(serverPlayer.getInventory(), insertStack);
+                    insertStack = PlayerHelper.insertIntoHandlerMergeOnly(InfiniteContainerHelper.getInventory(serverPlayer), insertStack);
+                    if (preInsertCount - insertStack.getCount() > 0) {
+                        PlayerHelper.playPickupSound(serverPlayer);
+                    }
+                    if (insertStack.isEmpty()) {
+                        event.getItemEntity().discard();
+                        event.setCanPickup(TriState.FALSE);
+                    } else {
+                        event.getItemEntity().setItem(insertStack);
                     }
                 }
             }
@@ -69,14 +83,14 @@ public class PlayerEvents {
         if (event.getPlayer() instanceof ServerPlayer serverPlayer) {
             ItemStack itemStack = event.getItemEntity().getItem();
             if (!itemStack.isEmpty() && !event.getItemEntity().isRemoved()) {
-                IItemHandlerModifiable infinite = InfiniteContainerHelper.getInventory(serverPlayer);
                 ItemStack insertStack = itemStack.copy();
                 int preInsertCount = insertStack.getCount();
-                if (PlayerHelper.insertIntoHandler(infinite, insertStack)) {
+                if (PlayerHelper.insertIntoHandler(InfiniteContainerHelper.getInventory(serverPlayer), insertStack)) {
                     if (preInsertCount - insertStack.getCount() > 0) {
                         PlayerHelper.playPickupSound(serverPlayer);
                     }
                     if (insertStack.isEmpty()) {
+                        event.getItemEntity().setItem(ItemStack.EMPTY);
                         event.getItemEntity().discard();
                     } else {
                         event.getItemEntity().setItem(insertStack);
@@ -163,16 +177,11 @@ public class PlayerEvents {
         Player newPlayer = event.getEntity();
         if (newPlayer instanceof ServerPlayer newServerPlayer) {
             if (event.isWasDeath() && !newPlayer.level().getGameRules().getBoolean(GameRules.RULE_KEEPINVENTORY)) {
-                IItemHandlerModifiable oldInfinite = InfiniteContainerHelper.getInventory(oldPlayer);
-                IItemHandlerModifiable oldFurnace = PortableFurnaceHelper.getInventory(oldPlayer);
-                IItemHandlerModifiable newInfinite = InfiniteContainerHelper.getInventory(newPlayer);
-                IItemHandlerModifiable newFurnace = PortableFurnaceHelper.getInventory(newPlayer);
+                PlayerHelper.dropAndClearHandler(oldPlayer, InfiniteContainerHelper.getInventory(oldPlayer), false);
+                PlayerHelper.dropAndClearHandler(oldPlayer, PortableFurnaceHelper.getInventory(oldPlayer), true);
     
-                PlayerHelper.dropAndClearHandler(oldPlayer, oldInfinite, false);
-                PlayerHelper.dropAndClearHandler(oldPlayer, oldFurnace, true);
-    
-                PlayerHelper.clearHandler(newInfinite, false);
-                PlayerHelper.clearHandler(newFurnace, true);
+                PlayerHelper.clearHandler(InfiniteContainerHelper.getInventory(newPlayer), false);
+                PlayerHelper.clearHandler(PortableFurnaceHelper.getInventory(newPlayer), true);
                 
                 IKnowledgeProvider oldKnowledge = oldPlayer.getCapability(PECapabilities.KNOWLEDGE_CAPABILITY);
                 IAbilityEMCProvider oldAbilityEMC = oldPlayer.getCapability(InventoryExchangeCapabilities.ABILITY_EMC_CAPABILITY);
