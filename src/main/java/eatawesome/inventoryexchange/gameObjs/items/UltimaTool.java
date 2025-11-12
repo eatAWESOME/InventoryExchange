@@ -44,7 +44,7 @@ public final class UltimaTool extends DiggerItem {
 			|| state.is(BlockTags.MINEABLE_WITH_AXE)
 			|| state.is(BlockTags.MINEABLE_WITH_HOE)
 			|| state.is(Blocks.COBWEB)) {
-			return 16.0F;
+			return 24.0F;
 		}
 		return super.getDestroySpeed(stack, state);
 	}
