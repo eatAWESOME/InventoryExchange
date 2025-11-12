@@ -6,7 +6,7 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.mojang.datafixers.util.Either;
-import moze_intel.projecte.PEPermissions;
+import eatawesome.inventoryexchange.InventoryExchangePermissions;
 import moze_intel.projecte.api.nss.NSSItem;
 import moze_intel.projecte.config.CustomEMCParser;
 import moze_intel.projecte.utils.text.PELang;
@@ -30,7 +30,7 @@ public class SetEmcCMD {
 
 	public static LiteralArgumentBuilder<CommandSourceStack> register(CommandBuildContext context) {
 		return Commands.literal("setemc")
-				.requires(PEPermissions.COMMAND_SET_EMC)
+				.requires(InventoryExchangePermissions.COMMAND_SET_EMC)
 				.then(Commands.argument("emc", LongArgumentType.longArg(0, Long.MAX_VALUE))
 						.then(Commands.argument("item", ItemArgument.item(context))
 								.executes(ctx -> {

@@ -1,4 +1,4 @@
-package moze_intel.projecte;
+package eatawesome.inventoryexchange;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +17,7 @@ import net.neoforged.neoforge.server.permission.nodes.PermissionType;
 import net.neoforged.neoforge.server.permission.nodes.PermissionTypes;
 import org.jetbrains.annotations.Nullable;
 
-public class PEPermissions {
+public class InventoryExchangePermissions {
 
 	private static final List<PermissionNode<?>> NODES_TO_REGISTER = new ArrayList<>();
 	private static final PermissionResolver<Boolean> PLAYER_IS_OP = (player, uuid, context) -> player != null && player.hasPermissions(Commands.LEVEL_GAMEMASTERS);
@@ -30,7 +30,6 @@ public class PEPermissions {
 	public static final CommandPermissionNode COMMAND_REMOVE_EMC = nodeOpCommand("remove_emc");
 	public static final CommandPermissionNode COMMAND_RESET_EMC = nodeOpCommand("reset_emc");
 	public static final CommandPermissionNode COMMAND_SET_EMC = nodeOpCommand("set_emc");
-	public static final CommandPermissionNode COMMAND_SHOW_BAG = nodeOpCommand("show_bag");
 	public static final CommandPermissionNode COMMAND_EMC = nodeOpCommand("emc");
 	public static final CommandPermissionNode COMMAND_EMC_ADD = nodeSubCommand(COMMAND_EMC, "add");
 	public static final CommandPermissionNode COMMAND_EMC_REMOVE = nodeSubCommand(COMMAND_EMC, "remove");
@@ -42,6 +41,9 @@ public class PEPermissions {
 	public static final CommandPermissionNode COMMAND_KNOWLEDGE_LEARN = nodeSubCommand(COMMAND_KNOWLEDGE, "learn");
 	public static final CommandPermissionNode COMMAND_KNOWLEDGE_UNLEARN = nodeSubCommand(COMMAND_KNOWLEDGE, "unlearn");
 	public static final CommandPermissionNode COMMAND_KNOWLEDGE_TEST = nodeSubCommand(COMMAND_KNOWLEDGE, "test");
+	
+	public static final CommandPermissionNode COMMAND_VIEW_FURNACE_OTHER = nodeOpCommand("view_furnace_other");
+	public static final CommandPermissionNode COMMAND_VIEW_INFINITE_INVENTORY_OTHER = nodeOpCommand("view_infinite_inventory_other");
 
 	private static CommandPermissionNode nodeOpCommand(String nodeName) {
 		PermissionNode<Boolean> node = node("command." + nodeName, PermissionTypes.BOOLEAN, PLAYER_IS_OP);
@@ -78,7 +80,7 @@ public class PEPermissions {
 
 	@SafeVarargs
 	private static <T> PermissionNode<T> node(String nodeName, PermissionType<T> type, PermissionResolver<T> defaultResolver, PermissionDynamicContextKey<T>... dynamics) {
-		PermissionNode<T> node = new PermissionNode<>(PECore.PEID, nodeName, type, defaultResolver, dynamics);
+		PermissionNode<T> node = new PermissionNode<>(InventoryExchange.MODID, nodeName, type, defaultResolver, dynamics);
 		NODES_TO_REGISTER.add(node);
 		return node;
 	}

@@ -6,7 +6,7 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.mojang.datafixers.util.Either;
-import moze_intel.projecte.PEPermissions;
+import eatawesome.inventoryexchange.InventoryExchangePermissions;
 import moze_intel.projecte.api.nss.NSSItem;
 import moze_intel.projecte.config.CustomEMCParser;
 import moze_intel.projecte.utils.text.PELang;
@@ -27,7 +27,7 @@ public class ResetEmcCMD {
 
 	public static LiteralArgumentBuilder<CommandSourceStack> register(CommandBuildContext context) {
 		return Commands.literal("resetemc")
-				.requires(PEPermissions.COMMAND_RESET_EMC)
+				.requires(InventoryExchangePermissions.COMMAND_RESET_EMC)
 				.then(Commands.argument("item", ItemArgument.item(context))
 						.executes(ctx -> {
 							ItemInput itemInput = ItemArgument.getItem(ctx, "item");

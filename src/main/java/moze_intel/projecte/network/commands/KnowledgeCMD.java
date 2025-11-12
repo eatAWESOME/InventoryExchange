@@ -4,8 +4,8 @@ import com.mojang.brigadier.Command;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import eatawesome.inventoryexchange.InventoryExchangePermissions;
 import moze_intel.projecte.PECore;
-import moze_intel.projecte.PEPermissions;
 import moze_intel.projecte.api.ItemInfo;
 import moze_intel.projecte.api.capabilities.IKnowledgeProvider;
 import moze_intel.projecte.api.capabilities.PECapabilities;
@@ -34,18 +34,18 @@ public class KnowledgeCMD {
 
 	public static ArgumentBuilder<CommandSourceStack, ?> register(CommandBuildContext context) {
 		return Commands.literal("knowledge")
-				.requires(PEPermissions.COMMAND_KNOWLEDGE)
+				.requires(InventoryExchangePermissions.COMMAND_KNOWLEDGE)
 				.then(subCommandClear())
 				.then(Commands.literal("learn")
-						.requires(PEPermissions.COMMAND_KNOWLEDGE_LEARN)
+						.requires(InventoryExchangePermissions.COMMAND_KNOWLEDGE_LEARN)
 						.then(executeWithParameters(ActionType.LEARN, context))
 				)
 				.then(Commands.literal("unlearn")
-						.requires(PEPermissions.COMMAND_KNOWLEDGE_UNLEARN)
+						.requires(InventoryExchangePermissions.COMMAND_KNOWLEDGE_UNLEARN)
 						.then(executeWithParameters(ActionType.UNLEARN, context))
 				)
 				.then(Commands.literal("test")
-						.requires(PEPermissions.COMMAND_KNOWLEDGE_TEST)
+						.requires(InventoryExchangePermissions.COMMAND_KNOWLEDGE_TEST)
 						.then(executeWithParameters(ActionType.TEST, context))
 				);
 	}
@@ -63,7 +63,7 @@ public class KnowledgeCMD {
 
 	private static ArgumentBuilder<CommandSourceStack, ?> subCommandClear() {
 		return Commands.literal("clear")
-				.requires(PEPermissions.COMMAND_KNOWLEDGE_CLEAR)
+				.requires(InventoryExchangePermissions.COMMAND_KNOWLEDGE_CLEAR)
 				.then(Commands.argument("targets", EntityArgument.players())
 						.executes(ctx -> {
 							CommandSourceStack source = ctx.getSource();

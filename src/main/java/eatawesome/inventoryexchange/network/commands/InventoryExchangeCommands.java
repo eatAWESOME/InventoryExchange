@@ -1,9 +1,10 @@
-package eatawesome.inventoryexchange.commands;
+package eatawesome.inventoryexchange.network.commands;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.arguments.BoolArgumentType;
 import eatawesome.inventoryexchange.InventoryExchange;
+import eatawesome.inventoryexchange.InventoryExchangePermissions;
 import eatawesome.inventoryexchange.capabilities.IInfiniteContainerProvider;
 import eatawesome.inventoryexchange.capabilities.InventoryExchangeCapabilities;
 import eatawesome.inventoryexchange.gameObjs.container.InfiniteContainerMenu;
@@ -12,7 +13,6 @@ import eatawesome.inventoryexchange.impl.capability.PortableFurnaceImpl;
 import eatawesome.inventoryexchange.utils.CondenseToggle;
 import eatawesome.inventoryexchange.utils.FeedToggle;
 import eatawesome.inventoryexchange.utils.InfiniteContainerHelper;
-import eatawesome.inventoryexchange.utils.PermissionHelper;
 import eatawesome.inventoryexchange.utils.RepairToggle;
 import eatawesome.inventoryexchange.utils.SmeltToggle;
 import eatawesome.inventoryexchange.utils.text.InventoryExchangeLang;
@@ -43,18 +43,16 @@ public class InventoryExchangeCommands {
 
 		LiteralArgumentBuilder<CommandSourceStack> root =
 			Commands.literal("inventoryexchange")
-				.requires(src -> PermissionHelper.has(src, CommandPermissions.VIEW_ROOT, PermissionHelper.BASE))
+				.requires(InventoryExchangePermissions.COMMAND)
 				.then(Commands.literal("view")
-					.requires(src -> PermissionHelper.has(src, CommandPermissions.VIEW_ROOT, PermissionHelper.BASE))
 					.then(Commands.literal("furnace")
-						.requires(src -> PermissionHelper.has(src, CommandPermissions.VIEW_FURNACE, PermissionHelper.BASE))
 						.executes(ctx -> {
 							ServerPlayer viewer = ctx.getSource().getPlayerOrException();
 							openFurnace(viewer, viewer);
 							return 1;
 						})
 						.then(Commands.argument("player", EntityArgument.player())
-							.requires(src -> PermissionHelper.has(src, CommandPermissions.VIEW_FURNACE, PermissionHelper.ADMIN))
+							.requires(InventoryExchangePermissions.COMMAND_VIEW_FURNACE_OTHER)
 							.executes(ctx -> {
 								ServerPlayer viewer = ctx.getSource().getPlayerOrException();
 								ServerPlayer target = EntityArgument.getPlayer(ctx, "player");
@@ -64,14 +62,13 @@ public class InventoryExchangeCommands {
 						)
 					)
 					.then(Commands.literal("infiniteinventory")
-						.requires(src -> PermissionHelper.has(src, CommandPermissions.VIEW_INFINITE_INVENTORY, PermissionHelper.BASE))
 						.executes(ctx -> {
 							ServerPlayer viewer = ctx.getSource().getPlayerOrException();
 							openInfinite(viewer, viewer);
 							return 1;
 						})
 						.then(Commands.argument("player", EntityArgument.player())
-							.requires(src -> PermissionHelper.has(src, CommandPermissions.VIEW_INFINITE_INVENTORY, PermissionHelper.ADMIN))
+							.requires(InventoryExchangePermissions.COMMAND_VIEW_INFINITE_INVENTORY_OTHER)
 							.executes(ctx -> {
 								ServerPlayer viewer = ctx.getSource().getPlayerOrException();
 								ServerPlayer target = EntityArgument.getPlayer(ctx, "player");
@@ -83,7 +80,6 @@ public class InventoryExchangeCommands {
 				)
 				.then(Commands.literal("toggle")
 					.then(Commands.literal("condensing")
-						.requires(src -> PermissionHelper.has(src, CommandPermissions.TOGGLE_CONDENSING, PermissionHelper.BASE))
 						.executes(ctx -> {
 							ServerPlayer self = ctx.getSource().getPlayerOrException();
 							CondenseToggle.toggleValue(self);
@@ -91,7 +87,6 @@ public class InventoryExchangeCommands {
 						})
 					)
 					.then(Commands.literal("feeding")
-						.requires(src -> PermissionHelper.has(src, CommandPermissions.TOGGLE_FEEDING, PermissionHelper.BASE))
 						.executes(ctx -> {
 							ServerPlayer self = ctx.getSource().getPlayerOrException();
 							FeedToggle.toggleValue(self);
@@ -99,7 +94,6 @@ public class InventoryExchangeCommands {
 						})
 					)
 					.then(Commands.literal("repairing")
-						.requires(src -> PermissionHelper.has(src, CommandPermissions.TOGGLE_REPAIRING, PermissionHelper.BASE))
 						.executes(ctx -> {
 							ServerPlayer self = ctx.getSource().getPlayerOrException();
 							RepairToggle.toggleValue(self);
@@ -107,7 +101,6 @@ public class InventoryExchangeCommands {
 						})
 					)
 					.then(Commands.literal("smelting")
-						.requires(src -> PermissionHelper.has(src, CommandPermissions.TOGGLE_SMELTING, PermissionHelper.BASE))
 						.executes(ctx -> {
 							ServerPlayer self = ctx.getSource().getPlayerOrException();
 							SmeltToggle.toggleValue(self);
@@ -117,7 +110,6 @@ public class InventoryExchangeCommands {
 				)
 				.then(Commands.literal("set")
 					.then(Commands.literal("feeding")
-						.requires(src -> PermissionHelper.has(src, CommandPermissions.SET_FEEDING, PermissionHelper.BASE))
 						.then(Commands.argument("value", BoolArgumentType.bool())
 							.executes(ctx -> {
 								ServerPlayer self = ctx.getSource().getPlayerOrException();
@@ -128,7 +120,6 @@ public class InventoryExchangeCommands {
 						)
 					)
 					.then(Commands.literal("condensing")
-						.requires(src -> PermissionHelper.has(src, CommandPermissions.SET_CONDENSING, PermissionHelper.BASE))
 						.then(Commands.argument("value", BoolArgumentType.bool())
 							.executes(ctx -> {
 								ServerPlayer self = ctx.getSource().getPlayerOrException();
@@ -139,7 +130,6 @@ public class InventoryExchangeCommands {
 						)
 					)
 					.then(Commands.literal("repairing")
-						.requires(src -> PermissionHelper.has(src, CommandPermissions.SET_REPAIRING, PermissionHelper.BASE))
 						.then(Commands.argument("value", BoolArgumentType.bool())
 							.executes(ctx -> {
 								ServerPlayer self = ctx.getSource().getPlayerOrException();
@@ -150,7 +140,6 @@ public class InventoryExchangeCommands {
 						)
 					)
 					.then(Commands.literal("smelting")
-						.requires(src -> PermissionHelper.has(src, CommandPermissions.SET_SMELTING, PermissionHelper.BASE))
 						.then(Commands.argument("value", BoolArgumentType.bool())
 							.executes(ctx -> {
 								ServerPlayer self = ctx.getSource().getPlayerOrException();
@@ -171,7 +160,7 @@ public class InventoryExchangeCommands {
 
 		LiteralArgumentBuilder<CommandSourceStack> alias =
 			Commands.literal("ie")
-				.requires(src -> PermissionHelper.has(src, CommandPermissions.VIEW_ROOT, PermissionHelper.BASE))
+				.requires(InventoryExchangePermissions.COMMAND)
 				.redirect(root.build());
 
 		dispatcher.register(root);

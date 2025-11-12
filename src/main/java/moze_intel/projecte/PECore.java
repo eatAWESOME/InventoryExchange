@@ -97,7 +97,6 @@ public class PECore {
 		NeoForge.EVENT_BUS.addListener(this::dataPackSync);
 		NeoForge.EVENT_BUS.addListener(this::serverStarting);
 		NeoForge.EVENT_BUS.addListener(this::serverQuit);
-		NeoForge.EVENT_BUS.addListener(PEPermissions::registerPermissionNodes);
 
 		//Register our config files
 		ProjectEConfig.register(modContainer);

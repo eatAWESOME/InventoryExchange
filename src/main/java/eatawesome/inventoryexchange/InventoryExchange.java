@@ -22,6 +22,7 @@ import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
+import net.neoforged.neoforge.common.NeoForge;
 
 @Mod(InventoryExchange.MODID)
 public class InventoryExchange {
@@ -56,6 +57,8 @@ public class InventoryExchange {
 		InventoryExchangeContainerTypes.CONTAINER_TYPES.register(modEventBus);
 		InventoryExchangeItems.ITEMS.register(modEventBus);
 		InventoryExchangeCreativeTabs.CREATIVE_TABS.register(modEventBus);
+		
+		NeoForge.EVENT_BUS.addListener(InventoryExchangePermissions::registerPermissionNodes);
 
 		this.packetHandler = new PacketHandler(modEventBus, modContainer.getModInfo().getVersion());
 	}

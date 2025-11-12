@@ -6,7 +6,7 @@ import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import java.math.BigInteger;
-import moze_intel.projecte.PEPermissions;
+import eatawesome.inventoryexchange.InventoryExchangePermissions;
 import moze_intel.projecte.api.capabilities.IKnowledgeProvider;
 import moze_intel.projecte.api.capabilities.PECapabilities;
 import moze_intel.projecte.utils.TransmutationEMCFormatter;
@@ -34,25 +34,25 @@ public class EMCCMD {
 
 	public static ArgumentBuilder<CommandSourceStack, ?> register(CommandBuildContext context) {
 		return Commands.literal("emc")
-				.requires(PEPermissions.COMMAND_EMC)
+				.requires(InventoryExchangePermissions.COMMAND_EMC)
 				.then(Commands.literal("add")
-						.requires(PEPermissions.COMMAND_EMC_ADD)
+						.requires(InventoryExchangePermissions.COMMAND_EMC_ADD)
 						.then(executeWithParameters(ActionType.ADD))
 				)
 				.then(Commands.literal("remove")
-						.requires(PEPermissions.COMMAND_EMC_REMOVE)
+						.requires(InventoryExchangePermissions.COMMAND_EMC_REMOVE)
 						.then(executeWithParameters(ActionType.REMOVE))
 				)
 				.then(Commands.literal("set")
-						.requires(PEPermissions.COMMAND_EMC_SET)
+						.requires(InventoryExchangePermissions.COMMAND_EMC_SET)
 						.then(executeWithParameters(ActionType.SET))
 				)
 				.then(Commands.literal("test")
-						.requires(PEPermissions.COMMAND_EMC_TEST)
+						.requires(InventoryExchangePermissions.COMMAND_EMC_TEST)
 						.then(executeWithParameters(ActionType.TEST))
 				)
 				.then(Commands.literal("get")
-						.requires(PEPermissions.COMMAND_EMC_GET)
+						.requires(InventoryExchangePermissions.COMMAND_EMC_GET)
 						.then(Commands.argument("player", EntityArgument.player())
 								.executes((ctx) -> handle(ctx, ActionType.GET))
 						)
