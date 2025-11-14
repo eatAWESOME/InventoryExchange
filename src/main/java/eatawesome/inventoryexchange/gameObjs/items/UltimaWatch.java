@@ -1,7 +1,7 @@
 package eatawesome.inventoryexchange.gameObjs.items;
 
 import eatawesome.inventoryexchange.utils.UltimaWatchMode;
-import eatawesome.inventoryexchange.config.InventoryExchangeConfig;
+import eatawesome.inventoryexchange.config.InventoryExchangeCommonConfig;
 import java.math.BigInteger;
 import java.util.List;
 import moze_intel.projecte.api.capabilities.IKnowledgeProvider;
@@ -36,8 +36,8 @@ public class UltimaWatch extends Item {
 	public InteractionResultHolder<ItemStack> use(Level level, Player player, @NotNull InteractionHand hand) {
 		ItemStack stack = player.getItemInHand(hand);
 		if (player instanceof ServerPlayer serverPlayer) {
-			if (!InventoryExchangeConfig.isUltimaWatchAllowed()) {
-				player.sendSystemMessage(PELang.TIME_WATCH_DISABLED.translate());
+			if (!InventoryExchangeCommonConfig.isUltimaWatchAllowed()) {
+				serverPlayer.sendSystemMessage(PELang.TIME_WATCH_DISABLED.translate());
 				return InteractionResultHolder.fail(stack);
 			}
 			UltimaWatchMode.nextValue(serverPlayer);
@@ -48,7 +48,7 @@ public class UltimaWatch extends Item {
 	@Override
 	public void inventoryTick(@NotNull ItemStack stack, @NotNull Level level, @NotNull Entity entity, int slot, boolean isHeld) {
 		super.inventoryTick(stack, level, entity, slot, isHeld);
-		if (entity instanceof ServerPlayer serverPlayer && hotBarOrOffHand(slot) && level.getGameRules().getBoolean(GameRules.RULE_DAYLIGHT) && InventoryExchangeConfig.isUltimaWatchAllowed()) {
+		if (entity instanceof ServerPlayer serverPlayer && hotBarOrOffHand(slot) && level.getGameRules().getBoolean(GameRules.RULE_DAYLIGHT) && InventoryExchangeCommonConfig.isUltimaWatchAllowed()) {
 			int ultimaWatchMode = UltimaWatchMode.getMode(serverPlayer);
 			if (ultimaWatchMode != 0) {
 				IKnowledgeProvider knowledge = serverPlayer.getCapability(PECapabilities.KNOWLEDGE_CAPABILITY);

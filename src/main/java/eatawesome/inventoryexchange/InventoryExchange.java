@@ -3,7 +3,7 @@ package eatawesome.inventoryexchange;
 import org.slf4j.Logger;
 import com.mojang.logging.LogUtils;
 import eatawesome.inventoryexchange.capabilities.InventoryExchangeCapabilities;
-import eatawesome.inventoryexchange.config.InventoryExchangeConfig;
+import eatawesome.inventoryexchange.config.InventoryExchangeCommonConfig;
 import eatawesome.inventoryexchange.gameObjs.registries.InventoryExchangeArmorMaterials;
 import eatawesome.inventoryexchange.gameObjs.registries.InventoryExchangeAttachmentTypes;
 import eatawesome.inventoryexchange.gameObjs.registries.InventoryExchangeContainerTypes;
@@ -34,7 +34,7 @@ public class InventoryExchange {
 	public static ResourceLocation rl(String path) { return ResourceLocation.fromNamespaceAndPath(MODID, path); }
 
 	public static void debugLog(String msg, Object... args) {
-		if (!FMLEnvironment.production || InventoryExchangeConfig.isDebugLoggingEnabled()) {
+		if (!FMLEnvironment.production || InventoryExchangeCommonConfig.isDebugLoggingEnabled()) {
 			LOGGER.info(msg, args);
 		} else {
 			LOGGER.debug(msg, args);
@@ -47,7 +47,7 @@ public class InventoryExchange {
 	public InventoryExchange(IEventBus modEventBus, ModContainer modContainer) {
 		instance = this;
 
-		modContainer.registerConfig(ModConfig.Type.COMMON, InventoryExchangeConfig.COMMON_SPEC, MODID + "/" + MODID + ".toml");
+		modContainer.registerConfig(ModConfig.Type.COMMON, InventoryExchangeCommonConfig.COMMON_SPEC, MODID + "/common.toml");
 
 		modEventBus.addListener(this::commonSetup);
 		modEventBus.addListener(this::registerCapabilities);
@@ -72,7 +72,8 @@ public class InventoryExchange {
 	}
 
 	private void commonSetup(FMLCommonSetupEvent event) {
-		debugLog("Debug logging enabled = {}", InventoryExchangeConfig.isDebugLoggingEnabled());
-		debugLog("Infinite container max rows = {}", InventoryExchangeConfig.getMaxInfiniteContainerRows());
+		debugLog("Debug logging enabled = {}", InventoryExchangeCommonConfig.isDebugLoggingEnabled());
+		debugLog("Infinite container max rows = {}", InventoryExchangeCommonConfig.getMaxInfiniteContainerRows());
+		debugLog("Ultima watch allowed = {}", InventoryExchangeCommonConfig.isUltimaWatchAllowed());
 	}
 }

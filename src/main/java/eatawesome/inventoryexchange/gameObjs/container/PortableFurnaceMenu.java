@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import eatawesome.inventoryexchange.gameObjs.registries.InventoryExchangeContainerTypes;
 import eatawesome.inventoryexchange.utils.PlayerHelper;
 import eatawesome.inventoryexchange.utils.PortableFurnaceHelper;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -49,10 +50,10 @@ public class PortableFurnaceMenu extends AbstractContainerMenu {
 			@Override public boolean mayPickup(Player player) { return !handler.getStackInSlot(2).isEmpty() && !readOnly; }
 			@Override
 			public void onTake(Player player, ItemStack itemStack) {
-				if (!player.level().isClientSide && !itemStack.isEmpty()) {
+				if (player instanceof ServerPlayer serverPlayer && !itemStack.isEmpty()) {
 					NeoForge.EVENT_BUS.post(new PlayerEvent.ItemSmeltedEvent(player, itemStack.copy()));
 					float exp = PortableFurnaceHelper.getSmeltingExperienceFromOutput(player.level(), itemStack);
-					PlayerHelper.awardExp(player, exp);
+					PlayerHelper.awardExp(serverPlayer, exp);
 				}
 				super.onTake(player, itemStack);
 			}
@@ -65,11 +66,11 @@ public class PortableFurnaceMenu extends AbstractContainerMenu {
 	@Override
 	public void broadcastChanges() {
 		if (!viewer.level().isClientSide) {
-			boolean changed = PortableFurnaceHelper.smeltOneIfPossible(owner, handler);
+			boolean changed = PortableFurnaceHelper.smeltOneIfPossible((ServerPlayer) owner, handler);
 			if (changed) {
 				setRemoteSlot(0, handler.getStackInSlot(0));
 				setRemoteSlot(2, handler.getStackInSlot(2));
-				PortableFurnaceHelper.sync(owner);
+				PortableFurnaceHelper.sync((ServerPlayer) owner);
 			}
 		}
 		super.broadcastChanges();

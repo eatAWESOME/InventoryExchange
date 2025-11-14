@@ -10,11 +10,11 @@ import eatawesome.inventoryexchange.capabilities.InventoryExchangeCapabilities;
 import eatawesome.inventoryexchange.gameObjs.container.InfiniteContainerMenu;
 import eatawesome.inventoryexchange.gameObjs.container.PortableFurnaceMenu;
 import eatawesome.inventoryexchange.impl.capability.PortableFurnaceImpl;
-import eatawesome.inventoryexchange.utils.CondenseToggle;
-import eatawesome.inventoryexchange.utils.FeedToggle;
+import eatawesome.inventoryexchange.utils.CondensingToggle;
+import eatawesome.inventoryexchange.utils.FeedingToggle;
 import eatawesome.inventoryexchange.utils.InfiniteContainerHelper;
-import eatawesome.inventoryexchange.utils.RepairToggle;
-import eatawesome.inventoryexchange.utils.SmeltToggle;
+import eatawesome.inventoryexchange.utils.RepairingToggle;
+import eatawesome.inventoryexchange.utils.SmeltingToggle;
 import eatawesome.inventoryexchange.utils.text.InventoryExchangeLang;
 import moze_intel.projecte.network.commands.EMCCMD;
 import moze_intel.projecte.network.commands.KnowledgeCMD;
@@ -82,28 +82,28 @@ public class InventoryExchangeCommands {
 					.then(Commands.literal("condensing")
 						.executes(ctx -> {
 							ServerPlayer self = ctx.getSource().getPlayerOrException();
-							CondenseToggle.toggleValue(self);
+							CondensingToggle.toggleValue(self);
 							return 1;
 						})
 					)
 					.then(Commands.literal("feeding")
 						.executes(ctx -> {
 							ServerPlayer self = ctx.getSource().getPlayerOrException();
-							FeedToggle.toggleValue(self);
+							FeedingToggle.toggleValue(self);
 							return 1;
 						})
 					)
 					.then(Commands.literal("repairing")
 						.executes(ctx -> {
 							ServerPlayer self = ctx.getSource().getPlayerOrException();
-							RepairToggle.toggleValue(self);
+							RepairingToggle.toggleValue(self);
 							return 1;
 						})
 					)
 					.then(Commands.literal("smelting")
 						.executes(ctx -> {
 							ServerPlayer self = ctx.getSource().getPlayerOrException();
-							SmeltToggle.toggleValue(self);
+							SmeltingToggle.toggleValue(self);
 							return 1;
 						})
 					)	
@@ -114,7 +114,7 @@ public class InventoryExchangeCommands {
 							.executes(ctx -> {
 								ServerPlayer self = ctx.getSource().getPlayerOrException();
 								boolean value = BoolArgumentType.getBool(ctx, "value");
-								FeedToggle.setValue(self, value);
+								FeedingToggle.setValue(self, value);
 								return 1;
 							})
 						)
@@ -124,7 +124,7 @@ public class InventoryExchangeCommands {
 							.executes(ctx -> {
 								ServerPlayer self = ctx.getSource().getPlayerOrException();
 								boolean value = BoolArgumentType.getBool(ctx, "value");
-								CondenseToggle.setValue(self, value);
+								CondensingToggle.setValue(self, value);
 								return 1;
 							})
 						)
@@ -134,7 +134,7 @@ public class InventoryExchangeCommands {
 							.executes(ctx -> {
 								ServerPlayer self = ctx.getSource().getPlayerOrException();
 								boolean value = BoolArgumentType.getBool(ctx, "value");
-								RepairToggle.setValue(self, value);
+								RepairingToggle.setValue(self, value);
 								return 1;
 							})
 						)
@@ -144,7 +144,7 @@ public class InventoryExchangeCommands {
 							.executes(ctx -> {
 								ServerPlayer self = ctx.getSource().getPlayerOrException();
 								boolean value = BoolArgumentType.getBool(ctx, "value");
-								SmeltToggle.setValue(self, value);
+								SmeltingToggle.setValue(self, value);
 								return 1;
 							})
 						)

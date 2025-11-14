@@ -1,6 +1,7 @@
 package eatawesome.inventoryexchange.client;
 
 import eatawesome.inventoryexchange.InventoryExchange;
+import eatawesome.inventoryexchange.config.InventoryExchangeClientConfig;
 import eatawesome.inventoryexchange.gameObjs.gui.InfiniteContainerScreen;
 import eatawesome.inventoryexchange.gameObjs.gui.PortableFurnaceScreen;
 import eatawesome.inventoryexchange.gameObjs.gui.TransmutationScreen;
@@ -13,6 +14,7 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
@@ -24,8 +26,10 @@ import net.neoforged.neoforge.common.NeoForge;
 @Mod(value = InventoryExchange.MODID, dist = Dist.CLIENT)
 public class InventoryExchangeClient {
 
-	public InventoryExchangeClient(ModContainer container, IEventBus modEventBus) {
-		container.registerExtensionPoint(IConfigScreenFactory.class, ConfigurationScreen::new);
+	public InventoryExchangeClient(ModContainer modContainer, IEventBus modEventBus) {
+		modContainer.registerConfig(ModConfig.Type.CLIENT, InventoryExchangeClientConfig.CLIENT_SPEC, InventoryExchange.MODID + "/client.toml");
+		modContainer.registerExtensionPoint(IConfigScreenFactory.class, ConfigurationScreen::new);
+		
 		modEventBus.addListener(this::registerKeybindings);
 		modEventBus.addListener(this::registerScreens);
 		modEventBus.addListener(this::clientSetup);
@@ -51,5 +55,9 @@ public class InventoryExchangeClient {
 				}
 			});
 		}
+		InventoryExchange.debugLog("Condensing Limited = {}", InventoryExchangeClientConfig.isCondensingLimited());
+		InventoryExchange.debugLog("Feeding Limited = {}", InventoryExchangeClientConfig.isFeedingLimited());
+		InventoryExchange.debugLog("Repairing Limited = {}", InventoryExchangeClientConfig.isRepairingLimited());
+		InventoryExchange.debugLog("Smelting Limited = {}", InventoryExchangeClientConfig.isSmeltingLimited());
 	}
 }

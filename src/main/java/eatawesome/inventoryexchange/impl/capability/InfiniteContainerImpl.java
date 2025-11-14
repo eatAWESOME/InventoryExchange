@@ -2,7 +2,7 @@ package eatawesome.inventoryexchange.impl.capability;
 
 import com.mojang.serialization.Codec;
 import eatawesome.inventoryexchange.capabilities.IInfiniteContainerProvider;
-import eatawesome.inventoryexchange.config.InventoryExchangeConfig;
+import eatawesome.inventoryexchange.config.InventoryExchangeCommonConfig;
 import eatawesome.inventoryexchange.gameObjs.registries.InventoryExchangeAttachmentTypes;
 import eatawesome.inventoryexchange.impl.codec.InventoryExchangeCodecHelper;
 import eatawesome.inventoryexchange.network.packets.to_client.InfiniteContainerSyncPKT;
@@ -43,7 +43,7 @@ public class InfiniteContainerImpl implements IInfiniteContainerProvider {
     }
 
     private static int currentSize() {
-        return InventoryExchangeConfig.getMaxInfiniteContainerRows() * 13;
+        return InventoryExchangeCommonConfig.getMaxInfiniteContainerRows() * 13;
     }
 
     public static final Codec<InfiniteContainerAttachment> CODEC =

@@ -5,6 +5,7 @@ import eatawesome.inventoryexchange.network.packets.to_client.AbilityEMCSyncPKT;
 import eatawesome.inventoryexchange.network.packets.to_client.InfiniteContainerSyncPKT;
 import eatawesome.inventoryexchange.network.packets.to_client.KnowledgeToastPKT;
 import eatawesome.inventoryexchange.network.packets.to_client.PortableFurnaceSyncPKT;
+import eatawesome.inventoryexchange.network.packets.to_server.ClientConfigSyncPKT;
 import eatawesome.inventoryexchange.network.packets.to_server.InfiniteContainerScrollPKT;
 import eatawesome.inventoryexchange.network.packets.to_server.InfiniteContainerSortPKT;
 import eatawesome.inventoryexchange.network.packets.to_server.KeyPressPKT;
@@ -32,9 +33,10 @@ public final class PacketHandler {
 	}
 
 	private void registerClientToServer(PacketRegistrar registrar) {
-		registrar.play(KeyPressPKT.TYPE, KeyPressPKT.STREAM_CODEC);
+		registrar.play(ClientConfigSyncPKT.TYPE, ClientConfigSyncPKT.STREAM_CODEC);
 		registrar.play(InfiniteContainerScrollPKT.TYPE, InfiniteContainerScrollPKT.STREAM_CODEC);
 		registrar.play(InfiniteContainerSortPKT.TYPE, InfiniteContainerSortPKT.STREAM_CODEC);
+		registrar.play(KeyPressPKT.TYPE, KeyPressPKT.STREAM_CODEC);
 	}
 	
 	private void registerServerToClient(PacketRegistrar registrar) {

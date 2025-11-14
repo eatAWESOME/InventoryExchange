@@ -7,12 +7,12 @@ import eatawesome.inventoryexchange.gameObjs.container.PortableCraftingMenu;
 import eatawesome.inventoryexchange.gameObjs.container.PortableFurnaceMenu;
 import eatawesome.inventoryexchange.gameObjs.container.TransmutationContainerMenu;
 import eatawesome.inventoryexchange.network.packets.IInventoryExchangePacket;
-import eatawesome.inventoryexchange.utils.CondenseToggle;
-import eatawesome.inventoryexchange.utils.FeedToggle;
+import eatawesome.inventoryexchange.utils.CondensingToggle;
+import eatawesome.inventoryexchange.utils.FeedingToggle;
 import eatawesome.inventoryexchange.utils.InfiniteContainerHelper;
 import eatawesome.inventoryexchange.utils.InventoryExchangeKeybind;
-import eatawesome.inventoryexchange.utils.RepairToggle;
-import eatawesome.inventoryexchange.utils.SmeltToggle;
+import eatawesome.inventoryexchange.utils.RepairingToggle;
+import eatawesome.inventoryexchange.utils.SmeltingToggle;
 import eatawesome.inventoryexchange.utils.UltimaToolMode;
 import eatawesome.inventoryexchange.utils.text.InventoryExchangeLang;
 import net.minecraft.network.chat.Component;
@@ -40,15 +40,11 @@ public record KeyPressPKT(InventoryExchangeKeybind key) implements IInventoryExc
 
 	@Override
 	public void handle(IPayloadContext context) {
-		Player player = context.player();
-		if (player.isSpectator()) {
-			return;
-		}
-		if (key == InventoryExchangeKeybind.CRAFTING) {
-			if (!player.level().isClientSide) {
-				player.openMenu(new net.minecraft.world.MenuProvider() {
+		if (context.player() instanceof ServerPlayer serverPlayer && !context.player().isSpectator()) {
+			if (key == InventoryExchangeKeybind.CRAFTING) {
+				serverPlayer.openMenu(new net.minecraft.world.MenuProvider() {
 		            @Override
-		            public net.minecraft.world.inventory.AbstractContainerMenu createMenu(int windowId, Inventory inv, Player p) {
+		            public net.minecraft.world.inventory.AbstractContainerMenu createMenu(int windowId, Inventory inv, Player player) {
 		                return new PortableCraftingMenu(windowId, inv);
 		            }
 		            
@@ -57,33 +53,25 @@ public record KeyPressPKT(InventoryExchangeKeybind key) implements IInventoryExc
 		                return net.minecraft.network.chat.Component.translatable("container.crafting");
 		            }
 		        });
-			}
-		    return;
-		} else if (key == InventoryExchangeKeybind.CONDENSE_TOGGLE) {
-			if (player instanceof ServerPlayer serverPlayer) {
-				CondenseToggle.toggleValue(serverPlayer);
-			}
-			return;
-		} else if (key == InventoryExchangeKeybind.FEED_TOGGLE) {
-			if (player instanceof ServerPlayer serverPlayer) {
-				FeedToggle.toggleValue(serverPlayer);
-			}
-			return;
-		} else if (key == InventoryExchangeKeybind.FURNACE) {
-			if (!player.level().isClientSide) {
-				player.openMenu(new MenuProvider() {
+			    return;
+			} else if (key == InventoryExchangeKeybind.CONDENSE_TOGGLE) {
+				CondensingToggle.toggleValue(serverPlayer);
+				return;
+			} else if (key == InventoryExchangeKeybind.FEED_TOGGLE) {
+				FeedingToggle.toggleValue(serverPlayer);
+				return;
+			} else if (key == InventoryExchangeKeybind.FURNACE) {
+				serverPlayer.openMenu(new MenuProvider() {
 					@Override
-					public AbstractContainerMenu createMenu(int windowId, Inventory inv, Player p) {
+					public AbstractContainerMenu createMenu(int windowId, Inventory inv, Player player) {
 						return new PortableFurnaceMenu(windowId, inv);
 					}
 					@Override
 					public Component getDisplayName() { return Component.translatable("container.furnace"); }
 				});
-			}
-			return;
-		} else if (key == InventoryExchangeKeybind.INFINITE_CONTAINER) {
-			if (!player.level().isClientSide) {
-				player.openMenu(new MenuProvider() {
+				return;
+			} else if (key == InventoryExchangeKeybind.INFINITE_CONTAINER) {
+				serverPlayer.openMenu(new MenuProvider() {
                     @Override
                     public AbstractContainerMenu createMenu(int windowId, Inventory inv, Player player) {
                         IItemHandlerModifiable infiniteInventory = InfiniteContainerHelper.getInventory(player);
@@ -95,21 +83,15 @@ public record KeyPressPKT(InventoryExchangeKeybind key) implements IInventoryExc
                         return InventoryExchangeLang.INFINITE_CONTAINER_CONTAINER.translate();
                     }
                 }, buf -> {});
-			}
-		    return;
-		} else if (key == InventoryExchangeKeybind.REPAIR_TOGGLE) {
-			if (player instanceof ServerPlayer serverPlayer) {
-				RepairToggle.toggleValue(serverPlayer);
-			}
-			return;
-		} else if (key == InventoryExchangeKeybind.SMELT_TOGGLE) {
-			if (player instanceof ServerPlayer serverPlayer) {
-				SmeltToggle.toggleValue(serverPlayer);
-			}
-			return;
-		} else if (key == InventoryExchangeKeybind.TRANSMUTATION) {
-			if (!player.level().isClientSide) {
-				player.openMenu(new MenuProvider() {
+			    return;
+			} else if (key == InventoryExchangeKeybind.REPAIR_TOGGLE) {
+				RepairingToggle.toggleValue(serverPlayer);
+				return;
+			} else if (key == InventoryExchangeKeybind.SMELT_TOGGLE) {
+				SmeltingToggle.toggleValue(serverPlayer);
+				return;
+			} else if (key == InventoryExchangeKeybind.TRANSMUTATION) {
+				serverPlayer.openMenu(new MenuProvider() {
 					@Override
 					public AbstractContainerMenu createMenu(int windowId, Inventory inv, Player player) {
 						return new TransmutationContainerMenu(windowId, inv);
@@ -120,13 +102,11 @@ public record KeyPressPKT(InventoryExchangeKeybind key) implements IInventoryExc
 						return InventoryExchangeLang.TRANSMUTATION_CONTAINER.translate();
 					}
 				}, buf -> buf.writeBoolean(false));
-			}
-		    return;
-		} else if (key == InventoryExchangeKeybind.ULTIMA_TOOL_MODE) {
-			if (player instanceof ServerPlayer serverPlayer) {
+			    return;
+			} else if (key == InventoryExchangeKeybind.ULTIMA_TOOL_MODE) {
 				UltimaToolMode.nextValue(serverPlayer);
+				return;
 			}
-			return;
 		}
 	}
 }

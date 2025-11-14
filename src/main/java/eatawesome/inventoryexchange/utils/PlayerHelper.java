@@ -15,7 +15,6 @@ import moze_intel.projecte.api.ItemInfo;
 import moze_intel.projecte.api.capabilities.IKnowledgeProvider;
 import moze_intel.projecte.api.capabilities.PECapabilities;
 import moze_intel.projecte.api.proxy.IEMCProxy;
-import moze_intel.projecte.integration.IntegrationHelper;
 import moze_intel.projecte.utils.Constants;
 import moze_intel.projecte.utils.MathUtils;
 import moze_intel.projecte.utils.ReadOnlyScoreCriteria;
@@ -51,7 +50,6 @@ import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.common.util.BlockSnapshot;
 import net.neoforged.neoforge.event.level.BlockEvent;
 import net.neoforged.neoforge.event.level.BlockEvent.EntityMultiPlaceEvent;
-import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.IItemHandlerModifiable;
 import net.neoforged.neoforge.network.PacketDistributor;
 
@@ -119,9 +117,9 @@ public final class PlayerHelper {
     }
 
     public static ItemStack findFirstItem(Player player, Holder<Item> consumeFrom) {
-        for (ItemStack s : player.getInventory().items) {
-            if (!s.isEmpty() && s.is(consumeFrom)) {
-                return s;
+        for (ItemStack itemStack : player.getInventory().items) {
+            if (!itemStack.isEmpty() && itemStack.is(consumeFrom)) {
+                return itemStack;
             }
         }
         return ItemStack.EMPTY;
@@ -132,26 +130,6 @@ public final class PlayerHelper {
             ItemStack itemStack = player.getInventory().getItem(i);
             if (!itemStack.isEmpty() && checker.test(player, itemStack)) {
                 return true;
-            }
-        }
-        return false;
-    }
-
-    public static boolean checkHotbarCurios(Player player, BiPredicate<Player, ItemStack> checker) {
-        if (checkHotbar(player, checker)) {
-            return true;
-        }
-        ItemStack offhand = player.getOffhandItem();
-        if (!offhand.isEmpty() && checker.test(player, offhand)) {
-            return true;
-        }
-        IItemHandler curios = player.getCapability(IntegrationHelper.CURIO_ITEM_HANDLER);
-        if (curios != null) {
-            for (int i = 0, slots = curios.getSlots(); i < slots; i++) {
-                ItemStack itemStack = curios.getStackInSlot(i);
-                if (!itemStack.isEmpty() && checker.test(player, itemStack)) {
-                    return true;
-                }
             }
         }
         return false;
@@ -233,33 +211,31 @@ public final class PlayerHelper {
         PECore.debugLog("Synced knowledge and EMC for {}", serverPlayer.getName());
     }
 
-    public static void containerKnowledgeCheck(Player player, AbstractContainerMenu container) {
+    public static void containerKnowledgeCheck(ServerPlayer serverPlayer, AbstractContainerMenu container) {
         for (ItemStack itemStack : container.getItems()) {
-            knowledgeCheck(player, itemStack);
+            knowledgeCheck(serverPlayer, itemStack);
         }
-        for (ItemStack itemStack : player.inventoryMenu.getItems()) {
-            knowledgeCheck(player, itemStack);
+        for (ItemStack itemStack : serverPlayer.inventoryMenu.getItems()) {
+            knowledgeCheck(serverPlayer, itemStack);
         }
     }
     
-    public static void knowledgeCheck(Player player, ItemStack itemStack) {
-        if (player instanceof ServerPlayer serverPlayer) {
-            try {
-                IKnowledgeProvider knowledge = player.getCapability(PECapabilities.KNOWLEDGE_CAPABILITY);
-                if (!itemStack.isEmpty() && IEMCProxy.INSTANCE.getValue(itemStack) > 0) {
-                    if (!knowledge.hasKnowledge(itemStack)) {
-                        knowledge.addKnowledge(itemStack);
-                        knowledge.syncKnowledgeChange(serverPlayer, ItemInfo.fromStack(itemStack), true);
-                        ItemStack icon = itemStack.copy();
-                        icon.setCount(1);
-                        PacketDistributor.sendToPlayer(serverPlayer, new KnowledgeToastPKT(icon));
-                    }
+    public static void knowledgeCheck(ServerPlayer serverPlayer, ItemStack itemStack) {
+        try {
+            IKnowledgeProvider knowledge = serverPlayer.getCapability(PECapabilities.KNOWLEDGE_CAPABILITY);
+            if (!itemStack.isEmpty() && IEMCProxy.INSTANCE.getValue(itemStack) > 0) {
+                if (!knowledge.hasKnowledge(itemStack)) {
+                    knowledge.addKnowledge(itemStack);
+                    knowledge.syncKnowledgeChange(serverPlayer, ItemInfo.fromStack(itemStack), true);
+                    ItemStack icon = itemStack.copy();
+                    icon.setCount(1);
+                    PacketDistributor.sendToPlayer(serverPlayer, new KnowledgeToastPKT(icon));
                 }
-            } catch (IllegalArgumentException e) {
-                System.err.println("Error retrieving knowledge provider: " + e.getMessage());
             }
-            PECore.debugLog("Checked {}'s knowledge for {}", itemStack, serverPlayer.getName());
+        } catch (IllegalArgumentException e) {
+            System.err.println("Error retrieving knowledge provider: " + e.getMessage());
         }
+        PECore.debugLog("Checked {}'s knowledge for {}", itemStack, serverPlayer.getName());
     }
     
     public static boolean canInventoryAccept(Inventory inv, ItemStack itemStack) {
@@ -395,7 +371,7 @@ public final class PlayerHelper {
         }
     }
     
-    public static double repairItem(Player player, ItemStack itemStack, double availableEMC) {
+    public static double repairItem(ServerPlayer serverPlayer, ItemStack itemStack, double availableEMC) {
         if (availableEMC <= 0 || itemStack.isEmpty() || !itemStack.isDamageableItem() || !itemStack.isDamaged()) return 0;
 
         ItemStack stackCopy = itemStack.copy();
@@ -409,56 +385,68 @@ public final class PlayerHelper {
         return 0;
     }
     
-    public static void awardExp(Player player, float exp) {
-        if (player.level() instanceof ServerLevel serverLevel) {
+    public static boolean hasRepairableItem(Player player) {
+    	for (ItemStack itemStack : player.getInventory().items) {
+    		if (itemStack.isDamageableItem() && itemStack.isDamaged()) return true;
+    	}
+		for (ItemStack itemStack : player.getInventory().armor) {
+    		if (itemStack.isDamageableItem() && itemStack.isDamaged()) return true;
+    	}
+		for (ItemStack itemStack : player.getInventory().offhand) {
+    		if (itemStack.isDamageableItem() && itemStack.isDamaged()) return true;
+    	}
+		return false;
+    }
+    
+    public static void awardExp(ServerPlayer serverPlayer, float exp) {
+        if (serverPlayer.level() instanceof ServerLevel serverLevel) {
             if (exp <= 0F) return;
             int outputExp = net.minecraft.util.Mth.floor(exp);
             float fractionalExp = exp - outputExp;
-            if (fractionalExp > 0F && player.getRandom().nextFloat() < fractionalExp) outputExp++;
-            ExperienceOrb.award(serverLevel, player.position(), outputExp);
+            if (fractionalExp > 0F && serverPlayer.getRandom().nextFloat() < fractionalExp) outputExp++;
+            ExperienceOrb.award(serverLevel, serverPlayer.position(), outputExp);
         }
     }
     
-    public static void condenseFirstItem(Player player) {
-        if (player instanceof ServerPlayer serverPlayer) {
-            Inventory inventory = player.getInventory();
-            for (ItemStack itemStack : inventory.items) {
-                if (itemStack.isEmpty()) continue;
-                if (itemStack.is(InventoryExchangeTags.Items.NO_INVENTORY_CONDENSING)) continue;
-                
-                long emcValue = IEMCProxy.INSTANCE.getValue(itemStack.copyWithCount(1));
-                if (emcValue <= 0) continue;
-                
-                knowledgeCheck(player, itemStack);
-                
-                IKnowledgeProvider knowledge = player.getCapability(PECapabilities.KNOWLEDGE_CAPABILITY);
-                BigInteger current = knowledge.getEmc();
-                knowledge.setEmc(current.add(BigInteger.valueOf(emcValue)));
-                knowledge.syncEmc(serverPlayer);
-                
-                itemStack.shrink(1);
-                return;
-            }
-            IItemHandlerModifiable handler = InfiniteContainerHelper.getInventory(player);
-            for (int i = 0; i < handler.getSlots(); i++) {
-                ItemStack itemStack = handler.getStackInSlot(i);
-                if (itemStack.isEmpty()) continue;
-                if (itemStack.is(InventoryExchangeTags.Items.NO_INVENTORY_CONDENSING)) continue;
-                
-                long emcValue = IEMCProxy.INSTANCE.getValue(itemStack.copyWithCount(1));
-                if (emcValue <= 0) continue;
-                
-                knowledgeCheck(player, itemStack);
-                
-                IKnowledgeProvider knowledge = player.getCapability(PECapabilities.KNOWLEDGE_CAPABILITY);
-                BigInteger current = knowledge.getEmc();
-                knowledge.setEmc(current.add(BigInteger.valueOf(emcValue)));
-                knowledge.syncEmc(serverPlayer);
-                
-                itemStack.shrink(1);
-                handler.setStackInSlot(i, itemStack.isEmpty() ? ItemStack.EMPTY : itemStack);
-                return;
-            }
+    public static boolean condenseFirstItem(ServerPlayer serverPlayer) {
+        Inventory inventory = serverPlayer.getInventory();
+        for (ItemStack itemStack : inventory.items) {
+            if (itemStack.isEmpty()) continue;
+            if (itemStack.is(InventoryExchangeTags.Items.NO_INVENTORY_CONDENSING)) continue;
+            
+            long emcValue = IEMCProxy.INSTANCE.getValue(itemStack.copyWithCount(1));
+            if (emcValue <= 0) continue;
+            
+            knowledgeCheck(serverPlayer, itemStack);
+            
+            IKnowledgeProvider knowledge = serverPlayer.getCapability(PECapabilities.KNOWLEDGE_CAPABILITY);
+            BigInteger current = knowledge.getEmc();
+            knowledge.setEmc(current.add(BigInteger.valueOf(emcValue)));
+            knowledge.syncEmc(serverPlayer);
+            
+            itemStack.shrink(1);
+            return true;
         }
+        IItemHandlerModifiable handler = InfiniteContainerHelper.getInventory(serverPlayer);
+        for (int i = 0; i < handler.getSlots(); i++) {
+            ItemStack itemStack = handler.getStackInSlot(i);
+            if (itemStack.isEmpty()) continue;
+            if (itemStack.is(InventoryExchangeTags.Items.NO_INVENTORY_CONDENSING)) continue;
+            
+            long emcValue = IEMCProxy.INSTANCE.getValue(itemStack.copyWithCount(1));
+            if (emcValue <= 0) continue;
+            
+            knowledgeCheck(serverPlayer, itemStack);
+            
+            IKnowledgeProvider knowledge = serverPlayer.getCapability(PECapabilities.KNOWLEDGE_CAPABILITY);
+            BigInteger current = knowledge.getEmc();
+            knowledge.setEmc(current.add(BigInteger.valueOf(emcValue)));
+            knowledge.syncEmc(serverPlayer);
+            
+            itemStack.shrink(1);
+            handler.setStackInSlot(i, itemStack.isEmpty() ? ItemStack.EMPTY : itemStack);
+            return true;
+        }
+        return false;
     }
 }

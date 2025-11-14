@@ -83,12 +83,16 @@ public class InventoryExchangeLangProvider extends BaseLanguageProvider {
 		add(PELang.RELOAD_NOTICE, "Restart or use \"/reload\" when all changes are complete.");
 		add(InventoryExchangeLang.CONDENSING_ENABLED, "Inventory Condensing: Enabled");
 		add(InventoryExchangeLang.CONDENSING_DISABLED, "Inventory Condensing: Disabled");
+		add(InventoryExchangeLang.CONDENSING_COMPLETED, "Inventory Condensing: Completed");
 		add(InventoryExchangeLang.FEEDING_ENABLED, "Feeding via EMC: Enabled");
 		add(InventoryExchangeLang.FEEDING_DISABLED, "Feeding via EMC: Disabled");
-		add(InventoryExchangeLang.REPAIR_ENABLED, "Repairing Items via EMC: Enabled");
-		add(InventoryExchangeLang.REPAIR_DISABLED, "Repairing Items via EMC: Disabled");
+		add(InventoryExchangeLang.FEEDING_COMPLETED, "Feeding via EMC: Completed");
+		add(InventoryExchangeLang.REPAIRING_ENABLED, "Repairing Items via EMC: Enabled");
+		add(InventoryExchangeLang.REPAIRING_DISABLED, "Repairing Items via EMC: Disabled");
+		add(InventoryExchangeLang.REPAIRING_COMPLETED, "Repairing Items via EMC: Completed");
 		add(InventoryExchangeLang.SMELTING_ENABLED, "Smelting via EMC: Enabled");
 		add(InventoryExchangeLang.SMELTING_DISABLED, "Smelting via EMC: Disabled");
+		add(InventoryExchangeLang.SMELTING_COMPLETED, "Smelting via EMC: Completed");
 		
 		// Items
 		add(InventoryExchangeItems.ULTIMA, "Ultima");

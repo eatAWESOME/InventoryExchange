@@ -34,41 +34,41 @@ public record InfiniteContainerSortPKT() implements IInventoryExchangePacket {
     @Override
     public void handle(IPayloadContext context) {
         Player player = context.player();
-        if (!(player instanceof ServerPlayer serverPlayer)) {
-            return;
-        }
-        IItemHandlerModifiable handler = InfiniteContainerHelper.getInventory(player);
-        if (handler == null) {
-            return;
-        }
-
-        // Compact and sort
-        List<ItemStack> all = new ArrayList<>();
-        for (int i = 0, slots = handler.getSlots(); i < slots; i++) {
-            ItemStack s = handler.getStackInSlot(i);
-            if (!s.isEmpty()) {
-                all.add(s.copy());
+        if (player instanceof ServerPlayer serverPlayer) {
+        	IItemHandlerModifiable handler = InfiniteContainerHelper.getInventory(serverPlayer);
+            if (handler == null) {
+                return;
             }
+
+            // Compact and sort
+            List<ItemStack> all = new ArrayList<>();
+            for (int i = 0, slots = handler.getSlots(); i < slots; i++) {
+                ItemStack s = handler.getStackInSlot(i);
+                if (!s.isEmpty()) {
+                    all.add(s.copy());
+                }
+            }
+
+            // Clear
+            for (int i = 0, slots = handler.getSlots(); i < slots; i++) {
+                handler.setStackInSlot(i, ItemStack.EMPTY);
+            }
+
+            List<ItemStack> compacted = compactStacks(all);
+            compacted.sort(stackComparator());
+
+            // Refill
+            int idx = 0;
+            int totalSlots = handler.getSlots();
+            for (ItemStack s : compacted) {
+                if (idx >= totalSlots) break;
+                handler.setStackInSlot(idx++, s);
+            }
+
+            // Sync back to client
+            new InfiniteContainerImpl(serverPlayer).sync(serverPlayer);
         }
-
-        // Clear
-        for (int i = 0, slots = handler.getSlots(); i < slots; i++) {
-            handler.setStackInSlot(i, ItemStack.EMPTY);
-        }
-
-        List<ItemStack> compacted = compactStacks(all);
-        compacted.sort(stackComparator());
-
-        // Refill
-        int idx = 0;
-        int totalSlots = handler.getSlots();
-        for (ItemStack s : compacted) {
-            if (idx >= totalSlots) break;
-            handler.setStackInSlot(idx++, s);
-        }
-
-        // Sync back to client
-        new InfiniteContainerImpl(player).sync(serverPlayer);
+        
     }
 
     private static Comparator<ItemStack> stackComparator() {

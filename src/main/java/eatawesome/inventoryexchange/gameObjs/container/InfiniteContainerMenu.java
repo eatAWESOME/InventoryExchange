@@ -1,6 +1,6 @@
 package eatawesome.inventoryexchange.gameObjs.container;
 
-import eatawesome.inventoryexchange.config.InventoryExchangeConfig;
+import eatawesome.inventoryexchange.config.InventoryExchangeCommonConfig;
 import eatawesome.inventoryexchange.gameObjs.registries.InventoryExchangeContainerTypes;
 import eatawesome.inventoryexchange.handlers.ScrollingSlotItemHandler;
 import eatawesome.inventoryexchange.utils.InfiniteContainerHelper;
@@ -87,7 +87,7 @@ public class InfiniteContainerMenu extends AbstractContainerMenu {
     }
 
     public static int configMaxRows() {
-        return InventoryExchangeConfig.getMaxInfiniteContainerRows();
+        return InventoryExchangeCommonConfig.getMaxInfiniteContainerRows();
     }
 
     public static int totalSlotCount() {

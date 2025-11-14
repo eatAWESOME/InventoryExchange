@@ -2,7 +2,7 @@ package eatawesome.inventoryexchange.config;
 
 import net.neoforged.neoforge.common.ModConfigSpec;
 
-public final class InventoryExchangeConfig {
+public final class InventoryExchangeCommonConfig {
 
 	// spec
 	public static final ModConfigSpec COMMON_SPEC;
@@ -24,8 +24,8 @@ public final class InventoryExchangeConfig {
 
 	static {
 		// header
-		BUILDER.comment(" " + InventoryExchangeConfigTranslations.CONFIG_HEADER.title())
-			   .translation(InventoryExchangeConfigTranslations.CONFIG_HEADER.getTranslationKey());
+		BUILDER.comment(" " + InventoryExchangeConfigTranslations.COMMON_HEADER.title())
+			   .translation(InventoryExchangeConfigTranslations.COMMON_HEADER.getTranslationKey());
 
 		// entries
 		CFG_DEBUG_LOGS = BUILDER
@@ -56,7 +56,7 @@ public final class InventoryExchangeConfig {
 		COMMON_SPEC = BUILDER.build();
 	}
 
-	private InventoryExchangeConfig() {}
+	private InventoryExchangeCommonConfig() {}
 
 	public static boolean isDebugLoggingEnabled() {
 		return CFG_DEBUG_LOGS.get();

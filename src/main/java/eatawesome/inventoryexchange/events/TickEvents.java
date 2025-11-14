@@ -9,12 +9,12 @@ import eatawesome.inventoryexchange.InventoryExchange;
 import eatawesome.inventoryexchange.capabilities.IAbilityEMCProvider;
 import eatawesome.inventoryexchange.capabilities.InventoryExchangeCapabilities;
 import eatawesome.inventoryexchange.gameObjs.container.PortableFurnaceMenu;
-import eatawesome.inventoryexchange.utils.CondenseToggle;
-import eatawesome.inventoryexchange.utils.FeedToggle;
+import eatawesome.inventoryexchange.utils.CondensingToggle;
+import eatawesome.inventoryexchange.utils.FeedingToggle;
 import eatawesome.inventoryexchange.utils.PlayerHelper;
 import eatawesome.inventoryexchange.utils.PortableFurnaceHelper;
-import eatawesome.inventoryexchange.utils.RepairToggle;
-import eatawesome.inventoryexchange.utils.SmeltToggle;
+import eatawesome.inventoryexchange.utils.RepairingToggle;
+import eatawesome.inventoryexchange.utils.SmeltingToggle;
 import moze_intel.projecte.api.capabilities.IKnowledgeProvider;
 import moze_intel.projecte.api.capabilities.PECapabilities;
 import moze_intel.projecte.gameObjs.registries.PESoundEvents;
@@ -49,20 +49,18 @@ public class TickEvents {
 	}
 	
 	@SubscribeEvent
-	public static void playerTick(PlayerTickEvent.Post event) {
-		Player player = event.getEntity();
-		
-		if (player instanceof ServerPlayer serverPlayer) {
-			boolean isFlying = player.getAbilities().flying;
-			boolean wasFlying = wasFlyingMap.getOrDefault(player.getUUID(), false);
+	public static void onPlayerTickPost(PlayerTickEvent.Post event) {
+		if (event.getEntity() instanceof ServerPlayer serverPlayer) {
+			boolean isFlying = serverPlayer.getAbilities().flying;
+			boolean wasFlying = wasFlyingMap.getOrDefault(serverPlayer.getUUID(), false);
 	
-			InternalAbilities.tick(player);
+			InternalAbilities.tick(serverPlayer);
 			
-			IKnowledgeProvider knowledge = player.getCapability(PECapabilities.KNOWLEDGE_CAPABILITY);
-			IAbilityEMCProvider abilityEMC = player.getCapability(InventoryExchangeCapabilities.ABILITY_EMC_CAPABILITY);
+			IKnowledgeProvider knowledge = serverPlayer.getCapability(PECapabilities.KNOWLEDGE_CAPABILITY);
+			IAbilityEMCProvider abilityEMC = serverPlayer.getCapability(InventoryExchangeCapabilities.ABILITY_EMC_CAPABILITY);
 			
 			// Flying via EMC
-			if (isFlying && !player.isCreative() && !player.isSpectator()) {
+			if (isFlying && !serverPlayer.isCreative() && !serverPlayer.isSpectator()) {
 				if (abilityEMC.getEmc().intValue() >= FLYING_COST) {
 					int emc = abilityEMC.getEmc().intValue() - FLYING_COST;
 					abilityEMC.setEmc(BigInteger.valueOf(emc));
@@ -77,37 +75,46 @@ public class TickEvents {
 				}
 			}
 			if (isFlying && !wasFlying) {
-				player.level().playSound(null, player.getX(), player.getY(), player.getZ(), PESoundEvents.HEAL.get(), SoundSource.PLAYERS, 0.8F, 1.0F);
-				wasFlyingMap.put(player.getUUID(), isFlying);
+				serverPlayer.level().playSound(null, serverPlayer.getX(), serverPlayer.getY(), serverPlayer.getZ(), PESoundEvents.HEAL.get(), SoundSource.PLAYERS, 0.8F, 1.0F);
+				wasFlyingMap.put(serverPlayer.getUUID(), isFlying);
 			} else if (wasFlying && !isFlying) {
-				player.level().playSound(null, player.getX(), player.getY(), player.getZ(), PESoundEvents.UNCHARGE.get(), SoundSource.PLAYERS, 0.8F, 1.0F);
-				wasFlyingMap.put(player.getUUID(), isFlying);
+				serverPlayer.level().playSound(null, serverPlayer.getX(), serverPlayer.getY(), serverPlayer.getZ(), PESoundEvents.UNCHARGE.get(), SoundSource.PLAYERS, 0.8F, 1.0F);
+				wasFlyingMap.put(serverPlayer.getUUID(), isFlying);
 			}
 		
 			// Inventory Condensing
-			if (CondenseToggle.isEnabled(player)) {
-				PlayerHelper.condenseFirstItem(player);
+			if (CondensingToggle.isEnabled(serverPlayer)) {
+				boolean condensingSuccess = PlayerHelper.condenseFirstItem(serverPlayer);
+				if (!condensingSuccess && CondensingToggle.isLimited(serverPlayer)) {
+					CondensingToggle.setComplete(serverPlayer);
+				}
 			}
 		
 			// Eating via EMC
-			if (FeedToggle.isEnabled(player) && player.getFoodData().getFoodLevel() <= 16 && !player.isCreative() && !player.isSpectator()) {
-				if (knowledge.getEmc().intValue() >= FEED_COST) {
-					player.getFoodData().eat(FEED_POINTS, FEED_SATURATION);
-					player.level().playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.GENERIC_EAT, SoundSource.PLAYERS, 0.8F, 1.0F);
-					int emc = knowledge.getEmc().intValue() - FEED_COST;
-					knowledge.setEmc(BigInteger.valueOf(emc));
-					knowledge.syncEmc(serverPlayer);
+			if (FeedingToggle.isEnabled(serverPlayer)) {
+				if (serverPlayer.getFoodData().getFoodLevel() <= 16) {
+					if (!serverPlayer.isCreative() && !serverPlayer.isSpectator()) {
+						if (knowledge.getEmc().intValue() >= FEED_COST) {
+							serverPlayer.getFoodData().eat(FEED_POINTS, FEED_SATURATION);
+							serverPlayer.level().playSound(null, serverPlayer.getX(), serverPlayer.getY(), serverPlayer.getZ(), SoundEvents.GENERIC_EAT, SoundSource.PLAYERS, 0.8F, 1.0F);
+							int emc = knowledge.getEmc().intValue() - FEED_COST;
+							knowledge.setEmc(BigInteger.valueOf(emc));
+							knowledge.syncEmc(serverPlayer);
+						}
+					}
+				} else if (FeedingToggle.isLimited(serverPlayer)) {
+					FeedingToggle.setComplete(serverPlayer);
 				}
 			}
 			
 			// Repairing via EMC
-			if (RepairToggle.isEnabled(player)) {
+			if (RepairingToggle.isEnabled(serverPlayer)) {
 				double availableEMC = (double) knowledge.getEmc().intValue() + ((double) abilityEMC.getEmc().intValue()) / 100;
 				double spentEMC = 0;
 
-				for (ItemStack itemStack : player.getInventory().items) spentEMC += PlayerHelper.repairItem(player, itemStack, availableEMC - spentEMC);
-				for (ItemStack itemStack : player.getInventory().armor) spentEMC += PlayerHelper.repairItem(player, itemStack, availableEMC - spentEMC);
-				for (ItemStack itemStack : player.getInventory().offhand) spentEMC += PlayerHelper.repairItem(player, itemStack, availableEMC - spentEMC);
+				for (ItemStack itemStack : serverPlayer.getInventory().items) spentEMC += PlayerHelper.repairItem(serverPlayer, itemStack, availableEMC - spentEMC);
+				for (ItemStack itemStack : serverPlayer.getInventory().armor) spentEMC += PlayerHelper.repairItem(serverPlayer, itemStack, availableEMC - spentEMC);
+				for (ItemStack itemStack : serverPlayer.getInventory().offhand) spentEMC += PlayerHelper.repairItem(serverPlayer, itemStack, availableEMC - spentEMC);
 
 				if (spentEMC > 0) {
 					int totalEmc = (int) Math.floor(availableEMC - spentEMC);
@@ -116,18 +123,25 @@ public class TickEvents {
 					knowledge.syncEmc(serverPlayer);
 					abilityEMC.setEmc(BigInteger.valueOf(emc));
 					abilityEMC.sync(serverPlayer);
+				} else if (RepairingToggle.isLimited(serverPlayer)) {
+					if (!PlayerHelper.hasRepairableItem(serverPlayer)) {
+						RepairingToggle.setComplete(serverPlayer);
+					}
 				}
 			}
 			
 			// Smelting via EMC
-			if (!player.isSpectator()) {
-		        if (!(player.containerMenu instanceof PortableFurnaceMenu)) {
+			if (!serverPlayer.isSpectator()) {
+		        if (!(serverPlayer.containerMenu instanceof PortableFurnaceMenu)) {
 		        	// Portable Furnace Smelting
-			        PortableFurnaceHelper.smeltOneIfPossible(player, new PortableFurnaceImpl(player).getInventory());
+			        PortableFurnaceHelper.smeltOneIfPossible(serverPlayer, new PortableFurnaceImpl(serverPlayer).getInventory());
 			        
 			        // Auto Smelting in Inventory
-			        if (SmeltToggle.isEnabled(player) && !player.isCreative()) {
-			        	PortableFurnaceHelper.smeltOneIfPossible(player);
+			        if (SmeltingToggle.isEnabled(serverPlayer) && !serverPlayer.isCreative()) {
+			        	boolean smeltingSuccess = PortableFurnaceHelper.smeltOneIfPossible(serverPlayer);
+						if (!smeltingSuccess && SmeltingToggle.isLimited(serverPlayer)) {
+							SmeltingToggle.setComplete(serverPlayer);
+						}
 			        }
 		        }
 			}
