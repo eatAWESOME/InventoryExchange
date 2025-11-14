@@ -43,6 +43,8 @@ import net.minecraft.world.level.block.SignBlock;
 import net.minecraft.world.level.block.entity.SignBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.HitResult.Type;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.scores.criteria.ObjectiveCriteria;
 import net.neoforged.neoforge.common.CommonHooks;
@@ -449,4 +451,29 @@ public final class PlayerHelper {
         }
         return false;
     }
+    
+    public static void pickBlockWithEMC(ServerPlayer serverPlayer) {
+    	if (serverPlayer.isCreative() || serverPlayer.isSpectator()) return;
+		if (!serverPlayer.getMainHandItem().isEmpty()) return;
+		HitResult hit = serverPlayer.pick(5.0D, 1.0F, false);
+		if (!(hit instanceof BlockHitResult bhr) || bhr.getType() != Type.BLOCK) return;
+		BlockPos pos = bhr.getBlockPos();
+		BlockState state = serverPlayer.level().getBlockState(pos);
+		if (state.isAir()) return;
+		ItemStack itemStack = new ItemStack(state.getBlock());
+		if (itemStack.isEmpty()) return;
+		knowledgeCheck(serverPlayer, itemStack);
+		IKnowledgeProvider knowledge = serverPlayer.getCapability(PECapabilities.KNOWLEDGE_CAPABILITY);
+		if (knowledge == null) return;
+		long singleEMC = IEMCProxy.INSTANCE.getValue(itemStack.copyWithCount(1));
+		if (singleEMC <= 0) return;
+		BigInteger availableEMC = knowledge.getEmc();
+		if (availableEMC.compareTo(BigInteger.valueOf(singleEMC)) < 0) return;
+		int count = (int) Math.min(availableEMC.divide(BigInteger.valueOf(singleEMC)).longValue(), itemStack.getMaxStackSize());
+		if (count <= 0) return;
+		serverPlayer.setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND, itemStack.copyWithCount(count));
+		knowledge.setEmc(availableEMC.subtract(BigInteger.valueOf(singleEMC).multiply(BigInteger.valueOf(count))));
+		knowledge.syncEmc(serverPlayer);
+		playPickupSound(serverPlayer);
+	}
 }

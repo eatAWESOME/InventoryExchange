@@ -32,7 +32,7 @@ public class ClientKeyHelper {
 	}
 
 	private static void addKeyBinding(RegisterKeyMappingsEvent event, ImmutableBiMap.Builder<InventoryExchangeKeybind, KeyMapping> builder, InventoryExchangeKeybind keyBind, KeyModifier modifier, int keyCode) {
-		KeyMapping keyMapping = new IEKeyMapping(keyBind, modifier, keyCode);
+		KeyMapping keyMapping = new InventoryExchangeKeyMapping(keyBind, modifier, keyCode);
 		builder.put(keyBind, keyMapping);
 		event.register(keyMapping);
 	}
@@ -45,12 +45,12 @@ public class ClientKeyHelper {
 		return keyMapping.getTranslatedKeyMessage();
 	}
 
-	private static class IEKeyMapping extends KeyMapping {
+	private static class InventoryExchangeKeyMapping extends KeyMapping {
 
 		private final InventoryExchangeKeybind keybind;
 		private boolean lastState;
 
-		IEKeyMapping(InventoryExchangeKeybind keybind, KeyModifier keyModifier, int keyCode) {
+		InventoryExchangeKeyMapping(InventoryExchangeKeybind keybind, KeyModifier keyModifier, int keyCode) {
 			super(keybind.getTranslationKey(), KeyConflictContext.IN_GAME, keyModifier, InputConstants.Type.KEYSYM, keyCode, InventoryExchangeLang.INVENTORYEXCHANGE.getTranslationKey());
 			this.keybind = keybind;
 		}

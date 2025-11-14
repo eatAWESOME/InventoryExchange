@@ -17,6 +17,7 @@ public enum InventoryExchangeKeybind implements IHasEnumNameTranslationKey {
 	FEED_TOGGLE,
 	FURNACE,
 	INFINITE_CONTAINER,
+	PICK_ITEM,
 	REPAIR_TOGGLE,
 	SMELT_TOGGLE,
 	TRANSMUTATION,

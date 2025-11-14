@@ -11,6 +11,7 @@ import eatawesome.inventoryexchange.utils.CondensingToggle;
 import eatawesome.inventoryexchange.utils.FeedingToggle;
 import eatawesome.inventoryexchange.utils.InfiniteContainerHelper;
 import eatawesome.inventoryexchange.utils.InventoryExchangeKeybind;
+import eatawesome.inventoryexchange.utils.PlayerHelper;
 import eatawesome.inventoryexchange.utils.RepairingToggle;
 import eatawesome.inventoryexchange.utils.SmeltingToggle;
 import eatawesome.inventoryexchange.utils.UltimaToolMode;
@@ -84,6 +85,9 @@ public record KeyPressPKT(InventoryExchangeKeybind key) implements IInventoryExc
                     }
                 }, buf -> {});
 			    return;
+			} else if (key == InventoryExchangeKeybind.PICK_ITEM) {
+				PlayerHelper.pickBlockWithEMC(serverPlayer);
+				return;
 			} else if (key == InventoryExchangeKeybind.REPAIR_TOGGLE) {
 				RepairingToggle.toggleValue(serverPlayer);
 				return;
