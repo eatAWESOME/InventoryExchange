@@ -62,7 +62,7 @@ Wearing the full Ultima armor set grants continuous:
 | Pick Block (vanilla key)       | Middle Button | Gives a stack of the targeted block using EMC (survival only, empty hand) |
 | Toggle Repairing Items via EMC | Numpad 8      | Toggles repairing automation                                              |
 | Toggle Smelting Items via EMC  | Numpad 3      | Toggles smelting automation                                               |
-| Transmutation                  | Numpad 5      | Opens transmutation                                                       |
+| Open Transmutation             | Numpad 5      | Opens transmutation                                                       |
 | Change Ultima Tool Mode        | Numpad 9      | Cycles ultima tool mode                                                   |
 
 Note: Pick Block uses the vanilla pick block key and is not registered as a separate keybind.

@@ -336,7 +336,7 @@
   "key.inventoryexchange.infinite_container": "Open Infinite Inventory",
   "key.inventoryexchange.repair_toggle": "Toggle Repairing Items via EMC",
   "key.inventoryexchange.smelt_toggle": "Toggle Smelting Items via EMC",
-  "key.inventoryexchange.transmutation": "Transmutation",
+  "key.inventoryexchange.transmutation": "Open Transmutation",
   "key.inventoryexchange.ultima_tool_mode": "Change Ultima Tool Mode",
   "message.inventoryexchange.condensing_completed": "Inventory Condensing: Completed",
   "message.inventoryexchange.condensing_disabled": "Inventory Condensing: Disabled",

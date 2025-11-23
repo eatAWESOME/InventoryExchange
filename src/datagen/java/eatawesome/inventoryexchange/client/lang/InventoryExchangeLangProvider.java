@@ -48,7 +48,7 @@ public class InventoryExchangeLangProvider extends BaseLanguageProvider {
 		add(InventoryExchangeKeybind.INFINITE_CONTAINER, "Open Infinite Inventory");
 		add(InventoryExchangeKeybind.REPAIR_TOGGLE, "Toggle Repairing Items via EMC");
 		add(InventoryExchangeKeybind.SMELT_TOGGLE, "Toggle Smelting Items via EMC");
-		add(InventoryExchangeKeybind.TRANSMUTATION, "Transmutation");
+		add(InventoryExchangeKeybind.TRANSMUTATION, "Open Transmutation");
 		add(InventoryExchangeKeybind.ULTIMA_TOOL_MODE, "Change Ultima Tool Mode");
 
 		// Commands
