@@ -15,10 +15,12 @@ import moze_intel.projecte.api.capabilities.PECapabilities;
 import net.minecraft.advancements.AdvancementRewards;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.stats.Stats;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameRules;
@@ -41,60 +43,25 @@ public class PlayerEvents {
     @SubscribeEvent
     public static void onEntityItemPickupPre(ItemEntityPickupEvent.Pre event) {
         if (event.getPlayer() instanceof ServerPlayer serverPlayer) {
-            ItemStack itemStack = event.getItemEntity().getItem();
+        	ItemEntity itemEntity = event.getItemEntity();
+            ItemStack itemStack = itemEntity.getItem();
             PlayerHelper.knowledgeCheck(serverPlayer, itemStack);
-            if (!itemStack.isEmpty() && !event.getItemEntity().hasPickUpDelay()) {
-                if (!PlayerHelper.canInventoryAccept(serverPlayer.getInventory(), itemStack)) {
-                    ItemStack insertStack = itemStack.copy();
-                    int preInsertCount = insertStack.getCount();
-                    if (PlayerHelper.insertIntoHandler(InfiniteContainerHelper.getInventory(serverPlayer), insertStack)) {
-                        if (preInsertCount - insertStack.getCount() > 0) {
-                            PlayerHelper.playPickupSound(serverPlayer);
-                        }
-                        if (insertStack.isEmpty()) {
-                            event.getItemEntity().discard();
-                            event.setCanPickup(TriState.FALSE);
-                        } else {
-                            event.getItemEntity().setItem(insertStack);
-                        }
+            if (!itemStack.isEmpty() && !itemEntity.hasPickUpDelay()) {
+                ItemStack remainderStack = itemStack.copy();
+                remainderStack = PlayerHelper.insertIntoInventoryMergeOnly(serverPlayer.getInventory(), remainderStack);
+                remainderStack = PlayerHelper.insertIntoHandlerMergeOnly(InfiniteContainerHelper.getInventory(serverPlayer), remainderStack);
+                remainderStack = PlayerHelper.insertIntoInventory(serverPlayer.getInventory(), remainderStack);
+                remainderStack = PlayerHelper.insertIntoHandler(InfiniteContainerHelper.getInventory(serverPlayer), remainderStack);
+                int pickedUpCount = itemStack.getCount() - remainderStack.getCount();
+                if (pickedUpCount > 0) {
+                    event.setCanPickup(TriState.FALSE);
+                    if (remainderStack.isEmpty()) {
+                    	event.getItemEntity().discard();
+                    	itemStack.setCount(pickedUpCount);
                     }
-                } else {
-                    ItemStack insertStack = itemStack.copy();
-                    int preInsertCount = insertStack.getCount();
-                    insertStack = PlayerHelper.insertIntoInventoryMergeOnly(serverPlayer.getInventory(), insertStack);
-                    insertStack = PlayerHelper.insertIntoHandlerMergeOnly(InfiniteContainerHelper.getInventory(serverPlayer), insertStack);
-                    if (preInsertCount - insertStack.getCount() > 0) {
-                        PlayerHelper.playPickupSound(serverPlayer);
-                    }
-                    if (insertStack.isEmpty()) {
-                        event.getItemEntity().discard();
-                        event.setCanPickup(TriState.FALSE);
-                    } else {
-                        event.getItemEntity().setItem(insertStack);
-                    }
-                }
-            }
-        }
-    }
-    
-    // Insert items leftover from pickup into infinite container
-    @SubscribeEvent
-    public static void onEntityItemPickupPost(ItemEntityPickupEvent.Post event) {
-        if (event.getPlayer() instanceof ServerPlayer serverPlayer) {
-            ItemStack itemStack = event.getItemEntity().getItem();
-            if (!itemStack.isEmpty() && !event.getItemEntity().isRemoved()) {
-                ItemStack insertStack = itemStack.copy();
-                int preInsertCount = insertStack.getCount();
-                if (PlayerHelper.insertIntoHandler(InfiniteContainerHelper.getInventory(serverPlayer), insertStack)) {
-                    if (preInsertCount - insertStack.getCount() > 0) {
-                        PlayerHelper.playPickupSound(serverPlayer);
-                    }
-                    if (insertStack.isEmpty()) {
-                        event.getItemEntity().setItem(ItemStack.EMPTY);
-                        event.getItemEntity().discard();
-                    } else {
-                        event.getItemEntity().setItem(insertStack);
-                    }
+                    PlayerHelper.playPickupSound(serverPlayer);
+                    serverPlayer.awardStat(Stats.ITEM_PICKED_UP.get(itemStack.getItem()), pickedUpCount);
+                    serverPlayer.onItemPickup(itemEntity);
                 }
             }
         }

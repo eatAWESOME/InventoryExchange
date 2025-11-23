@@ -276,7 +276,7 @@ public final class PlayerHelper {
             inv.items.set(i, newStack);
             itemStack.shrink(canAdd);
         }
-        return itemStack.isEmpty() ? ItemStack.EMPTY : itemStack;
+        return itemStack;
     }
     
     public static ItemStack insertIntoHandlerMergeOnly(IItemHandlerModifiable handler, ItemStack itemStack) {
@@ -300,12 +300,48 @@ public final class PlayerHelper {
             handler.setStackInSlot(i, newStack);
             itemStack.shrink(canAdd);
         }
-        return itemStack.isEmpty() ? ItemStack.EMPTY : itemStack;
+        return itemStack;
+    }
+    
+    public static ItemStack insertIntoInventory(Inventory inv, ItemStack itemStack) {
+        if (itemStack.isEmpty()) return itemStack;
+        
+        // Merge into existing stacks
+        for (int i = 0; i < inv.items.size() && !itemStack.isEmpty(); i++) {
+            ItemStack cur = inv.items.get(i);
+            if (cur.isEmpty()) continue;
+            if (!ItemStack.isSameItemSameComponents(cur, itemStack)) continue;
+
+            int limit = Math.min(cur.getMaxStackSize(), 64);
+            if (cur.getCount() >= limit) continue;
+
+            int canAdd = Math.min(limit - cur.getCount(), itemStack.getCount());
+            if (canAdd <= 0) continue;
+
+            ItemStack newStack = cur.copy();
+            newStack.grow(canAdd);
+            inv.items.set(i, newStack);
+            itemStack.shrink(canAdd);
+        }
+
+        // Fill empty slots
+        for (int i = 0; i < inv.items.size() && !itemStack.isEmpty(); i++) {
+        	ItemStack cur = inv.items.get(i);
+            if (!cur.isEmpty()) continue;
+
+            int toMove = Math.min(itemStack.getCount(), Math.min(itemStack.getMaxStackSize(), inv.getMaxStackSize()));
+            if (toMove <= 0) continue;
+
+            ItemStack newStack = itemStack.copy();
+            newStack.setCount(toMove);
+            inv.items.set(i, newStack);
+            itemStack.shrink(toMove);
+        }
+        return itemStack;
     }
 
-    public static boolean insertIntoHandler(IItemHandlerModifiable handler, ItemStack itemStack) {
-        if (itemStack.isEmpty()) return false;
-        boolean changed = false;
+    public static ItemStack insertIntoHandler(IItemHandlerModifiable handler, ItemStack itemStack) {
+        if (itemStack.isEmpty()) return itemStack;
         int slots = handler.getSlots();
 
         // Merge into existing stacks
@@ -324,7 +360,6 @@ public final class PlayerHelper {
             newStack.grow(canAdd);
             handler.setStackInSlot(i, newStack);
             itemStack.shrink(canAdd);
-            changed = true;
         }
 
         // Fill empty slots
@@ -336,13 +371,12 @@ public final class PlayerHelper {
             int toMove = Math.min(itemStack.getCount(), Math.min(itemStack.getMaxStackSize(), handler.getSlotLimit(i)));
             if (toMove <= 0) continue;
 
-            ItemStack place = itemStack.copy();
-            place.setCount(toMove);
-            handler.setStackInSlot(i, place);
+            ItemStack newStack = itemStack.copy();
+            newStack.setCount(toMove);
+            handler.setStackInSlot(i, newStack);
             itemStack.shrink(toMove);
-            changed = true;
         }
-        return changed;
+        return itemStack;
     }
     
     public static void playPickupSound(Player player) {
