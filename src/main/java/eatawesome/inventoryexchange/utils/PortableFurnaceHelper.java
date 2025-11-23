@@ -9,6 +9,7 @@ import moze_intel.projecte.api.capabilities.IKnowledgeProvider;
 import moze_intel.projecte.api.capabilities.PECapabilities;
 import moze_intel.projecte.api.proxy.IEMCProxy;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.stats.Stats;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -66,6 +67,7 @@ public final class PortableFurnaceHelper {
 	public static boolean smeltOneIfPossible(ServerPlayer serverPlayer) {
 		if (!canAfford(serverPlayer)) return true;
 		Level level = serverPlayer.level();
+		// Inventory
 		Inventory inv = serverPlayer.getInventory();
 		for (int i = 0; i < inv.items.size(); i++) {
 			ItemStack itemStack = inv.items.get(i);
@@ -77,9 +79,8 @@ public final class PortableFurnaceHelper {
 			ItemStack result = recipe.get().value().assemble(new SingleRecipeInput(one), level.registryAccess());
 			if (result.isEmpty()) continue;
 			if (IEMCProxy.INSTANCE.getValue(result) <= 0) continue;
-			ItemStack toInsert = result.copy();
-			boolean fullyAdded = inv.add(toInsert);
-			if (fullyAdded) {
+			ItemStack remainderStack = PlayerHelper.insertIntoInventoryThenHandler(serverPlayer.getInventory(), InfiniteContainerHelper.getInventory(serverPlayer), result.copy());
+			if (remainderStack.isEmpty()) {
 				PortableFurnaceHelper.withdrawEmc(serverPlayer);
 				itemStack.shrink(1);
 				if (itemStack.isEmpty()) inv.items.set(i, ItemStack.EMPTY);
@@ -88,9 +89,37 @@ public final class PortableFurnaceHelper {
 				if (exp > 0) {
 					PlayerHelper.awardExp(serverPlayer, exp);
 				}
+				serverPlayer.awardStat(Stats.ITEM_CRAFTED.get(result.getItem()), result.getCount());
 			}
 			return true;
 		}
+		// Infinite Inventory
+		IItemHandlerModifiable handler = InfiniteContainerHelper.getInventory(serverPlayer);
+		int slots = handler.getSlots();
+		for (int i = 0; i < slots; i++) {
+            ItemStack itemStack = handler.getStackInSlot(i);
+            if (itemStack.isEmpty()) continue;
+			if (IEMCProxy.INSTANCE.getValue(itemStack) > 0) continue;
+			ItemStack one = itemStack.copyWithCount(1);
+			Optional<RecipeHolder<SmeltingRecipe>> recipe = level.getRecipeManager().getRecipeFor(RecipeType.SMELTING, new SingleRecipeInput(one), level);
+			if (recipe.isEmpty()) continue;
+			ItemStack result = recipe.get().value().assemble(new SingleRecipeInput(one), level.registryAccess());
+			if (result.isEmpty()) continue;
+			if (IEMCProxy.INSTANCE.getValue(result) <= 0) continue;
+			ItemStack remainderStack = PlayerHelper.insertIntoInventoryThenHandler(serverPlayer.getInventory(), InfiniteContainerHelper.getInventory(serverPlayer), result.copy());
+			if (remainderStack.isEmpty()) {
+				PortableFurnaceHelper.withdrawEmc(serverPlayer);
+				itemStack.shrink(1);
+				if (itemStack.isEmpty()) handler.setStackInSlot(i, ItemStack.EMPTY);
+				NeoForge.EVENT_BUS.post(new PlayerEvent.ItemSmeltedEvent(serverPlayer, result.copy()));
+				float exp = getSmeltingExperienceFromInput(level, one);
+				if (exp > 0) {
+					PlayerHelper.awardExp(serverPlayer, exp);
+				}
+				serverPlayer.awardStat(Stats.ITEM_CRAFTED.get(result.getItem()), result.getCount());
+			}
+			return true;
+        }
 		return false;
     }
 

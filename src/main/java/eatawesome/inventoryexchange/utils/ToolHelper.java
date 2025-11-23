@@ -12,6 +12,7 @@ import net.minecraft.core.Direction.Axis;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.entity.player.Player;
@@ -91,6 +92,7 @@ public class ToolHelper {
 					}
 					drops.addAll(Block.getDrops(state, (ServerLevel) level, digPos, WorldHelper.getBlockEntity(level, digPos), serverPlayer, stack));
 					level.removeBlock(digPos, false);
+					serverPlayer.awardStat(Stats.BLOCK_MINED.get(state.getBlock()));
 				}
 			}
 		}

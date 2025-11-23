@@ -47,11 +47,7 @@ public class PlayerEvents {
             ItemStack itemStack = itemEntity.getItem();
             PlayerHelper.knowledgeCheck(serverPlayer, itemStack);
             if (!itemStack.isEmpty() && !itemEntity.hasPickUpDelay()) {
-                ItemStack remainderStack = itemStack.copy();
-                remainderStack = PlayerHelper.insertIntoInventoryMergeOnly(serverPlayer.getInventory(), remainderStack);
-                remainderStack = PlayerHelper.insertIntoHandlerMergeOnly(InfiniteContainerHelper.getInventory(serverPlayer), remainderStack);
-                remainderStack = PlayerHelper.insertIntoInventory(serverPlayer.getInventory(), remainderStack);
-                remainderStack = PlayerHelper.insertIntoHandler(InfiniteContainerHelper.getInventory(serverPlayer), remainderStack);
+                ItemStack remainderStack = PlayerHelper.insertIntoInventoryThenHandler(serverPlayer.getInventory(), InfiniteContainerHelper.getInventory(serverPlayer), itemStack.copy());
                 int pickedUpCount = itemStack.getCount() - remainderStack.getCount();
                 if (pickedUpCount > 0) {
                     event.setCanPickup(TriState.FALSE);

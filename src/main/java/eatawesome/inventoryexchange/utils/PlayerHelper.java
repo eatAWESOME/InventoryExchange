@@ -379,6 +379,15 @@ public final class PlayerHelper {
         return itemStack;
     }
     
+    public static ItemStack insertIntoInventoryThenHandler(Inventory inv, IItemHandlerModifiable handler, ItemStack itemStack) {
+    	ItemStack remainderStack = itemStack.copy();
+        remainderStack = PlayerHelper.insertIntoInventoryMergeOnly(inv, remainderStack);
+        remainderStack = PlayerHelper.insertIntoHandlerMergeOnly(handler, remainderStack);
+        remainderStack = PlayerHelper.insertIntoInventory(inv, remainderStack);
+        remainderStack = PlayerHelper.insertIntoHandler(handler, remainderStack);
+        return remainderStack;
+    }
+    
     public static void playPickupSound(Player player) {
         float vol = 0.2F;
         float pitch = ((player.getRandom().nextFloat() - player.getRandom().nextFloat()) * 0.7F + 1.0F) * 2.0F;
