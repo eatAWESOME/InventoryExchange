@@ -25,6 +25,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.stats.Stats;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -515,6 +516,7 @@ public final class PlayerHelper {
 		int count = (int) Math.min(availableEMC.divide(BigInteger.valueOf(singleEMC)).longValue(), itemStack.getMaxStackSize());
 		if (count <= 0) return;
 		serverPlayer.setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND, itemStack.copyWithCount(count));
+		serverPlayer.awardStat(Stats.ITEM_CRAFTED.get(itemStack.getItem()), count);
 		knowledge.setEmc(availableEMC.subtract(BigInteger.valueOf(singleEMC).multiply(BigInteger.valueOf(count))));
 		knowledge.syncEmc(serverPlayer);
 		playPickupSound(serverPlayer);

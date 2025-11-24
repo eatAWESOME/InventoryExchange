@@ -3,6 +3,8 @@ package eatawesome.inventoryexchange.gameObjs.container.slots.transmutation;
 import java.math.BigInteger;
 import moze_intel.projecte.api.proxy.IEMCProxy;
 import moze_intel.projecte.utils.ItemHelper;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.stats.Stats;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -51,6 +53,14 @@ public class SlotOutput extends InventoryContainerSlot {
 		return stack;
 	}
 
+	@Override
+	public void onTake(Player player, @NotNull ItemStack stack) {
+		if (player instanceof ServerPlayer serverPlayer && stack.getCount() > 0) {
+			serverPlayer.awardStat(Stats.ITEM_CRAFTED.get(stack.getItem()), stack.getCount());
+		}
+		super.onTake(player, stack);
+	}
+	
 	@Override
 	public void initialize(@NotNull ItemStack stack) {
 	}

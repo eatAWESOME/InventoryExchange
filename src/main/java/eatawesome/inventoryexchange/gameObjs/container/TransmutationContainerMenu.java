@@ -18,6 +18,8 @@ import moze_intel.projecte.network.packets.to_client.container.UpdateWindowLongP
 import moze_intel.projecte.network.packets.to_server.SearchUpdatePKT;
 import moze_intel.projecte.utils.ItemHelper;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -227,6 +229,9 @@ public class TransmutationContainerMenu extends AbstractContainerMenu {
 					}
 					stack.setCount(1);
 					ItemHandlerHelper.insertItemStacked(player.getCapability(ItemHandler.ENTITY), stack, false);
+					if (player instanceof ServerPlayer serverPlayer && stack.getCount() > 0) {
+						serverPlayer.awardStat(Stats.ITEM_CRAFTED.get(stack.getItem()), stack.getCount());
+					}
 				} else if (itemsRoomFor > 1) {
 					BigInteger availableEMC = transmutationInventory.getAvailableEmc();
 					BigInteger emc = BigInteger.valueOf(itemEmc);
@@ -244,6 +249,9 @@ public class TransmutationContainerMenu extends AbstractContainerMenu {
 					}
 					stack.setCount(itemsRoomFor);
 					ItemHandlerHelper.insertItemStacked(player.getCapability(ItemHandler.ENTITY), stack, false);
+					if (player instanceof ServerPlayer serverPlayer && stack.getCount() > 0) {
+						serverPlayer.awardStat(Stats.ITEM_CRAFTED.get(stack.getItem()), stack.getCount());
+					}
 				}
 			}
 		} else if (slotIndex >= 30) {

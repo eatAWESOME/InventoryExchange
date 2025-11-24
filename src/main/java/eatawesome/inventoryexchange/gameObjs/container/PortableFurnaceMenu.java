@@ -5,6 +5,7 @@ import eatawesome.inventoryexchange.gameObjs.registries.InventoryExchangeContain
 import eatawesome.inventoryexchange.utils.PlayerHelper;
 import eatawesome.inventoryexchange.utils.PortableFurnaceHelper;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.stats.Stats;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -54,6 +55,7 @@ public class PortableFurnaceMenu extends AbstractContainerMenu {
 					NeoForge.EVENT_BUS.post(new PlayerEvent.ItemSmeltedEvent(player, itemStack.copy()));
 					float exp = PortableFurnaceHelper.getSmeltingExperienceFromOutput(player.level(), itemStack);
 					PlayerHelper.awardExp(serverPlayer, exp);
+					serverPlayer.awardStat(Stats.ITEM_CRAFTED.get(itemStack.getItem()), itemStack.getCount());
 				}
 				super.onTake(player, itemStack);
 			}
