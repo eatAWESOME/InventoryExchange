@@ -47,6 +47,7 @@ Wearing the full Ultima armor set grants continuous:
 - Fire Resistance
 - Speed (+60%)
 - Invincibility
+- Items gravitate towards player
 
 ---
 
