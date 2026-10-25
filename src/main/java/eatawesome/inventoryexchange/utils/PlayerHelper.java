@@ -225,14 +225,16 @@ public final class PlayerHelper {
     
     public static void knowledgeCheck(ServerPlayer serverPlayer, ItemStack itemStack) {
         try {
-            IKnowledgeProvider knowledge = serverPlayer.getCapability(PECapabilities.KNOWLEDGE_CAPABILITY);
-            if (!itemStack.isEmpty() && IEMCProxy.INSTANCE.getValue(itemStack) > 0) {
-                if (!knowledge.hasKnowledge(itemStack)) {
-                    knowledge.addKnowledge(itemStack);
-                    knowledge.syncKnowledgeChange(serverPlayer, ItemInfo.fromStack(itemStack), true);
-                    ItemStack icon = itemStack.copy();
-                    icon.setCount(1);
-                    PacketDistributor.sendToPlayer(serverPlayer, new KnowledgeToastPKT(icon));
+            if (serverPlayer != null && itemStack != null) {
+                IKnowledgeProvider knowledge = serverPlayer.getCapability(PECapabilities.KNOWLEDGE_CAPABILITY);
+                if (!itemStack.isEmpty() && IEMCProxy.INSTANCE.getValue(itemStack) > 0) {
+                    if (!knowledge.hasKnowledge(itemStack)) {
+                        knowledge.addKnowledge(itemStack);
+                        knowledge.syncKnowledgeChange(serverPlayer, ItemInfo.fromStack(itemStack), true);
+                        ItemStack icon = itemStack.copy();
+                        icon.setCount(1);
+                        PacketDistributor.sendToPlayer(serverPlayer, new KnowledgeToastPKT(icon));
+                    }
                 }
             }
         } catch (IllegalArgumentException e) {
