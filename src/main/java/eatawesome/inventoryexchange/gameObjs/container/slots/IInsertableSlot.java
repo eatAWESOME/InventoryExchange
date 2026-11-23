@@ -1,9 +1,10 @@
 package eatawesome.inventoryexchange.gameObjs.container.slots;
 
-import moze_intel.projecte.utils.ItemHelper;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
+
+import eatawesome.inventoryexchange.utils.ItemHelper;
 
 /**
  * @implNote Heavily based off of Mekanism's IInsertableSlot

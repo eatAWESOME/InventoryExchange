@@ -4,8 +4,9 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import java.math.BigInteger;
 import java.util.Objects;
-import eatawesome.inventoryexchange.capabilities.IAbilityEMCProvider;
+
 import eatawesome.inventoryexchange.api.event.PlayerAbilityEMCChangeEvent;
+import eatawesome.inventoryexchange.api.capabilities.IAbilityEMCProvider;
 import eatawesome.inventoryexchange.api.codec.IInventoryExchangeCodecHelper;
 import eatawesome.inventoryexchange.gameObjs.registries.InventoryExchangeAttachmentTypes;
 import eatawesome.inventoryexchange.network.InventoryExchangeStreamCodecs;

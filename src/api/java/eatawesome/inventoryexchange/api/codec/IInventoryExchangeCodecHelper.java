@@ -3,6 +3,9 @@ package eatawesome.inventoryexchange.api.codec;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.MapCodec;
+
+import eatawesome.inventoryexchange.api.nss.NormalizedSimpleStack;
+
 import java.math.BigInteger;
 import java.util.Collection;
 import java.util.HashMap;
@@ -18,10 +21,20 @@ import org.jetbrains.annotations.Nullable;
 public interface IInventoryExchangeCodecHelper {
 
 	/**
-	 * Helper for dealing with {@link Codec Codecs} related to ProjectE.
+	 * Helper for dealing with {@link Codec Codecs} related to InventoryExchange.
 	 */
 	IInventoryExchangeCodecHelper INSTANCE = ServiceLoader.load(IInventoryExchangeCodecHelper.class).findFirst()
 			.orElseThrow(() -> new IllegalStateException("No valid ServiceImpl for IInventoryExchangeCodecHelper found, InventoryExchange may be absent, damaged, or outdated"));
+
+	/**
+	 * {@link Codec} that tries to encode a {@link NormalizedSimpleStack}..
+	 */
+	Codec<NormalizedSimpleStack> nssCodec();
+
+	/**
+	 * {@link MapCodec} that tries to encode a {@link NormalizedSimpleStack}..
+	 */
+	MapCodec<NormalizedSimpleStack> nssMapCodec();
 
 	/**
 	 * {@return Big Integer Codec that validates the value is greater than or equal to zero}

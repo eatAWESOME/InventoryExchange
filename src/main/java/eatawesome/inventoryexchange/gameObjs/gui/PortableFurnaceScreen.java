@@ -2,10 +2,11 @@ package eatawesome.inventoryexchange.gameObjs.gui;
 
 import java.math.BigInteger;
 import java.text.NumberFormat;
+
+import eatawesome.inventoryexchange.api.capabilities.IKnowledgeProvider;
+import eatawesome.inventoryexchange.api.capabilities.InventoryExchangeCapabilities;
 import eatawesome.inventoryexchange.gameObjs.container.PortableFurnaceMenu;
 import eatawesome.inventoryexchange.utils.PortableFurnaceHelper;
-import moze_intel.projecte.api.capabilities.IKnowledgeProvider;
-import moze_intel.projecte.api.capabilities.PECapabilities;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
@@ -75,7 +76,7 @@ public class PortableFurnaceScreen extends AbstractContainerScreen<PortableFurna
 	}
 
 	private BigInteger getClientEmc() {
-		IKnowledgeProvider knowledge = this.minecraft.player.getCapability(PECapabilities.KNOWLEDGE_CAPABILITY);
+		IKnowledgeProvider knowledge = this.minecraft.player.getCapability(InventoryExchangeCapabilities.KNOWLEDGE_CAPABILITY);
 		if (knowledge == null) return BigInteger.ZERO;
 		try {
 			return knowledge.getEmc();

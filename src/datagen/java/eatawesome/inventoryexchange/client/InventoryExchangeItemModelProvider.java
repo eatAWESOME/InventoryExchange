@@ -31,18 +31,8 @@ public class InventoryExchangeItemModelProvider extends ItemModelProvider {
 		return modLoc("item/" + itemProvider.getName());
 	}
 
-	protected ResourceLocation itemTexture(moze_intel.projecte.gameObjs.registration.INamedEntry itemProvider) {
-		return modLoc("item/" + itemProvider.getName());
-	}
-
 	protected void register(INamedEntry... itemProviders) {
 		for (INamedEntry itemProvider : itemProviders) {
-			register(itemProvider);
-		}
-	}
-
-	protected void register(moze_intel.projecte.gameObjs.registration.INamedEntry... itemProviders) {
-		for (moze_intel.projecte.gameObjs.registration.INamedEntry itemProvider : itemProviders) {
 			register(itemProvider);
 		}
 	}
@@ -52,10 +42,6 @@ public class InventoryExchangeItemModelProvider extends ItemModelProvider {
 	}
 	
 	protected ItemModelBuilder register(INamedEntry itemProvider) {
-		return withExistingParent(itemProvider.getName(), "item/generated").texture("layer0", itemTexture(itemProvider));
-	}
-
-	protected ItemModelBuilder register(moze_intel.projecte.gameObjs.registration.INamedEntry itemProvider) {
 		return withExistingParent(itemProvider.getName(), "item/generated").texture("layer0", itemTexture(itemProvider));
 	}
 }

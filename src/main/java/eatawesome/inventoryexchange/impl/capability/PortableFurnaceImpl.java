@@ -1,7 +1,8 @@
 package eatawesome.inventoryexchange.impl.capability;
 
 import com.mojang.serialization.Codec;
-import eatawesome.inventoryexchange.capabilities.IPortableFurnaceProvider;
+
+import eatawesome.inventoryexchange.api.capabilities.IPortableFurnaceProvider;
 import eatawesome.inventoryexchange.gameObjs.registries.InventoryExchangeAttachmentTypes;
 import eatawesome.inventoryexchange.impl.codec.InventoryExchangeCodecHelper;
 import eatawesome.inventoryexchange.network.packets.to_client.PortableFurnaceSyncPKT;

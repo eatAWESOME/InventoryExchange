@@ -3,6 +3,8 @@ package eatawesome.inventoryexchange.gameObjs.container;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
+
+import eatawesome.inventoryexchange.api.proxy.IEMCProxy;
 import eatawesome.inventoryexchange.gameObjs.container.inventory.TransmutationInventory;
 import eatawesome.inventoryexchange.gameObjs.container.slots.HotBarSlot;
 import eatawesome.inventoryexchange.gameObjs.container.slots.IInventoryContainerSlot;
@@ -11,12 +13,11 @@ import eatawesome.inventoryexchange.gameObjs.container.slots.transmutation.SlotC
 import eatawesome.inventoryexchange.gameObjs.container.slots.transmutation.SlotOutput;
 import eatawesome.inventoryexchange.gameObjs.items.TomeOfKnowledge;
 import eatawesome.inventoryexchange.gameObjs.registries.InventoryExchangeContainerTypes;
-import moze_intel.projecte.api.proxy.IEMCProxy;
-import moze_intel.projecte.network.packets.IPEPacket;
-import moze_intel.projecte.network.packets.to_client.container.SyncOffhandPkt;
-import moze_intel.projecte.network.packets.to_client.container.UpdateWindowLongPKT;
-import moze_intel.projecte.network.packets.to_server.SearchUpdatePKT;
-import moze_intel.projecte.utils.ItemHelper;
+import eatawesome.inventoryexchange.network.packets.IInventoryExchangePacket;
+import eatawesome.inventoryexchange.network.packets.to_client.container.SyncOffhandPkt;
+import eatawesome.inventoryexchange.network.packets.to_client.container.UpdateWindowLongPKT;
+import eatawesome.inventoryexchange.network.packets.to_server.SearchUpdatePKT;
+import eatawesome.inventoryexchange.utils.ItemHelper;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.Stats;
@@ -303,7 +304,7 @@ public class TransmutationContainerMenu extends AbstractContainerMenu {
 		}
 	}
 
-	protected void syncDataChange(IPEPacket packet) {
+	protected void syncDataChange(IInventoryExchangePacket packet) {
 		if (this.playerInv.player instanceof net.minecraft.server.level.ServerPlayer sp) {
 			PacketDistributor.sendToPlayer(sp, packet);
 		}

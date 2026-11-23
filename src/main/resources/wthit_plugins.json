@@ -1,6 +1,6 @@
 {
-  "projecte:plugin": {
-    "initializer": "moze_intel.projecte.integration.wthit.PEWTHITPlugin",
+  "inventoryexchange:plugin": {
+    "initializer": "eatawesome.inventoryexchange.integration.wthit.InventoryExchangeWTHITPlugin",
     "side": "*",
     "required": []
   }

@@ -3,11 +3,11 @@ package eatawesome.inventoryexchange.utils;
 import java.math.BigInteger;
 import java.util.Optional;
 
+import eatawesome.inventoryexchange.api.capabilities.IKnowledgeProvider;
+import eatawesome.inventoryexchange.api.capabilities.InventoryExchangeCapabilities;
+import eatawesome.inventoryexchange.api.proxy.IEMCProxy;
 import eatawesome.inventoryexchange.gameObjs.container.PortableFurnaceMenu;
 import eatawesome.inventoryexchange.impl.capability.PortableFurnaceImpl;
-import moze_intel.projecte.api.capabilities.IKnowledgeProvider;
-import moze_intel.projecte.api.capabilities.PECapabilities;
-import moze_intel.projecte.api.proxy.IEMCProxy;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.entity.player.Inventory;
@@ -184,13 +184,13 @@ public final class PortableFurnaceHelper {
     }
 
     private static BigInteger getEmc(Player player) {
-        IKnowledgeProvider knowledge = player.getCapability(PECapabilities.KNOWLEDGE_CAPABILITY);
+        IKnowledgeProvider knowledge = player.getCapability(InventoryExchangeCapabilities.KNOWLEDGE_CAPABILITY);
         if (knowledge == null) return BigInteger.ZERO;
         try { return knowledge.getEmc(); } catch (Throwable t) { return BigInteger.ZERO; }
     }
 
     private static void setEmc(ServerPlayer serverPlayer, BigInteger emc) {
-        IKnowledgeProvider knowledge = serverPlayer.getCapability(PECapabilities.KNOWLEDGE_CAPABILITY);
+        IKnowledgeProvider knowledge = serverPlayer.getCapability(InventoryExchangeCapabilities.KNOWLEDGE_CAPABILITY);
         if (knowledge == null) return;
         knowledge.setEmc(emc);
         knowledge.syncEmc(serverPlayer);

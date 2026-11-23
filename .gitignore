@@ -25,5 +25,7 @@ run-data
 
 repo
 
+src/datagen/generated
+
 build.bat
 .clean.bat

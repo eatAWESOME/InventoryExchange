@@ -6,7 +6,9 @@ import java.util.Locale;
 import java.util.concurrent.CompletableFuture;
 import eatawesome.inventoryexchange.InventoryExchange;
 import eatawesome.inventoryexchange.client.lang.FormatSplitter.Component;
-import moze_intel.projecte.config.IPEConfig;
+import eatawesome.inventoryexchange.config.IConfigTranslation;
+import eatawesome.inventoryexchange.config.IInventoryExchangeConfig;
+import eatawesome.inventoryexchange.utils.text.IHasTranslationKey;
 import net.minecraft.Util;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.PackOutput;
@@ -32,42 +34,27 @@ public abstract class BaseLanguageProvider extends LanguageProvider {
 		};
 	}
 
-	protected void add(eatawesome.inventoryexchange.utils.text.IHasTranslationKey key, String value) {
+	protected void add(IHasTranslationKey key, String value) {
 		add(key.getTranslationKey(), value);
 	}
 
-	protected void add(moze_intel.projecte.utils.text.IHasTranslationKey key, String value) {
-		add(key.getTranslationKey(), value);
-	}
-
-	private String getConfigSectionTranslationPath(IPEConfig config) {
+	private String getConfigSectionTranslationPath(IInventoryExchangeConfig config) {
 		String baseConfigFolder = InventoryExchange.MODNAME.toLowerCase(Locale.ROOT);
 		String fileName = config.getFileName().replaceAll("[^a-zA-Z0-9]+", ".").toLowerCase(Locale.ROOT);
 		return modid + ".configuration.section." + baseConfigFolder + "." + fileName + ".toml";
 	}
 
-	protected void addPEConfigs(Collection<IPEConfig> configs) {
+	protected void addInventoryExchangeConfigs(Collection<IInventoryExchangeConfig> configs) {
 		add(modid + ".configuration.title", InventoryExchange.MODNAME + " Config");
-		for (IPEConfig config : configs) {
+		for (IInventoryExchangeConfig config : configs) {
 			String key = getConfigSectionTranslationPath(config);
 			add(key, config.getTranslation());
 			add(key + ".title", InventoryExchange.MODNAME + " - " + config.getTranslation());
 		}
 	}
 
-	protected void addInventoryExchangeConfigs(eatawesome.inventoryexchange.config.IConfigTranslation... translations) {
+	protected void addInventoryExchangeConfigs(IConfigTranslation... translations) {
 		for (eatawesome.inventoryexchange.config.IConfigTranslation translation : translations) {
-			add(translation, translation.title());
-			add(translation.getTranslationKey() + ".tooltip", translation.tooltip());
-			String button = translation.button();
-			if (button != null) {
-				add(translation.getTranslationKey() + ".button", button);
-			}
-		}
-	}
-
-	protected void addPEConfigs(moze_intel.projecte.config.IConfigTranslation... translations) {
-		for (moze_intel.projecte.config.IConfigTranslation translation : translations) {
 			add(translation, translation.title());
 			add(translation.getTranslationKey() + ".tooltip", translation.tooltip());
 			String button = translation.button();

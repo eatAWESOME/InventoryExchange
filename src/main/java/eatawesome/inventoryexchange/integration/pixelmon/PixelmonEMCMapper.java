@@ -1,10 +1,10 @@
 package eatawesome.inventoryexchange.integration.pixelmon;
 
+import eatawesome.inventoryexchange.api.mapper.EMCMapper;
+import eatawesome.inventoryexchange.api.mapper.IEMCMapper;
+import eatawesome.inventoryexchange.api.mapper.collector.IMappingCollector;
+import eatawesome.inventoryexchange.api.nss.NSSItem;
 import eatawesome.inventoryexchange.config.InventoryExchangeConfigTranslations;
-import moze_intel.projecte.api.mapper.EMCMapper;
-import moze_intel.projecte.api.mapper.IEMCMapper;
-import moze_intel.projecte.api.mapper.collector.IMappingCollector;
-import moze_intel.projecte.api.nss.NSSItem;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.ReloadableServerResources;
@@ -15,17 +15,17 @@ public class PixelmonEMCMapper implements IEMCMapper {
 
 	@Override
 	public String getName() {
-		return InventoryExchangeConfigTranslations.MAPPING_PIXELMON_EMC_MAPPER.title();
+		return InventoryExchangeConfigTranslations.MAPPING_PIXELMON_MAPPER.title();
 	}
 
 	@Override
 	public String getTranslationKey() {
-		return InventoryExchangeConfigTranslations.MAPPING_PIXELMON_EMC_MAPPER.getTranslationKey();
+		return InventoryExchangeConfigTranslations.MAPPING_PIXELMON_MAPPER.getTranslationKey();
 	}
 
 	@Override
 	public String getDescription() {
-		return InventoryExchangeConfigTranslations.MAPPING_PIXELMON_EMC_MAPPER.tooltip();
+		return InventoryExchangeConfigTranslations.MAPPING_PIXELMON_MAPPER.tooltip();
 	}
 
 	@Override

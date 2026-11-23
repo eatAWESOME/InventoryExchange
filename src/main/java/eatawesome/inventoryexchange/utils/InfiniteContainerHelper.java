@@ -1,7 +1,7 @@
 package eatawesome.inventoryexchange.utils;
 
-import eatawesome.inventoryexchange.capabilities.IInfiniteContainerProvider;
-import eatawesome.inventoryexchange.capabilities.InventoryExchangeCapabilities;
+import eatawesome.inventoryexchange.api.capabilities.IInfiniteContainerProvider;
+import eatawesome.inventoryexchange.api.capabilities.InventoryExchangeCapabilities;
 import eatawesome.inventoryexchange.gameObjs.container.InfiniteContainerMenu;
 import eatawesome.inventoryexchange.gameObjs.registries.InventoryExchangeAttachmentTypes;
 import eatawesome.inventoryexchange.utils.text.InventoryExchangeLang;

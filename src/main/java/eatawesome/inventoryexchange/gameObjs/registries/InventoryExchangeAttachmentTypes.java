@@ -6,6 +6,7 @@ import eatawesome.inventoryexchange.gameObjs.registration.InventoryExchangeDefer
 import eatawesome.inventoryexchange.impl.capability.AbilityEMCImpl.AbilityEMCAttachment;
 import eatawesome.inventoryexchange.impl.capability.InfiniteContainerImpl;
 import eatawesome.inventoryexchange.impl.capability.InfiniteContainerImpl.InfiniteContainerAttachment;
+import eatawesome.inventoryexchange.impl.capability.KnowledgeImpl.KnowledgeAttachment;
 import eatawesome.inventoryexchange.impl.capability.PlayerSettingsImpl;
 import eatawesome.inventoryexchange.impl.capability.PlayerSettingsImpl.PlayerSettingsAttachment;
 import eatawesome.inventoryexchange.impl.capability.PortableFurnaceImpl;
@@ -25,6 +26,14 @@ public class InventoryExchangeAttachmentTypes {
 	public static final InventoryExchangeDeferredRegister<AttachmentType<?>> ATTACHMENT_TYPES =
 			new InventoryExchangeDeferredRegister<>(NeoForgeRegistries.Keys.ATTACHMENT_TYPES, InventoryExchange.MODID);
 
+	public static final InventoryExchangeDeferredHolder<AttachmentType<?>, AttachmentType<KnowledgeAttachment>> KNOWLEDGE = ATTACHMENT_TYPES.register("knowledge",
+			() -> AttachmentType.builder(KnowledgeAttachment::new)
+					.serialize(KnowledgeAttachment.CODEC)
+					.copyHandler(KnowledgeAttachment::copy)
+					.copyOnDeath()
+					.build()
+	);
+	
 	public static final InventoryExchangeDeferredHolder<AttachmentType<?>, AttachmentType<AbilityEMCAttachment>> ABILITY_EMC =
 			ATTACHMENT_TYPES.register("ability_emc",
 					() -> AttachmentType.builder(AbilityEMCAttachment::new)

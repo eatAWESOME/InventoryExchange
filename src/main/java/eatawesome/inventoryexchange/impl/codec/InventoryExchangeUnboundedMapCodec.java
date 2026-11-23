@@ -88,9 +88,9 @@ public record InventoryExchangeUnboundedMapCodec<KEY, VALUE, MAP extends Map<KEY
 	@Override
 	public String toString() {
 		if (lenientKey) {
-			return "projecte:LenientKeyUnboundedMapCodec[" + keyCodec + " -> " + valueCodec + ']';
+			return "inventoryexchange:LenientKeyUnboundedMapCodec[" + keyCodec + " -> " + valueCodec + ']';
 		}
-		return "projecte:UnboundedMapCodec[" + keyCodec + " -> " + valueCodec + ']';
+		return "inventoryexchange:UnboundedMapCodec[" + keyCodec + " -> " + valueCodec + ']';
 	}
 
 	private class DecoderState<T> {

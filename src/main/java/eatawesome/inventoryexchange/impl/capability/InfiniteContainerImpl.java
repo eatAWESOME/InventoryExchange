@@ -1,7 +1,8 @@
 package eatawesome.inventoryexchange.impl.capability;
 
 import com.mojang.serialization.Codec;
-import eatawesome.inventoryexchange.capabilities.IInfiniteContainerProvider;
+
+import eatawesome.inventoryexchange.api.capabilities.IInfiniteContainerProvider;
 import eatawesome.inventoryexchange.config.InventoryExchangeCommonConfig;
 import eatawesome.inventoryexchange.gameObjs.registries.InventoryExchangeAttachmentTypes;
 import eatawesome.inventoryexchange.impl.codec.InventoryExchangeCodecHelper;

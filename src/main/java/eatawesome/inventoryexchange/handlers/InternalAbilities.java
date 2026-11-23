@@ -1,11 +1,11 @@
 package eatawesome.inventoryexchange.handlers;
 
 import java.util.function.Predicate;
-import moze_intel.projecte.api.capabilities.IKnowledgeProvider;
-import moze_intel.projecte.api.capabilities.PECapabilities;
+
 import eatawesome.inventoryexchange.InventoryExchange;
-import eatawesome.inventoryexchange.capabilities.IAbilityEMCProvider;
-import eatawesome.inventoryexchange.capabilities.InventoryExchangeCapabilities;
+import eatawesome.inventoryexchange.api.capabilities.IAbilityEMCProvider;
+import eatawesome.inventoryexchange.api.capabilities.IKnowledgeProvider;
+import eatawesome.inventoryexchange.api.capabilities.InventoryExchangeCapabilities;
 import net.minecraft.core.Holder;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
@@ -39,7 +39,7 @@ public class InternalAbilities {
 	}
 
 	private static boolean shouldPlayerFly(Player player) {
-		IKnowledgeProvider knowledge = player.getCapability(PECapabilities.KNOWLEDGE_CAPABILITY);
+		IKnowledgeProvider knowledge = player.getCapability(InventoryExchangeCapabilities.KNOWLEDGE_CAPABILITY);
 		IAbilityEMCProvider abilityEMC = player.getCapability(InventoryExchangeCapabilities.ABILITY_EMC_CAPABILITY);
 		if (abilityEMC.getEmc().intValue() >= 32 || knowledge.getEmc().intValue() >= 1) {
 			return true;

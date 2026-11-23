@@ -1,16 +1,17 @@
 package eatawesome.inventoryexchange.gameObjs.container.slots.transmutation;
 
 import java.math.BigInteger;
-import moze_intel.projecte.api.proxy.IEMCProxy;
-import moze_intel.projecte.utils.ItemHelper;
+
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
+import eatawesome.inventoryexchange.api.proxy.IEMCProxy;
 import eatawesome.inventoryexchange.gameObjs.container.inventory.TransmutationInventory;
 import eatawesome.inventoryexchange.gameObjs.container.slots.InventoryContainerSlot;
+import eatawesome.inventoryexchange.utils.ItemHelper;
 
 public class SlotOutput extends InventoryContainerSlot {
 

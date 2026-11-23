@@ -1,12 +1,13 @@
 package eatawesome.inventoryexchange.gameObjs.items;
 
 import eatawesome.inventoryexchange.utils.UltimaWatchMode;
+import eatawesome.inventoryexchange.utils.text.InventoryExchangeLang;
+import eatawesome.inventoryexchange.api.capabilities.IKnowledgeProvider;
+import eatawesome.inventoryexchange.api.capabilities.InventoryExchangeCapabilities;
 import eatawesome.inventoryexchange.config.InventoryExchangeCommonConfig;
 import java.math.BigInteger;
 import java.util.List;
-import moze_intel.projecte.api.capabilities.IKnowledgeProvider;
-import moze_intel.projecte.api.capabilities.PECapabilities;
-import moze_intel.projecte.utils.text.PELang;
+
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -37,7 +38,7 @@ public class UltimaWatch extends Item {
 		ItemStack stack = player.getItemInHand(hand);
 		if (player instanceof ServerPlayer serverPlayer) {
 			if (!InventoryExchangeCommonConfig.isUltimaWatchAllowed()) {
-				serverPlayer.sendSystemMessage(PELang.TIME_WATCH_DISABLED.translate());
+				serverPlayer.sendSystemMessage(InventoryExchangeLang.TIME_WATCH_DISABLED.translate());
 				return InteractionResultHolder.fail(stack);
 			}
 			UltimaWatchMode.nextValue(serverPlayer);
@@ -51,7 +52,7 @@ public class UltimaWatch extends Item {
 		if (entity instanceof ServerPlayer serverPlayer && hotBarOrOffHand(slot) && level.getGameRules().getBoolean(GameRules.RULE_DAYLIGHT) && InventoryExchangeCommonConfig.isUltimaWatchAllowed()) {
 			int ultimaWatchMode = UltimaWatchMode.getMode(serverPlayer);
 			if (ultimaWatchMode != 0) {
-				IKnowledgeProvider knowledge = serverPlayer.getCapability(PECapabilities.KNOWLEDGE_CAPABILITY);
+				IKnowledgeProvider knowledge = serverPlayer.getCapability(InventoryExchangeCapabilities.KNOWLEDGE_CAPABILITY);
 				if (knowledge.getEmc().intValue() >= TIME_CHANGE_COST) {
 					int emc = knowledge.getEmc().intValue() - TIME_CHANGE_COST;
 					knowledge.setEmc(BigInteger.valueOf(emc));
@@ -76,9 +77,9 @@ public class UltimaWatch extends Item {
 	@Override
 	public void appendHoverText(@NotNull ItemStack stack, @NotNull Item.TooltipContext context, @NotNull List<Component> tooltip, @NotNull TooltipFlag flags) {
 		super.appendHoverText(stack, context, tooltip, flags);
-		tooltip.add(PELang.TOOLTIP_TIME_WATCH_1.translate());
-		tooltip.add(PELang.TOOLTIP_TIME_WATCH_2.translate(Component.keybind("key.use")));
-		//tooltip.add(PELang.TIME_WATCH_MODE.translate(UltimaWatchMode.getModeName(player)));
+		tooltip.add(InventoryExchangeLang.TOOLTIP_TIME_WATCH_1.translate());
+		tooltip.add(InventoryExchangeLang.TOOLTIP_TIME_WATCH_2.translate(Component.keybind("key.use")));
+		//tooltip.add(InventoryExchangeLang.TIME_WATCH_MODE.translate(UltimaWatchMode.getModeName(player)));
 	}
 
 

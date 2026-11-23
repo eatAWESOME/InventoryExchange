@@ -6,18 +6,17 @@ import java.util.Map;
 import java.util.UUID;
 
 import eatawesome.inventoryexchange.InventoryExchange;
-import eatawesome.inventoryexchange.capabilities.IAbilityEMCProvider;
-import eatawesome.inventoryexchange.capabilities.InventoryExchangeCapabilities;
+import eatawesome.inventoryexchange.api.capabilities.IAbilityEMCProvider;
+import eatawesome.inventoryexchange.api.capabilities.IKnowledgeProvider;
+import eatawesome.inventoryexchange.api.capabilities.InventoryExchangeCapabilities;
 import eatawesome.inventoryexchange.gameObjs.container.PortableFurnaceMenu;
+import eatawesome.inventoryexchange.gameObjs.registries.InventoryExchangeSoundEvents;
 import eatawesome.inventoryexchange.utils.CondensingToggle;
 import eatawesome.inventoryexchange.utils.FeedingToggle;
 import eatawesome.inventoryexchange.utils.PlayerHelper;
 import eatawesome.inventoryexchange.utils.PortableFurnaceHelper;
 import eatawesome.inventoryexchange.utils.RepairingToggle;
 import eatawesome.inventoryexchange.utils.SmeltingToggle;
-import moze_intel.projecte.api.capabilities.IKnowledgeProvider;
-import moze_intel.projecte.api.capabilities.PECapabilities;
-import moze_intel.projecte.gameObjs.registries.PESoundEvents;
 import eatawesome.inventoryexchange.handlers.InternalAbilities;
 import eatawesome.inventoryexchange.impl.capability.PortableFurnaceImpl;
 import net.minecraft.server.level.ServerPlayer;
@@ -56,7 +55,7 @@ public class TickEvents {
 	
 			InternalAbilities.tick(serverPlayer);
 			
-			IKnowledgeProvider knowledge = serverPlayer.getCapability(PECapabilities.KNOWLEDGE_CAPABILITY);
+			IKnowledgeProvider knowledge = serverPlayer.getCapability(InventoryExchangeCapabilities.KNOWLEDGE_CAPABILITY);
 			IAbilityEMCProvider abilityEMC = serverPlayer.getCapability(InventoryExchangeCapabilities.ABILITY_EMC_CAPABILITY);
 			
 			// Flying via EMC
@@ -75,10 +74,10 @@ public class TickEvents {
 				}
 			}
 			if (isFlying && !wasFlying) {
-				serverPlayer.level().playSound(null, serverPlayer.getX(), serverPlayer.getY(), serverPlayer.getZ(), PESoundEvents.HEAL.get(), SoundSource.PLAYERS, 0.8F, 1.0F);
+				serverPlayer.level().playSound(null, serverPlayer.getX(), serverPlayer.getY(), serverPlayer.getZ(), InventoryExchangeSoundEvents.HEAL.get(), SoundSource.PLAYERS, 0.8F, 1.0F);
 				wasFlyingMap.put(serverPlayer.getUUID(), isFlying);
 			} else if (wasFlying && !isFlying) {
-				serverPlayer.level().playSound(null, serverPlayer.getX(), serverPlayer.getY(), serverPlayer.getZ(), PESoundEvents.UNCHARGE.get(), SoundSource.PLAYERS, 0.8F, 1.0F);
+				serverPlayer.level().playSound(null, serverPlayer.getX(), serverPlayer.getY(), serverPlayer.getZ(), InventoryExchangeSoundEvents.UNCHARGE.get(), SoundSource.PLAYERS, 0.8F, 1.0F);
 				wasFlyingMap.put(serverPlayer.getUUID(), isFlying);
 			}
 		

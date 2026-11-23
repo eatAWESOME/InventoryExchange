@@ -1,10 +1,11 @@
 package eatawesome.inventoryexchange.gameObjs.container.slots.transmutation;
 
 import java.math.BigInteger;
-import moze_intel.projecte.api.proxy.IEMCProxy;
+
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
+import eatawesome.inventoryexchange.api.proxy.IEMCProxy;
 import eatawesome.inventoryexchange.gameObjs.container.inventory.TransmutationInventory;
 import eatawesome.inventoryexchange.gameObjs.container.slots.InventoryContainerSlot;
 import eatawesome.inventoryexchange.gameObjs.registries.InventoryExchangeItems;

@@ -16,8 +16,10 @@ import com.mojang.serialization.RecordBuilder;
 
 
 import eatawesome.inventoryexchange.InventoryExchange;
+import eatawesome.inventoryexchange.api.InventoryExchangeRegistries;
 import eatawesome.inventoryexchange.api.codec.IInventoryExchangeCodecHelper;
 import eatawesome.inventoryexchange.api.codec.MapProcessor;
+import eatawesome.inventoryexchange.api.nss.NormalizedSimpleStack;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -81,6 +83,21 @@ public class InventoryExchangeCodecHelper implements IInventoryExchangeCodecHelp
 	private final Codec<BigInteger> NON_NEGATIVE_BIG_INT = bigIntRangeWithMessage(BigInteger.ZERO, null, value -> "Value must be non-negative: " + value);
 	private final Codec<BigInteger> POSITIVE_BIG_INT = bigIntRangeWithMessage(BigInteger.ONE, null, value -> "Value must be non-negative: " + value);
 
+
+	private final MapCodec<NormalizedSimpleStack> NSS_MAP_CODEC = InventoryExchangeRegistries.NSS_SERIALIZER.byNameCodec().dispatchMap(
+			NormalizedSimpleStack::codec, Function.identity()
+	);
+	private final Codec<NormalizedSimpleStack> NSS_CODEC = NSS_MAP_CODEC.codec();
+
+	@Override
+	public Codec<NormalizedSimpleStack> nssCodec() {
+		return NSS_CODEC;
+	}
+
+	@Override
+	public MapCodec<NormalizedSimpleStack> nssMapCodec() {
+		return NSS_MAP_CODEC;
+	}
 
 	@Override
 	public Codec<Long> nonNegativeLong() {
@@ -154,7 +171,7 @@ public class InventoryExchangeCodecHelper implements IInventoryExchangeCodecHelp
 
 			@Override
 			public String toString() {
-				return "projecte:OrElseWithLog[" + onError + " " + fallback + "]";
+				return "inventoryexchange:OrElseWithLog[" + onError + " " + fallback + "]";
 			}
 		});
 	}

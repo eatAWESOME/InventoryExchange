@@ -10,18 +10,18 @@ import java.util.Objects;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import eatawesome.inventoryexchange.api.ItemInfo;
+import eatawesome.inventoryexchange.api.capabilities.IKnowledgeProvider;
+import eatawesome.inventoryexchange.api.capabilities.IKnowledgeProvider.TargetUpdateType;
+import eatawesome.inventoryexchange.api.capabilities.InventoryExchangeCapabilities;
+import eatawesome.inventoryexchange.api.event.PlayerAttemptLearnEvent;
+import eatawesome.inventoryexchange.api.proxy.IEMCProxy;
 import eatawesome.inventoryexchange.gameObjs.InventoryExchangeTags;
 import eatawesome.inventoryexchange.gameObjs.registries.InventoryExchangeItems;
+import eatawesome.inventoryexchange.utils.MathUtils;
 import eatawesome.inventoryexchange.utils.PlayerHelper;
-import moze_intel.projecte.api.ItemInfo;
-import moze_intel.projecte.api.capabilities.IKnowledgeProvider;
-import moze_intel.projecte.api.capabilities.IKnowledgeProvider.TargetUpdateType;
-import moze_intel.projecte.api.capabilities.PECapabilities;
-import moze_intel.projecte.api.event.PlayerAttemptLearnEvent;
-import moze_intel.projecte.api.proxy.IEMCProxy;
-import moze_intel.projecte.utils.MathUtils;
-import moze_intel.projecte.utils.text.SearchQueryParser;
-import moze_intel.projecte.utils.text.SearchQueryParser.ISearchQuery;
+import eatawesome.inventoryexchange.utils.text.SearchQueryParser;
+import eatawesome.inventoryexchange.utils.text.SearchQueryParser.ISearchQuery;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -49,10 +49,10 @@ public class TransmutationInventory extends CombinedInvWrapper {
 	private long lastAvailableEmc;
 
 	public TransmutationInventory(Player player) {
-		super((IItemHandlerModifiable) Objects.requireNonNull(player.getCapability(PECapabilities.KNOWLEDGE_CAPABILITY)).getInputAndLocks(),
+		super((IItemHandlerModifiable) Objects.requireNonNull(player.getCapability(InventoryExchangeCapabilities.KNOWLEDGE_CAPABILITY)).getInputAndLocks(),
 				new ItemStackHandler(2), new ItemStackHandler(30));
 		this.player = player;
-		this.provider = Objects.requireNonNull(player.getCapability(PECapabilities.KNOWLEDGE_CAPABILITY));
+		this.provider = Objects.requireNonNull(player.getCapability(InventoryExchangeCapabilities.KNOWLEDGE_CAPABILITY));
 		this.learning = itemHandler[1];
 		this.outputs = itemHandler[2];
 		if (isClient()) {

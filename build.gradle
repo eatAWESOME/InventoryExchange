@@ -1,7 +1,7 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
-import moze_intel.projecte.UpdateJson
+import eatawesome.inventoryexchange.UpdateJson
 
 import java.util.function.Consumer
 
@@ -395,7 +395,7 @@ def shadowJar = tasks.named('shadowJar', ShadowJar) {
     exclude('META-INF/maven/**')
     exclude('META-INF/*.txt')
     // Relocate apache commons-math3 to prevent conflicts with other mods that include it
-    relocate('org.apache.commons.math3', 'moze_intel.projecte.shaded.org.apache.commons.math3')
+    relocate('org.apache.commons.math3', 'eatawesome.inventoryexchange.shaded.org.apache.commons.math3')
     // Minimize the required files so we only include what is needed
     minimize()
 }

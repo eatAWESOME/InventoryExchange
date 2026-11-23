@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.BiPredicate;
 
-import moze_intel.projecte.gameObjs.registries.PESoundEvents;
+import eatawesome.inventoryexchange.gameObjs.registries.InventoryExchangeSoundEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
@@ -39,7 +39,7 @@ public class ToolHelper {
 		AABB area = WorldHelper.getBroadDeepBox(pos, sideHit, 0);
 		return harvestVein(level, player, pos, stack, area, target.getBlock(), BlockStateBase::is, (drops, lvl, p) -> {
 			WorldHelper.createLootDrop(drops, lvl, p);
-			lvl.playSound(null, p.getX(), p.getY(), p.getZ(), PESoundEvents.DESTRUCT.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
+			lvl.playSound(null, p.getX(), p.getY(), p.getZ(), InventoryExchangeSoundEvents.DESTRUCT.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
 		});
 	}
 

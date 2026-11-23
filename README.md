@@ -88,7 +88,7 @@ Primary root aliases: `/inventoryexchange` and `/ie`
 /ie set <condensing|feeding|repairing|smelting> <true|false>
 ```
 
-### ProjectE EMC & Knowledge
+### EMC & Knowledge
 ```
 /ie dumpmissingemc
 /ie emc get <player> <value>

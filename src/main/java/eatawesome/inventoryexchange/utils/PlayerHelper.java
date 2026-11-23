@@ -5,19 +5,14 @@ import java.util.List;
 import java.util.function.BiPredicate;
 
 import eatawesome.inventoryexchange.InventoryExchange;
-import eatawesome.inventoryexchange.capabilities.IAbilityEMCProvider;
-import eatawesome.inventoryexchange.capabilities.InventoryExchangeCapabilities;
+import eatawesome.inventoryexchange.api.ItemInfo;
+import eatawesome.inventoryexchange.api.capabilities.IAbilityEMCProvider;
+import eatawesome.inventoryexchange.api.capabilities.IKnowledgeProvider;
+import eatawesome.inventoryexchange.api.capabilities.InventoryExchangeCapabilities;
+import eatawesome.inventoryexchange.api.proxy.IEMCProxy;
 import eatawesome.inventoryexchange.gameObjs.InventoryExchangeTags;
 import eatawesome.inventoryexchange.gameObjs.registries.InventoryExchangeItems;
 import eatawesome.inventoryexchange.network.packets.to_client.KnowledgeToastPKT;
-import moze_intel.projecte.PECore;
-import moze_intel.projecte.api.ItemInfo;
-import moze_intel.projecte.api.capabilities.IKnowledgeProvider;
-import moze_intel.projecte.api.capabilities.PECapabilities;
-import moze_intel.projecte.api.proxy.IEMCProxy;
-import moze_intel.projecte.utils.Constants;
-import moze_intel.projecte.utils.MathUtils;
-import moze_intel.projecte.utils.ReadOnlyScoreCriteria;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
@@ -61,7 +56,7 @@ import net.neoforged.neoforge.network.PacketDistributor;
  */
 public final class PlayerHelper {
     
-    public final static ObjectiveCriteria SCOREBOARD_EMC = new ReadOnlyScoreCriteria(PECore.PEID + ":emc_score");
+    public final static ObjectiveCriteria SCOREBOARD_EMC = new ReadOnlyScoreCriteria(InventoryExchange.MODID + ":emc_score");
     public final static ObjectiveCriteria SCOREBOARD_ABILITY_EMC = new ReadOnlyScoreCriteria(InventoryExchange.MODID + ":ability_emc_score");
 
     /**
@@ -207,11 +202,11 @@ public final class PlayerHelper {
     }
 
     public static void syncCapabilities(ServerPlayer serverPlayer) {
-        IKnowledgeProvider knowledge = serverPlayer.getCapability(PECapabilities.KNOWLEDGE_CAPABILITY);
+        IKnowledgeProvider knowledge = serverPlayer.getCapability(InventoryExchangeCapabilities.KNOWLEDGE_CAPABILITY);
         IAbilityEMCProvider abilityEMC = serverPlayer.getCapability(InventoryExchangeCapabilities.ABILITY_EMC_CAPABILITY);
         knowledge.sync(serverPlayer);
         abilityEMC.sync(serverPlayer);
-        PECore.debugLog("Synced knowledge and EMC for {}", serverPlayer.getName());
+        InventoryExchange.debugLog("Synced knowledge and EMC for {}", serverPlayer.getName());
     }
 
     public static void containerKnowledgeCheck(ServerPlayer serverPlayer, AbstractContainerMenu container) {
@@ -226,7 +221,7 @@ public final class PlayerHelper {
     public static void knowledgeCheck(ServerPlayer serverPlayer, ItemStack itemStack) {
         try {
             if (serverPlayer != null && itemStack != null) {
-                IKnowledgeProvider knowledge = serverPlayer.getCapability(PECapabilities.KNOWLEDGE_CAPABILITY);
+                IKnowledgeProvider knowledge = serverPlayer.getCapability(InventoryExchangeCapabilities.KNOWLEDGE_CAPABILITY);
                 if (!itemStack.isEmpty() && IEMCProxy.INSTANCE.getValue(itemStack) > 0) {
                     if (!knowledge.hasKnowledge(itemStack)) {
                         knowledge.addKnowledge(itemStack);
@@ -240,7 +235,7 @@ public final class PlayerHelper {
         } catch (IllegalArgumentException e) {
             System.err.println("Error retrieving knowledge provider: " + e.getMessage());
         }
-        PECore.debugLog("Checked {}'s knowledge for {}", itemStack, serverPlayer.getName());
+        InventoryExchange.debugLog("Checked {}'s knowledge for {}", itemStack, serverPlayer.getName());
     }
     
     public static boolean canInventoryAccept(Inventory inv, ItemStack itemStack) {
@@ -467,7 +462,7 @@ public final class PlayerHelper {
             
             knowledgeCheck(serverPlayer, itemStack);
             
-            IKnowledgeProvider knowledge = serverPlayer.getCapability(PECapabilities.KNOWLEDGE_CAPABILITY);
+            IKnowledgeProvider knowledge = serverPlayer.getCapability(InventoryExchangeCapabilities.KNOWLEDGE_CAPABILITY);
             BigInteger current = knowledge.getEmc();
             knowledge.setEmc(current.add(BigInteger.valueOf(emcValue)));
             knowledge.syncEmc(serverPlayer);
@@ -486,7 +481,7 @@ public final class PlayerHelper {
             
             knowledgeCheck(serverPlayer, itemStack);
             
-            IKnowledgeProvider knowledge = serverPlayer.getCapability(PECapabilities.KNOWLEDGE_CAPABILITY);
+            IKnowledgeProvider knowledge = serverPlayer.getCapability(InventoryExchangeCapabilities.KNOWLEDGE_CAPABILITY);
             BigInteger current = knowledge.getEmc();
             knowledge.setEmc(current.add(BigInteger.valueOf(emcValue)));
             knowledge.syncEmc(serverPlayer);
@@ -509,7 +504,7 @@ public final class PlayerHelper {
 		ItemStack itemStack = new ItemStack(state.getBlock());
 		if (itemStack.isEmpty()) return;
 		knowledgeCheck(serverPlayer, itemStack);
-		IKnowledgeProvider knowledge = serverPlayer.getCapability(PECapabilities.KNOWLEDGE_CAPABILITY);
+		IKnowledgeProvider knowledge = serverPlayer.getCapability(InventoryExchangeCapabilities.KNOWLEDGE_CAPABILITY);
 		if (knowledge == null) return;
 		long singleEMC = IEMCProxy.INSTANCE.getValue(itemStack.copyWithCount(1));
 		if (singleEMC <= 0) return;

@@ -4,14 +4,13 @@ import java.math.BigInteger;
 import java.util.List;
 
 import eatawesome.inventoryexchange.InventoryExchange;
-import eatawesome.inventoryexchange.capabilities.IAbilityEMCProvider;
-import eatawesome.inventoryexchange.capabilities.InventoryExchangeCapabilities;
+import eatawesome.inventoryexchange.api.capabilities.IAbilityEMCProvider;
+import eatawesome.inventoryexchange.api.capabilities.IKnowledgeProvider;
+import eatawesome.inventoryexchange.api.capabilities.InventoryExchangeCapabilities;
+import eatawesome.inventoryexchange.impl.TransmutationOffline;
 import eatawesome.inventoryexchange.utils.InfiniteContainerHelper;
 import eatawesome.inventoryexchange.utils.PlayerHelper;
 import eatawesome.inventoryexchange.utils.PortableFurnaceHelper;
-import moze_intel.projecte.PECore;
-import moze_intel.projecte.api.capabilities.IKnowledgeProvider;
-import moze_intel.projecte.api.capabilities.PECapabilities;
 import net.minecraft.advancements.AdvancementRewards;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -27,7 +26,10 @@ import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.util.thread.EffectiveSide;
+import net.neoforged.neoforge.common.util.FakePlayer;
 import net.neoforged.neoforge.common.util.TriState;
+import net.neoforged.neoforge.event.entity.EntityEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.neoforge.event.entity.living.LivingEquipmentChangeEvent;
 import net.neoforged.neoforge.event.entity.player.AdvancementEvent;
@@ -146,9 +148,9 @@ public class PlayerEvents {
                 PlayerHelper.clearHandler(InfiniteContainerHelper.getInventory(newPlayer), false);
                 PlayerHelper.clearHandler(PortableFurnaceHelper.getInventory(newPlayer), true);
                 
-                IKnowledgeProvider oldKnowledge = oldPlayer.getCapability(PECapabilities.KNOWLEDGE_CAPABILITY);
+                IKnowledgeProvider oldKnowledge = oldPlayer.getCapability(InventoryExchangeCapabilities.KNOWLEDGE_CAPABILITY);
                 IAbilityEMCProvider oldAbilityEMC = oldPlayer.getCapability(InventoryExchangeCapabilities.ABILITY_EMC_CAPABILITY);
-                IKnowledgeProvider newKnowledge = newPlayer.getCapability(PECapabilities.KNOWLEDGE_CAPABILITY);
+                IKnowledgeProvider newKnowledge = newPlayer.getCapability(InventoryExchangeCapabilities.KNOWLEDGE_CAPABILITY);
                 IAbilityEMCProvider newAbilityEMC = newPlayer.getCapability(InventoryExchangeCapabilities.ABILITY_EMC_CAPABILITY);
     
                 oldKnowledge.setEmc(BigInteger.valueOf(0));
@@ -157,7 +159,7 @@ public class PlayerEvents {
                 oldAbilityEMC.sync((ServerPlayer) oldPlayer);
                 newKnowledge.setEmc(BigInteger.valueOf(0));
                 newAbilityEMC.setEmc(BigInteger.valueOf(0));
-                PECore.debugLog("Reset knowledge and EMC for {}", newServerPlayer.getName());
+                InventoryExchange.debugLog("Reset knowledge and EMC for {}", newServerPlayer.getName());
             }
             PlayerHelper.syncCapabilities(newServerPlayer);
         }
@@ -194,4 +196,13 @@ public class PlayerEvents {
             serverPlayer.awardRecipesByKey(recipeIds);
         }
     }
+    
+    @SubscribeEvent
+	public static void onConstruct(EntityEvent.EntityConstructing evt) {
+		if (EffectiveSide.get().isServer() // No world to check yet
+			&& evt.getEntity() instanceof Player && !(evt.getEntity() instanceof FakePlayer)) {
+			TransmutationOffline.clear(evt.getEntity().getUUID());
+			InventoryExchange.debugLog("Clearing offline data cache in preparation to load online data");
+		}
+	}
 }
