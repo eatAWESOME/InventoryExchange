@@ -30,6 +30,7 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -210,9 +211,13 @@ public final class PlayerHelper {
     }
 
     public static void containerKnowledgeCheck(ServerPlayer serverPlayer, AbstractContainerMenu container) {
-        for (ItemStack itemStack : container.getItems()) {
-            knowledgeCheck(serverPlayer, itemStack);
+        for (Slot slot : container.slots) {
+            if (!slot.isActive() || !slot.hasItem() || !slot.mayPickup(serverPlayer)) {
+                continue;
+            }
+            knowledgeCheck(serverPlayer, slot.getItem());
         }
+        
         for (ItemStack itemStack : serverPlayer.inventoryMenu.getItems()) {
             knowledgeCheck(serverPlayer, itemStack);
         }
