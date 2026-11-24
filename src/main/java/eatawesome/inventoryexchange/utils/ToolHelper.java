@@ -39,7 +39,7 @@ public class ToolHelper {
 		AABB area = WorldHelper.getBroadDeepBox(pos, sideHit, 0);
 		return harvestVein(level, player, pos, stack, area, target.getBlock(), BlockStateBase::is, (drops, lvl, p) -> {
 			WorldHelper.createLootDrop(drops, lvl, p);
-			lvl.playSound(null, p.getX(), p.getY(), p.getZ(), InventoryExchangeSoundEvents.DESTRUCT.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
+			lvl.playSound(null, p.getX(), p.getY(), p.getZ(), InventoryExchangeSoundEvents.VEIN_MINE.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
 		});
 	}
 

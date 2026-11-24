@@ -115,14 +115,9 @@ public class InventoryExchangeLangProvider extends BaseLanguageProvider {
 		add(InventoryExchangeLang.TOOLTIP_TIME_WATCH_2, "Interact (%1$s) to change mode");
 		
 		// Subtitles
-		add(InventoryExchangeSoundEvents.WIND_MAGIC, "Wind Magic");
-		add(InventoryExchangeSoundEvents.WATER_MAGIC, "Water Magic");
-		add(InventoryExchangeSoundEvents.POWER, "Device Powered");
-		add(InventoryExchangeSoundEvents.HEAL, "Healing Performed");
-		add(InventoryExchangeSoundEvents.DESTRUCT, "Destruction");
-		add(InventoryExchangeSoundEvents.CHARGE, "Device Charged");
-		add(InventoryExchangeSoundEvents.UNCHARGE, "Device Uncharged");
-		add(InventoryExchangeSoundEvents.TRANSMUTE, "Block Transmuted");
+		add(InventoryExchangeSoundEvents.FLIGHT_START, "Flight Started");
+		add(InventoryExchangeSoundEvents.FLIGHT_END, "Flight Ended");
+		add(InventoryExchangeSoundEvents.VEIN_MINE, "Vein Mined");
 
 		// Configs
 		addInventoryExchangeConfigs(InventoryExchangeConfigTranslations.values());

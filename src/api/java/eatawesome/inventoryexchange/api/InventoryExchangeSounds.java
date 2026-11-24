@@ -8,14 +8,9 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 
 public final class InventoryExchangeSounds {
 
-	public static final Holder<SoundEvent> WIND = get("windmagic");
-	public static final Holder<SoundEvent> WATER = get("watermagic");
-	public static final Holder<SoundEvent> POWER = get("power");
-	public static final Holder<SoundEvent> HEAL = get("heal");
-	public static final Holder<SoundEvent> DESTRUCT = get("destruct");
-	public static final Holder<SoundEvent> CHARGE = get("charge");
-	public static final Holder<SoundEvent> UNCHARGE = get("uncharge");
-	public static final Holder<SoundEvent> TRANSMUTE = get("transmute");
+	public static final Holder<SoundEvent> FLIGHT_START = get("flight_start");
+	public static final Holder<SoundEvent> FLIGHT_END = get("flight_end");
+	public static final Holder<SoundEvent> VEIN_MINE = get("vein_mine");
 
 	private InventoryExchangeSounds() {
 	}

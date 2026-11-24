@@ -21,14 +21,8 @@ public class InventoryExchangeSoundProvider extends SoundDefinitionsProvider {
 
 	@Override
 	public void registerSounds() {
-		addSoundEventWithSubtitle(InventoryExchangeSoundEvents.WIND_MAGIC, InventoryExchange.rl("item/pewindmagic"));
-		addSoundEventWithSubtitle(InventoryExchangeSoundEvents.WATER_MAGIC, InventoryExchange.rl("item/pewatermagic"));
-		addSoundEventWithSubtitle(InventoryExchangeSoundEvents.POWER, InventoryExchange.rl("item/pepower"));
-		addSoundEventWithSubtitle(InventoryExchangeSoundEvents.HEAL, InventoryExchange.rl("item/peheal"));
-		addSoundEventWithSubtitle(InventoryExchangeSoundEvents.DESTRUCT, InventoryExchange.rl("item/pedestruct"));
-		addSoundEventWithSubtitle(InventoryExchangeSoundEvents.CHARGE, InventoryExchange.rl("item/pecharge"));
-		addSoundEventWithSubtitle(InventoryExchangeSoundEvents.UNCHARGE, InventoryExchange.rl("item/peuncharge"));
-		addSoundEventWithSubtitle(InventoryExchangeSoundEvents.TRANSMUTE, InventoryExchange.rl("item/petransmute"));
-		//TODO: Evaluate the remaining sounds that we don't actually use anywhere
+		addSoundEventWithSubtitle(InventoryExchangeSoundEvents.FLIGHT_START, InventoryExchange.rl("item/flight_start"));
+		addSoundEventWithSubtitle(InventoryExchangeSoundEvents.FLIGHT_END, InventoryExchange.rl("item/flight_end"));
+		addSoundEventWithSubtitle(InventoryExchangeSoundEvents.VEIN_MINE, InventoryExchange.rl("item/vein_mine"));
 	}
 }

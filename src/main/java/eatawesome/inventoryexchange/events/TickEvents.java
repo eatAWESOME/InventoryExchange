@@ -74,10 +74,10 @@ public class TickEvents {
 				}
 			}
 			if (isFlying && !wasFlying) {
-				serverPlayer.level().playSound(null, serverPlayer.getX(), serverPlayer.getY(), serverPlayer.getZ(), InventoryExchangeSoundEvents.HEAL.get(), SoundSource.PLAYERS, 0.8F, 1.0F);
+				serverPlayer.level().playSound(null, serverPlayer.getX(), serverPlayer.getY(), serverPlayer.getZ(), InventoryExchangeSoundEvents.FLIGHT_START.get(), SoundSource.PLAYERS, 0.8F, 1.0F);
 				wasFlyingMap.put(serverPlayer.getUUID(), isFlying);
 			} else if (wasFlying && !isFlying) {
-				serverPlayer.level().playSound(null, serverPlayer.getX(), serverPlayer.getY(), serverPlayer.getZ(), InventoryExchangeSoundEvents.UNCHARGE.get(), SoundSource.PLAYERS, 0.8F, 1.0F);
+				serverPlayer.level().playSound(null, serverPlayer.getX(), serverPlayer.getY(), serverPlayer.getZ(), InventoryExchangeSoundEvents.FLIGHT_END.get(), SoundSource.PLAYERS, 0.8F, 1.0F);
 				wasFlyingMap.put(serverPlayer.getUUID(), isFlying);
 			}
 		
