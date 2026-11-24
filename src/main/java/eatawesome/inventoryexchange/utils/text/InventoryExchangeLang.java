@@ -97,12 +97,12 @@ public enum InventoryExchangeLang implements ILangEntry {
 	EMC_HAS_KNOWLEDGE("emc", "has_knowledge"),
 	EMC_NO_KNOWLEDGE("emc", "no_knowledge"),
 	EMC_TOOLTIP("emc", "tooltip"),
+	EMC_IE_TOOLTIP("emc", "tooltip_ie"),
 	EMC_STACK_TOOLTIP("emc", "tooltip.stack"),
-	EMC_TOOLTIP_WITH_SELL("emc", "tooltip.with_sell"),
-	EMC_STACK_TOOLTIP_WITH_SELL("emc", "tooltip.stack.with_sell"),
+	EMC_IE_STACK_TOOLTIP("emc", "tooltip_ie.stack"),
 	EMC_TOO_MUCH("emc", "too_much"),
 	
-	//Watch of flowing time
+	//Watch
 	TIME_WATCH_DISABLED("time_watch", "disabled"),
 	TIME_WATCH_MODE("time_watch", "mode"),
 	TIME_WATCH_MODE_SWITCH("time_watch", "mode_switch"),

@@ -316,6 +316,8 @@ dependencies {
     localRuntime(crt)
 
     additionalRuntimeClasspath(implementation(shadow(group: 'org.apache.commons', name: 'commons-math3', version: '3.6.1')))
+    
+    compileOnly("curse.maven:projecte-226410:${projecte_id}")
 }
 
 //Set the various variables/settings for the different process resources tasks

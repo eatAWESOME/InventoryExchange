@@ -83,6 +83,7 @@ public enum InventoryExchangeConfigTranslations implements IConfigTranslation {
 	MAPPING_MAPPER_ENABLED("mapping.mapper.enabled", "Enabled", "Determines whether this EMC Mapper is enabled."),
 	MAPPING_RECIPE_TYPE_MAPPER_ENABLED("mapping.mapper.recipe_type.enabled", "Enabled", "Determines whether this Recipe Type Mapper is enabled."),
 	MAPPING_PIXELMON_MAPPER("mapping.mapper.pixelmon.enabled", "Pixelmon Mapper", "Adds Pixelmon item EMC values if pixelmon is installed.", "Edit Pixelmon"),
+	MAPPING_PROJECTE_MAPPER("mapping.mapper.projecte.enabled", "ProjectE Mapper", "Defers EMC values to ProjectE if it is installed.", "Edit ProjectE"),
 	
 	//Data Component Processors
 	MAPPING_PROCESSORS("mapping.processors", "Data Component Processors", "Used to configure settings for the various Data Component Processors.",

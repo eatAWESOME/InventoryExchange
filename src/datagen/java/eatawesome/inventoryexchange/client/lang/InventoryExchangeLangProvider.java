@@ -153,9 +153,9 @@ public class InventoryExchangeLangProvider extends BaseLanguageProvider {
 		add(InventoryExchangeLang.EMC_HAS_KNOWLEDGE, "Learned");
 		add(InventoryExchangeLang.EMC_NO_KNOWLEDGE, "Unlearned");
 		add(InventoryExchangeLang.EMC_TOOLTIP, "EMC: %1$s");
+		add(InventoryExchangeLang.EMC_IE_TOOLTIP, "EMC (IE): %1$s");
 		add(InventoryExchangeLang.EMC_STACK_TOOLTIP, "Stack EMC: %1$s");
-		add(InventoryExchangeLang.EMC_TOOLTIP_WITH_SELL, "EMC: %1$s (%2$s)");
-		add(InventoryExchangeLang.EMC_STACK_TOOLTIP_WITH_SELL, "Stack EMC: %1$s (%2$s)");
+		add(InventoryExchangeLang.EMC_IE_STACK_TOOLTIP, "Stack EMC (IE): %1$s");
 		add(InventoryExchangeLang.EMC_TOO_MUCH, "WAY TOO MUCH");
 		
 		//Postfix names for large EMC values.

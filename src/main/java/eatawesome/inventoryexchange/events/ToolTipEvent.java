@@ -31,7 +31,11 @@ public class ToolTipEvent {
 
 		if (EMCConfig.client.emcToolTips.get() && (!EMCConfig.client.shiftEmcToolTips.get() || Screen.hasShiftDown())) {
 			long value = IEMCProxy.INSTANCE.getValue(current);
-			if (value > 0) {
+			long projectEValue = 0;
+			if (net.neoforged.fml.ModList.get().isLoaded("projecte")) {
+				projectEValue = moze_intel.projecte.api.proxy.IEMCProxy.INSTANCE.getValue(current);
+			}
+			if (value > 0 && value != projectEValue) {
 				tooltip.add(EMCHelper.getEmcTextComponent(value, 1));
 				if (current.getCount() > 1) {
 					tooltip.add(EMCHelper.getEmcTextComponent(value, current.getCount()));

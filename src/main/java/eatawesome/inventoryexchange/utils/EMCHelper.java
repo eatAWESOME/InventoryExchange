@@ -78,34 +78,24 @@ public final class EMCHelper {
 	}
 
 	public static Component getEmcTextComponent(long emc, int stackSize) {
-		if (true) {//EMCConfig.server.difficulty.covalenceLoss.get() == 1.0) {
-			ILangEntry prefix;
-			String value;
-			if (stackSize > 1) {
-				prefix = InventoryExchangeLang.EMC_STACK_TOOLTIP;
-				value = formatEmc(BigInteger.valueOf(emc).multiply(BigInteger.valueOf(stackSize)));
-			} else {
-				prefix = InventoryExchangeLang.EMC_TOOLTIP;
-				value = formatEmc(emc);
-			}
-			return prefix.translateColored(ChatFormatting.YELLOW, ChatFormatting.WHITE, value);
-		}
-		//Sell enabled
-		long emcSellValue = getEmcSellValue(emc);
 		ILangEntry prefix;
 		String value;
-		String sell;
 		if (stackSize > 1) {
-			prefix = InventoryExchangeLang.EMC_STACK_TOOLTIP_WITH_SELL;
-			BigInteger bigIntStack = BigInteger.valueOf(stackSize);
-			value = formatEmc(BigInteger.valueOf(emc).multiply(bigIntStack));
-			sell = formatEmc(BigInteger.valueOf(emcSellValue).multiply(bigIntStack));
+			if (net.neoforged.fml.ModList.get().isLoaded("projecte")) {
+				prefix = InventoryExchangeLang.EMC_IE_STACK_TOOLTIP;
+			} else {
+				prefix = InventoryExchangeLang.EMC_STACK_TOOLTIP;
+			}
+			value = formatEmc(BigInteger.valueOf(emc).multiply(BigInteger.valueOf(stackSize)));
 		} else {
-			prefix = InventoryExchangeLang.EMC_TOOLTIP_WITH_SELL;
+			if (net.neoforged.fml.ModList.get().isLoaded("projecte")) {
+				prefix = InventoryExchangeLang.EMC_IE_TOOLTIP;
+			} else {
+				prefix = InventoryExchangeLang.EMC_TOOLTIP;
+			}
 			value = formatEmc(emc);
-			sell = formatEmc(emcSellValue);
 		}
-		return prefix.translateColored(ChatFormatting.YELLOW, ChatFormatting.WHITE, value, ChatFormatting.BLUE, sell);
+		return prefix.translateColored(ChatFormatting.YELLOW, ChatFormatting.WHITE, value);
 	}
 
 	@Range(from = 0, to = Long.MAX_VALUE)
