@@ -18,7 +18,7 @@ import net.minecraft.world.level.block.state.BlockState;
 
 //Registered via IMC
 @SuppressWarnings("unused")
-public class PEProbeInfoProvider implements IProbeInfoProvider, Function<ITheOneProbe, Void> {
+public class InventoryExchangeProbeInfoProvider implements IProbeInfoProvider, Function<ITheOneProbe, Void> {
 
 	@Override
 	public void addProbeInfo(ProbeMode mode, IProbeInfo probeInfo, Player player, Level level, BlockState blockState, IProbeHitData data) {

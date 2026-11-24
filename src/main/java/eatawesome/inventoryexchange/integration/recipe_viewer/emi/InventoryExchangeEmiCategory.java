@@ -7,11 +7,11 @@ import eatawesome.inventoryexchange.utils.text.ILangEntry;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.ItemLike;
 
-public class PEEmiCategory extends EmiRecipeCategory {
+public class InventoryExchangeEmiCategory extends EmiRecipeCategory {
 
 	private final Component name;
 
-	public PEEmiCategory(String path, ItemLike icon, ILangEntry name) {
+	public InventoryExchangeEmiCategory(String path, ItemLike icon, ILangEntry name) {
 		super(InventoryExchange.rl(path), EmiStack.of(icon));
 		this.name = name.translate();
 	}

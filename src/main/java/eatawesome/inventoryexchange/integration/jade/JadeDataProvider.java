@@ -22,6 +22,6 @@ public class JadeDataProvider implements IBlockComponentProvider {
 
 	@Override
 	public ResourceLocation getUid() {
-		return PEJadeConstants.EMC_PROVIDER;
+		return InventoryExchangeJadeConstants.EMC_PROVIDER;
 	}
 }

@@ -12,7 +12,7 @@ import org.jetbrains.annotations.Nullable;
 import eatawesome.inventoryexchange.InventoryExchange;
 
 @JeiPlugin
-public class PEJeiPlugin implements IModPlugin {
+public class InventoryExchangeJeiPlugin implements IModPlugin {
 
 	private static final ResourceLocation UID = InventoryExchange.rl("main");
 
