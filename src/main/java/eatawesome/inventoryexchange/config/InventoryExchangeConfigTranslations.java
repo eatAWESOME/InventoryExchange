@@ -89,6 +89,8 @@ public enum InventoryExchangeConfigTranslations implements IConfigTranslation {
 	MAPPING_MAPPER_ENABLED("mapping.mapper.enabled", "Enabled", "Determines whether this EMC Mapper is enabled."),
 	MAPPING_RECIPE_TYPE_MAPPER_ENABLED("mapping.mapper.recipe_type.enabled", "Enabled", "Determines whether this Recipe Type Mapper is enabled."),
 	MAPPING_PIXELMON_MAPPER("mapping.mapper.pixelmon.enabled", "Pixelmon Mapper", "Adds Pixelmon item EMC values if pixelmon is installed.", "Edit Pixelmon"),
+	MAPPING_PIXELMON_INCLUDE_POKEBALLS("mapping.mapper.pixelmon.include_pokeballs", "Include Pokeballs", "Adds EMC values to uncraftable pokeballs."),
+	MAPPING_PIXELMON_INCLUDE_CANDY("mapping.mapper.pixelmon.include_candy", "Include Candy", "Adds EMC values to Exp Candies, Rare Candy, and Dynamax Candy."),
 	MAPPING_PROJECTE_MAPPER("mapping.mapper.projecte.enabled", "ProjectE Mapper", "Defers EMC values to ProjectE if it is installed.", "Edit ProjectE"),
 	
 	//Data Component Processors
