@@ -25,6 +25,12 @@ public enum InventoryExchangeConfigTranslations implements IConfigTranslation {
 			"Requires holding shift to display the EMC value as a tooltip on items and blocks. Note: this does nothing if EMC Tooltips are disabled."),
 	CLIENT_TOOLTIPS_TAGS("client.tooltips.tags", "Tag Tooltips", "Show item tags in tooltips (useful for custom EMC registration)."),
 	
+	// Server Config
+	SERVER_HEADER("server_header", InventoryExchange.MODNAME + " Server Config", ""),
+	PIXELMON("pixelmon_header", "Pixelmon Settings", ""),
+	PIXELMON_KNOCKOUT_MULTIPLIER("pixelmon_knockout_multiplier", "Knockout EMC Multiplier", "Multiplier for EMC earned after knocking out a pokemon in battle. Set to 0 to disable knockout EMC awards."),
+	PIXELMON_CAPTURE_MULTIPLIER("pixelmon_capture_multiplier", "Capture EMC Multiplier", "Multiplier for EMC earned after capturing a pokemon. Set to 0 to disable capture EMC awards."),
+	
 	//EMC Mapping
 	MAPPING_DUMP_TO_FILE("mapping.dump_to_file", "Dump Everything To File",
 			"Want to take a look at the internals of EMC Calculation? Enable this to write all the conversions and setValue-Commands to config/InventoryExchange/mapping_dump.json"),

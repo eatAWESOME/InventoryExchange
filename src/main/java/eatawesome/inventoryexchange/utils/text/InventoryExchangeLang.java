@@ -133,8 +133,12 @@ public enum InventoryExchangeLang implements ILangEntry {
 	TRANSMUTATION_UNLEARNED_6("transmutation", "unlearned.6"),
 	TRANSMUTATION_UNLEARNED_7("transmutation", "unlearned.7"),
 	TRANSMUTATION_UNLEARNED_8("transmutation", "unlearned.8"),
-	TRANSMUTATION_UNLEARNED_9("transmutation", "unlearned.9")
-
+	TRANSMUTATION_UNLEARNED_9("transmutation", "unlearned.9"),
+	
+	//Pixelmon
+	PIXELMON_KNOCKOUT("pixelmon", "knockout"),
+	PIXELMON_CAPTURE("pixelmon", "capture")
+	
 	;
 	
 	private final String key;

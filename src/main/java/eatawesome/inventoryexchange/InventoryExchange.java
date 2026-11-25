@@ -15,6 +15,7 @@ import eatawesome.inventoryexchange.api.capabilities.InventoryExchangeCapabiliti
 import eatawesome.inventoryexchange.api.nss.AbstractNSSTag;
 import eatawesome.inventoryexchange.config.CustomEMCParser;
 import eatawesome.inventoryexchange.config.InventoryExchangeCommonConfig;
+import eatawesome.inventoryexchange.config.InventoryExchangeServerConfig;
 import eatawesome.inventoryexchange.config.EMCConfig;
 import eatawesome.inventoryexchange.emc.EMCMappingHandler;
 import eatawesome.inventoryexchange.gameObjs.registries.InventoryExchangeArmorMaterials;
@@ -30,6 +31,7 @@ import eatawesome.inventoryexchange.impl.capability.InfiniteContainerImpl;
 import eatawesome.inventoryexchange.impl.capability.KnowledgeImpl;
 import eatawesome.inventoryexchange.impl.capability.PortableFurnaceImpl;
 import eatawesome.inventoryexchange.integration.IntegrationHelper;
+import eatawesome.inventoryexchange.integration.pixelmon.PixelmonIntegration;
 import eatawesome.inventoryexchange.network.PacketHandler;
 import eatawesome.inventoryexchange.network.packets.to_client.SyncEmcPKT;
 import eatawesome.inventoryexchange.utils.WorldHelper;
@@ -44,6 +46,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
+import net.neoforged.fml.ModList;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -93,6 +96,7 @@ public class InventoryExchange {
 		MOD_CONTAINER = modContainer;
 
 		modContainer.registerConfig(ModConfig.Type.COMMON, InventoryExchangeCommonConfig.COMMON_SPEC, MODID + "/common.toml");
+		modContainer.registerConfig(ModConfig.Type.SERVER, InventoryExchangeServerConfig.SERVER_SPEC, MODID + "/server.toml");
 
 		modEventBus.addListener(this::commonSetup);
 		modEventBus.addListener(IntegrationHelper::sendIMCMessages);
@@ -117,6 +121,10 @@ public class InventoryExchange {
 		
 		EMCConfig.register(modContainer);
 		modEventBus.addListener(EMCConfig::onConfigLoad);
+		
+		if (ModList.get().isLoaded("pixelmon")) {
+			PixelmonIntegration.register();
+		}
 		
 		this.packetHandler = new PacketHandler(modEventBus, modContainer.getModInfo().getVersion());
 	}

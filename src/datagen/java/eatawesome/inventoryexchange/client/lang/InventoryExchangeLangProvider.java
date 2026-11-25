@@ -177,6 +177,10 @@ public class InventoryExchangeLangProvider extends BaseLanguageProvider {
 		addPostfix(15, "Octodecillion");
 		addPostfix(16, "Novemdecillion");
 		addPostfix(17, "Vigintillion");
+		
+		//Pixelmon
+		add(InventoryExchangeLang.PIXELMON_KNOCKOUT, "Earned %1$s EMC for defeating a level %2$s (%3$s CP) %4$s");
+		add(InventoryExchangeLang.PIXELMON_CAPTURE, "Earned %1$s EMC for catching a level %2$s (%3$s CP) %4$s");
 	}
 
 	private void addPostfix(int index, String postfix) {

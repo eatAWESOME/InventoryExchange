@@ -41,7 +41,9 @@ tasks.withType(ProcessResources).configureEach {
             mod_license            : mod_license,
             mod_version            : mod_version,
             mod_authors            : mod_authors,
-            mod_description        : mod_description
+            mod_description        : mod_description,
+            projecte_version_range : projecte_version_range,
+            pixelmon_version_range : pixelmon_version_range
     ]
     inputs.properties replaceProperties
 
@@ -318,6 +320,7 @@ dependencies {
     additionalRuntimeClasspath(implementation(shadow(group: 'org.apache.commons', name: 'commons-math3', version: '3.6.1')))
     
     compileOnly("curse.maven:projecte-226410:${projecte_id}")
+    compileOnly("curse.maven:pixelmon-389487:${pixelmon_id}")
 }
 
 //Set the various variables/settings for the different process resources tasks
@@ -334,7 +337,7 @@ tasks.named('processResources', ProcessResources) {
 }
 
 def replaceResources = tasks.register("replaceResources", Copy) {
-    def versionProperties = ["version": mod_version, "mc_version": minecraft_version, "neo_version": neo_version, "loader_version_range": loader_version_range, "mod_license": mod_license, "mod_id": mod_id, "mod_version": mod_version, "mod_name": mod_name, "mod_authors": mod_authors, "mod_description": mod_description, "minecraft_version_range": minecraft_version_range]
+    def versionProperties = ["version": mod_version, "mc_version": minecraft_version, "neo_version": neo_version, "loader_version_range": loader_version_range, "mod_license": mod_license, "mod_id": mod_id, "mod_version": mod_version, "mod_name": mod_name, "mod_authors": mod_authors, "mod_description": mod_description, "minecraft_version_range": minecraft_version_range, "projecte_version_range": projecte_version_range, "pixelmon_version_range": pixelmon_version_range]
     inputs.properties(versionProperties)
     def modsToml = copySpec {
         from(sourceSets.main.resources) {
