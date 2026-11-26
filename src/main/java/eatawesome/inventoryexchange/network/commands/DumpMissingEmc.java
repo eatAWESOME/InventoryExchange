@@ -7,7 +7,7 @@ import com.mojang.brigadier.context.CommandContext;
 import eatawesome.inventoryexchange.InventoryExchange;
 import eatawesome.inventoryexchange.api.ItemInfo;
 import eatawesome.inventoryexchange.api.proxy.IEMCProxy;
-import eatawesome.inventoryexchange.config.EMCMappingConfig;
+import eatawesome.inventoryexchange.config.InventoryExchangeEMCMappingConfig;
 import eatawesome.inventoryexchange.emc.mappers.OreBlacklistMapper;
 import eatawesome.inventoryexchange.emc.mappers.RawMaterialsBlacklistMapper;
 import eatawesome.inventoryexchange.gameObjs.InventoryExchangeTags;
@@ -69,12 +69,12 @@ public class DumpMissingEmc {
 			//Skip TOP items in dev
 			return true;
 		}
-		if (EMCMappingConfig.isEnabled(OreBlacklistMapper.INSTANCE)) {
+		if (InventoryExchangeEMCMappingConfig.isEnabled(OreBlacklistMapper.INSTANCE)) {
 			if (holder.is(Tags.Items.ORES) || holder.value() == Items.GILDED_BLACKSTONE) {
 				return true;
 			}
 		}
-		if (EMCMappingConfig.isEnabled(RawMaterialsBlacklistMapper.INSTANCE)) {
+		if (InventoryExchangeEMCMappingConfig.isEnabled(RawMaterialsBlacklistMapper.INSTANCE)) {
 			if (holder.is(Tags.Items.RAW_MATERIALS) || holder.is(Tags.Items.STORAGE_BLOCKS_RAW_COPPER) ||
 				holder.is(Tags.Items.STORAGE_BLOCKS_RAW_IRON) || holder.is(Tags.Items.STORAGE_BLOCKS_RAW_GOLD)) {
 				return true;

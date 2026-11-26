@@ -5,7 +5,7 @@ import eatawesome.inventoryexchange.api.mapper.recipe.INSSFakeGroupManager;
 import eatawesome.inventoryexchange.api.mapper.recipe.IRecipeTypeMapper;
 import eatawesome.inventoryexchange.api.mapper.recipe.RecipeTypeMapper;
 import eatawesome.inventoryexchange.api.nss.NormalizedSimpleStack;
-import eatawesome.inventoryexchange.config.EMCMappingConfig;
+import eatawesome.inventoryexchange.config.InventoryExchangeEMCMappingConfig;
 import eatawesome.inventoryexchange.config.InventoryExchangeConfigTranslations;
 import eatawesome.inventoryexchange.emc.components.processor.DamageProcessor;
 import eatawesome.inventoryexchange.emc.components.processor.DecoratedPotProcessor;
@@ -38,19 +38,19 @@ public class SpecialRecipeMarkHandledMapper implements IRecipeTypeMapper {
 		Recipe<?> recipe = recipeHolder.value();
 		if (recipe instanceof CustomRecipe) {
 			if (recipe instanceof ShieldDecorationRecipe) {
-				return EMCMappingConfig.isEnabled(DecoratedShieldProcessor.INSTANCE);
+				return InventoryExchangeEMCMappingConfig.isEnabled(DecoratedShieldProcessor.INSTANCE);
 			} else if (recipe instanceof DecoratedPotRecipe) {
-				return EMCMappingConfig.isEnabled(DecoratedPotProcessor.INSTANCE);
+				return InventoryExchangeEMCMappingConfig.isEnabled(DecoratedPotProcessor.INSTANCE);
 			} else if (recipe instanceof RepairItemRecipe) {
-				return EMCMappingConfig.isEnabled(DamageProcessor.INSTANCE);
+				return InventoryExchangeEMCMappingConfig.isEnabled(DamageProcessor.INSTANCE);
 			} else if (recipe instanceof FireworkStarRecipe || recipe instanceof FireworkStarFadeRecipe) {
-				return EMCMappingConfig.isEnabled(FireworkStarProcessor.INSTANCE);
+				return InventoryExchangeEMCMappingConfig.isEnabled(FireworkStarProcessor.INSTANCE);
 			} else if (recipe instanceof FireworkRocketRecipe) {
-				return EMCMappingConfig.isEnabled(FireworkProcessor.INSTANCE);
+				return InventoryExchangeEMCMappingConfig.isEnabled(FireworkProcessor.INSTANCE);
 			}
 			return recipe instanceof BookCloningRecipe || recipe instanceof MapCloningRecipe || recipe instanceof BannerDuplicateRecipe;
 		} else if (recipe instanceof MapExtendingRecipe) {
-			return EMCMappingConfig.isEnabled(MapScaleProcessor.INSTANCE);
+			return InventoryExchangeEMCMappingConfig.isEnabled(MapScaleProcessor.INSTANCE);
 		}
 		return false;
 	}

@@ -36,7 +36,7 @@ import org.apache.logging.log4j.util.TriConsumer;
 @EMCMapper
 public class CustomConversionMapper implements IEMCMapper<NormalizedSimpleStack, Long> {
 
-	private static final FileToIdConverter CONVERSION_LISTER = FileToIdConverter.json("pe_custom_conversions");
+	private static final FileToIdConverter CONVERSION_LISTER = FileToIdConverter.json("ie_custom_conversions");
 	private static final TriConsumer<IMappingCollector<NormalizedSimpleStack, Long>, NormalizedSimpleStack, CustomConversion> CONVERSION_CONSUMER =
 			(collector, nss, conversion) ->
 			collector.setValueFromConversion(conversion.count(), nss, conversion.ingredients());
@@ -69,7 +69,7 @@ public class CustomConversionMapper implements IEMCMapper<NormalizedSimpleStack,
 		Map<ResourceLocation, CustomConversionFile> loading = new HashMap<>();
 
 		RegistryOps<JsonElement> serializationContext = registryAccess.createSerializationContext(JsonOps.INSTANCE);
-		// Find all data/<domain>/pe_custom_conversions/foo/bar.json
+		// Find all data/<domain>/ie_custom_conversions/foo/bar.json
 		for (Map.Entry<ResourceLocation, List<Resource>> entry : CONVERSION_LISTER.listMatchingResourceStacks(resourceManager).entrySet()) {
 			ResourceLocation file = entry.getKey();//<domain>:foo/bar
 			ResourceLocation conversionId = CONVERSION_LISTER.fileToId(file);

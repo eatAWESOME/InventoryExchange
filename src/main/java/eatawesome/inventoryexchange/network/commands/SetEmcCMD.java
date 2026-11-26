@@ -8,7 +8,7 @@ import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.mojang.datafixers.util.Either;
 import eatawesome.inventoryexchange.InventoryExchangePermissions;
 import eatawesome.inventoryexchange.api.nss.NSSItem;
-import eatawesome.inventoryexchange.config.CustomEMCParser;
+import eatawesome.inventoryexchange.config.InventoryExchangeCustomEMCParser;
 import eatawesome.inventoryexchange.utils.text.InventoryExchangeLang;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
@@ -47,7 +47,7 @@ public class SetEmcCMD {
 	}
 
 	private static int setEmc(CommandContext<CommandSourceStack> ctx, NSSItem toSet, long emc) {
-		CustomEMCParser.addToFile(toSet, emc);
+		InventoryExchangeCustomEMCParser.addToFile(toSet, emc);
 		ctx.getSource().sendSuccess(() -> InventoryExchangeLang.COMMAND_SET_SUCCESS.translate(toSet, emc), true);
 		ctx.getSource().sendSuccess(InventoryExchangeLang.RELOAD_NOTICE::translate, true);
 		return Command.SINGLE_SUCCESS;

@@ -17,9 +17,9 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.util.ExtraCodecs;
 import org.jetbrains.annotations.Nullable;
 
-public final class CustomEMCParser {
+public final class InventoryExchangeCustomEMCParser {
 
-	private static final Path CONFIG = EMCConfig.CONFIG_DIR.resolve("custom_emc.json");
+	private static final Path CONFIG = InventoryExchangeEMCConfig.CONFIG_DIR.resolve("custom_emc.json");
 
 	public record CustomEMCFile(Object2LongSortedMap<NSSItem> entries, @Nullable String comment) {
 
@@ -51,7 +51,7 @@ public final class CustomEMCParser {
 
 		if (Files.exists(CONFIG)) {
 			currentEntries = InventoryExchangeCodecHelper.readFromFile(registries, CONFIG, CustomEMCFile.CODEC, "custom emc")
-					.orElseGet(CustomEMCParser::createDefault);
+					.orElseGet(InventoryExchangeCustomEMCParser::createDefault);
 		} else {
 			currentEntries = createDefault();
 			InventoryExchangeCodecHelper.writeToFile(registries, CONFIG, CustomEMCFile.CODEC, currentEntries, "default custom EMC");

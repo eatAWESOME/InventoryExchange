@@ -13,10 +13,10 @@ import com.mojang.logging.LogUtils;
 import eatawesome.inventoryexchange.api.InventoryExchangeRegistries;
 import eatawesome.inventoryexchange.api.capabilities.InventoryExchangeCapabilities;
 import eatawesome.inventoryexchange.api.nss.AbstractNSSTag;
-import eatawesome.inventoryexchange.config.CustomEMCParser;
 import eatawesome.inventoryexchange.config.InventoryExchangeCommonConfig;
+import eatawesome.inventoryexchange.config.InventoryExchangeCustomEMCParser;
 import eatawesome.inventoryexchange.config.InventoryExchangeServerConfig;
-import eatawesome.inventoryexchange.config.EMCConfig;
+import eatawesome.inventoryexchange.config.InventoryExchangeEMCConfig;
 import eatawesome.inventoryexchange.emc.EMCMappingHandler;
 import eatawesome.inventoryexchange.gameObjs.registries.InventoryExchangeArmorMaterials;
 import eatawesome.inventoryexchange.gameObjs.registries.InventoryExchangeAttachmentTypes;
@@ -119,8 +119,8 @@ public class InventoryExchange {
 		NeoForge.EVENT_BUS.addListener(this::serverStarting);
 		NeoForge.EVENT_BUS.addListener(this::serverQuit);
 		
-		EMCConfig.register(modContainer);
-		modEventBus.addListener(EMCConfig::onConfigLoad);
+		InventoryExchangeEMCConfig.register(modContainer);
+		modEventBus.addListener(InventoryExchangeEMCConfig::onConfigLoad);
 		
 		if (ModList.get().isLoaded("pixelmon")) {
 			PixelmonIntegration.register();
@@ -145,9 +145,6 @@ public class InventoryExchange {
 	}
 
 	private void commonSetup(FMLCommonSetupEvent event) {
-		debugLog("Debug logging enabled = {}", InventoryExchangeCommonConfig.isDebugLoggingEnabled());
-		debugLog("Infinite container max rows = {}", InventoryExchangeCommonConfig.getMaxInfiniteContainerRows());
-		debugLog("Ultima watch allowed = {}", InventoryExchangeCommonConfig.isUltimaWatchAllowed());
 		EMCMappingHandler.loadMappers();
 	}
 	
@@ -156,7 +153,7 @@ public class InventoryExchange {
 			long start = System.currentTimeMillis();
 			//Clear the cached created tags
 			AbstractNSSTag.clearCreatedTags();
-			CustomEMCParser.init(emcUpdateResourceManager.registryAccess());
+			InventoryExchangeCustomEMCParser.init(emcUpdateResourceManager.registryAccess());
 			try {
 				EMCMappingHandler.map(emcUpdateResourceManager.serverResources(), emcUpdateResourceManager.registryAccess(), emcUpdateResourceManager.resourceManager());
 				InventoryExchange.LOGGER.info("Registered {} EMC values. (took {} ms)", EMCMappingHandler.getEmcMapSize(), System.currentTimeMillis() - start);
@@ -193,7 +190,7 @@ public class InventoryExchange {
 
 	private void serverQuit(ServerStoppedEvent event) {
 		//Ensure we save any changes to the custom emc file
-		CustomEMCParser.flush(event.getServer().registryAccess());
+		InventoryExchangeCustomEMCParser.flush(event.getServer().registryAccess());
 		TransmutationOffline.cleanAll();
 		EMCMappingHandler.clearEmcMap();
 	}

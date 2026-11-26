@@ -20,9 +20,9 @@ import eatawesome.inventoryexchange.config.value.CachedBooleanValue;
 /**
  * For config options having to do with EMC Mapping. Syncs from server to client.
  */
-public class EMCMappingConfig extends BaseConfig {
+public class InventoryExchangeEMCMappingConfig extends BaseConfig {
 
-	private static EMCMappingConfig INSTANCE;
+	private static InventoryExchangeEMCMappingConfig INSTANCE;
 
 	/**
 	 * If the config has not already been initialized setup a config the with given list of {@link IEMCMapper}s and creates a dummy "server" config so that it will be
@@ -33,7 +33,7 @@ public class EMCMappingConfig extends BaseConfig {
 	 */
 	public static void setup(@NotNull List<IEMCMapper<NormalizedSimpleStack, Long>> mappers, @NotNull List<IDataComponentProcessor> processors) {
 		if (INSTANCE == null) {
-			EMCConfig.registerConfig(InventoryExchange.MOD_CONTAINER, INSTANCE = new EMCMappingConfig(mappers, processors));
+			InventoryExchangeEMCConfig.registerConfig(InventoryExchange.MOD_CONTAINER, INSTANCE = new InventoryExchangeEMCMappingConfig(mappers, processors));
 		}
 	}
 
@@ -45,7 +45,7 @@ public class EMCMappingConfig extends BaseConfig {
 	private final Map<String, BooleanSupplier> mappersEnabledConfig;
 	private final Map<String, ProcessorConfig> processorConfigs;
 
-	private EMCMappingConfig(@NotNull List<IEMCMapper<NormalizedSimpleStack, Long>> mappers, @NotNull List<IDataComponentProcessor> processors) {
+	private InventoryExchangeEMCMappingConfig(@NotNull List<IEMCMapper<NormalizedSimpleStack, Long>> mappers, @NotNull List<IDataComponentProcessor> processors) {
 		ModConfigSpec.Builder builder = new ModConfigSpec.Builder();
 
 		dumpToFile = CachedBooleanValue.wrap(this, InventoryExchangeConfigTranslations.MAPPING_DUMP_TO_FILE.applyToBuilder(builder).define("dumpToFile", false));

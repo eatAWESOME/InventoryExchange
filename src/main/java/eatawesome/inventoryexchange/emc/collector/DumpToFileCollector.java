@@ -1,6 +1,8 @@
 package eatawesome.inventoryexchange.emc.collector;
 
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
+import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
+
 import java.nio.file.Path;
 
 import eatawesome.inventoryexchange.api.conversion.CustomConversion;
@@ -24,19 +26,38 @@ public class DumpToFileCollector<A extends IValueArithmetic<?>> extends Abstract
 		this.inner = inner;
 	}
 
+	private Object2IntMap<NormalizedSimpleStack> withoutZeroAmounts(
+			Object2IntMap<NormalizedSimpleStack> ingredients) {
+		Object2IntMap<NormalizedSimpleStack> filtered = new Object2IntOpenHashMap<>(ingredients.size());
+		for (Object2IntMap.Entry<NormalizedSimpleStack> ingredient : ingredients.object2IntEntrySet()) {
+			if (ingredient.getIntValue() != 0) {
+				filtered.put(ingredient.getKey(), ingredient.getIntValue());
+			}
+		}
+		return filtered;
+	}
+	
 	@Override
-	public void setValueFromConversion(int outnumber, NormalizedSimpleStack something, Object2IntMap<NormalizedSimpleStack> ingredientsWithAmount) {
+	public void setValueFromConversion(int outnumber, NormalizedSimpleStack something,
+			Object2IntMap<NormalizedSimpleStack> ingredientsWithAmount) {
 		inner.setValueFromConversion(outnumber, something, ingredientsWithAmount);
 		if (something != null && !ingredientsWithAmount.containsKey(null)) {
-			out.values().addConversion(CustomConversion.getFor(outnumber, something, ingredientsWithAmount));
+			Object2IntMap<NormalizedSimpleStack> ingredients = withoutZeroAmounts(ingredientsWithAmount);
+			if (!ingredients.isEmpty()) {
+				out.values().addConversion(CustomConversion.getFor(outnumber, something, ingredients));
+			}
 		}
 	}
 
 	@Override
-	public void addConversion(int outnumber, NormalizedSimpleStack output, Object2IntMap<NormalizedSimpleStack> ingredientsWithAmount, A arithmeticForConversion) {
+	public void addConversion(int outnumber, NormalizedSimpleStack output,
+			Object2IntMap<NormalizedSimpleStack> ingredientsWithAmount, A arithmeticForConversion) {
 		inner.addConversion(outnumber, output, ingredientsWithAmount, arithmeticForConversion);
 		if (output != null && !ingredientsWithAmount.containsKey(null)) {
-			out.getOrAddGroup(currentGroupName).addConversion(CustomConversion.getFor(outnumber, output, ingredientsWithAmount));
+			Object2IntMap<NormalizedSimpleStack> ingredients = withoutZeroAmounts(ingredientsWithAmount);
+			if (!ingredients.isEmpty()) {
+				out.getOrAddGroup(currentGroupName).addConversion(CustomConversion.getFor(outnumber, output, ingredients));
+			}
 		}
 	}
 

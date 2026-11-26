@@ -12,7 +12,7 @@ import org.jetbrains.annotations.Range;
 
 import eatawesome.inventoryexchange.api.ItemInfo;
 import eatawesome.inventoryexchange.api.components.IDataComponentProcessor;
-import eatawesome.inventoryexchange.config.EMCMappingConfig;
+import eatawesome.inventoryexchange.config.InventoryExchangeEMCMappingConfig;
 import eatawesome.inventoryexchange.emc.EMCMappingHandler;
 import eatawesome.inventoryexchange.utils.AnnotationHelper;
 
@@ -32,7 +32,7 @@ public class DataComponentManager {
 		ComponentProcessorHelper.instance().updateCachedValues(emcLookup);
 		for (IDataComponentProcessor processor : processors) {
 			//Note: We only have to update enabled processors, as when a processor gets enabled it will update the cached values
-			if (EMCMappingConfig.isEnabled(processor)) {
+			if (InventoryExchangeEMCMappingConfig.isEnabled(processor)) {
 				processor.updateCachedValues(emcLookup);
 			}
 		}
@@ -47,7 +47,7 @@ public class DataComponentManager {
 		//Cleans up the tag in item to reduce it as much as possible
 		DataComponentPatch.Builder builder = DataComponentPatch.builder();
 		for (IDataComponentProcessor processor : processors) {
-			if (EMCMappingConfig.isEnabled(processor) && processor.hasPersistentComponents() && EMCMappingConfig.hasPersistent(processor)) {
+			if (InventoryExchangeEMCMappingConfig.isEnabled(processor) && processor.hasPersistentComponents() && InventoryExchangeEMCMappingConfig.hasPersistent(processor)) {
 				processor.collectPersistentComponents(info, builder);
 			}
 		}
@@ -73,7 +73,7 @@ public class DataComponentManager {
 
 		//Note: We continue to use our initial ItemInfo so that we are calculating based on the Data Components
 		for (IDataComponentProcessor processor : processors) {
-			if (EMCMappingConfig.isEnabled(processor)) {
+			if (InventoryExchangeEMCMappingConfig.isEnabled(processor)) {
 				try {
 					emcValue = processor.recalculateEMC(info, emcValue);
 				} catch (ArithmeticException e) {

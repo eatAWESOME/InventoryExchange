@@ -10,7 +10,7 @@ import eatawesome.inventoryexchange.api.mapper.IEMCMapper;
 import eatawesome.inventoryexchange.api.mapper.collector.IMappingCollector;
 import eatawesome.inventoryexchange.api.nss.NSSItem;
 import eatawesome.inventoryexchange.api.nss.NormalizedSimpleStack;
-import eatawesome.inventoryexchange.config.CustomEMCParser;
+import eatawesome.inventoryexchange.config.InventoryExchangeCustomEMCParser;
 import eatawesome.inventoryexchange.config.InventoryExchangeConfigTranslations;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.server.ReloadableServerResources;
@@ -22,7 +22,7 @@ public class CustomEMCMapper implements IEMCMapper<NormalizedSimpleStack, Long> 
 	@Override
 	public void addMappings(IMappingCollector<NormalizedSimpleStack, Long> mapper, ReloadableServerResources serverResources,
 			RegistryAccess registryAccess, ResourceManager resourceManager) {
-		for (Iterator<Object2LongMap.Entry<NSSItem>> iterator = Object2LongSortedMaps.fastIterator(CustomEMCParser.currentEntries.entries()); iterator.hasNext(); ) {
+		for (Iterator<Object2LongMap.Entry<NSSItem>> iterator = Object2LongSortedMaps.fastIterator(InventoryExchangeCustomEMCParser.currentEntries.entries()); iterator.hasNext(); ) {
 			Object2LongMap.Entry<NSSItem> entry = iterator.next();
 			NSSItem item = entry.getKey();
 			long emc = entry.getLongValue();

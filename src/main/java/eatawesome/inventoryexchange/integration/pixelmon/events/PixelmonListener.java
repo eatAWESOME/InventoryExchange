@@ -37,7 +37,7 @@ public class PixelmonListener {
             int cp = calculateCP(pokemon);
             IKnowledgeProvider knowledge = serverPlayer.getCapability(InventoryExchangeCapabilities.KNOWLEDGE_CAPABILITY);
             BigInteger currentEmc = knowledge.getEmc();
-            double multiplier = InventoryExchangeServerConfig.pixelmon_knockout_multiplier();
+            double multiplier = InventoryExchangeServerConfig.pixelmonKnockoutMultiplier();
             BigInteger newEmc = currentEmc.add(BigInteger.valueOf(Math.round(cp * multiplier)));
             knowledge.setEmc(newEmc);
             knowledge.syncEmc(serverPlayer);
@@ -54,7 +54,7 @@ public class PixelmonListener {
             int cp = calculateCP(pokemon);
             IKnowledgeProvider knowledge = serverPlayer.getCapability(InventoryExchangeCapabilities.KNOWLEDGE_CAPABILITY);
             BigInteger currentEmc = knowledge.getEmc();
-            double multiplier = InventoryExchangeServerConfig.pixelmon_capture_multiplier();
+            double multiplier = InventoryExchangeServerConfig.pixelmonCaptureMultiplier();
             BigInteger newEmc = currentEmc.add(BigInteger.valueOf(Math.round(cp * multiplier)));
             knowledge.setEmc(newEmc);
             knowledge.syncEmc(serverPlayer);

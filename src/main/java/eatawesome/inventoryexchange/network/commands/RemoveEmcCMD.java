@@ -8,7 +8,7 @@ import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.mojang.datafixers.util.Either;
 import eatawesome.inventoryexchange.InventoryExchangePermissions;
 import eatawesome.inventoryexchange.api.nss.NSSItem;
-import eatawesome.inventoryexchange.config.CustomEMCParser;
+import eatawesome.inventoryexchange.config.InventoryExchangeCustomEMCParser;
 import eatawesome.inventoryexchange.utils.text.InventoryExchangeLang;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
@@ -44,7 +44,7 @@ public class RemoveEmcCMD {
 	}
 
 	private static int removeEmc(CommandContext<CommandSourceStack> ctx, NSSItem item) {
-		CustomEMCParser.addToFile(item, 0);
+		InventoryExchangeCustomEMCParser.addToFile(item, 0);
 		ctx.getSource().sendSuccess(() -> InventoryExchangeLang.COMMAND_REMOVE_SUCCESS.translate(item), true);
 		ctx.getSource().sendSuccess(InventoryExchangeLang.RELOAD_NOTICE::translate, true);
 		return Command.SINGLE_SUCCESS;

@@ -29,7 +29,7 @@ public abstract class CustomConversionProvider implements DataProvider {
 	private final String modid;
 
 	protected CustomConversionProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider, String modid) {
-		this.outputProvider = output.createPathProvider(Target.DATA_PACK, "pe_custom_conversions");
+		this.outputProvider = output.createPathProvider(Target.DATA_PACK, "ie_custom_conversions");
 		this.lookupProvider = lookupProvider;
 		this.modid = modid;
 	}
@@ -54,7 +54,7 @@ public abstract class CustomConversionProvider implements DataProvider {
 	protected abstract void addCustomConversions(HolderLookup.Provider registries);
 
 	/**
-	 * Creates and adds a custom conversion builder with the file located by data/modid/pe_custom_conversions/namespace.json
+	 * Creates and adds a custom conversion builder with the file located by data/modid/ie_custom_conversions/namespace.json
 	 *
 	 * @param id modid:namespace
 	 *

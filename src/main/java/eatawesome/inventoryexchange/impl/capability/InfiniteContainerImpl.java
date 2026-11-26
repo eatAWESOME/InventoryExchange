@@ -3,7 +3,7 @@ package eatawesome.inventoryexchange.impl.capability;
 import com.mojang.serialization.Codec;
 
 import eatawesome.inventoryexchange.api.capabilities.IInfiniteContainerProvider;
-import eatawesome.inventoryexchange.config.InventoryExchangeCommonConfig;
+import eatawesome.inventoryexchange.config.InventoryExchangeServerConfig;
 import eatawesome.inventoryexchange.gameObjs.registries.InventoryExchangeAttachmentTypes;
 import eatawesome.inventoryexchange.impl.codec.InventoryExchangeCodecHelper;
 import eatawesome.inventoryexchange.network.packets.to_client.InfiniteContainerSyncPKT;
@@ -44,7 +44,7 @@ public class InfiniteContainerImpl implements IInfiniteContainerProvider {
     }
 
     private static int currentSize() {
-        return InventoryExchangeCommonConfig.getMaxInfiniteContainerRows() * 13;
+        return InventoryExchangeServerConfig.getMaxInfiniteContainerRows() * 13;
     }
 
     public static final Codec<InfiniteContainerAttachment> CODEC =
@@ -52,13 +52,23 @@ public class InfiniteContainerImpl implements IInfiniteContainerProvider {
             InfiniteContainerAttachment::new,
             att -> att.inventory
         );
-
+    
     public static StreamCodec<RegistryFriendlyByteBuf, ItemStackHandler> handlerStreamCodec() {
         return eatawesome.inventoryexchange.network.InventoryExchangeStreamCodecs.handlerStreamCodec(currentSize());
     }
 
     public static StreamCodec<RegistryFriendlyByteBuf, InfiniteContainerAttachment> streamCodec() {
-        return handlerStreamCodec().map(InfiniteContainerAttachment::new, att -> att.inventory);
+    	return new StreamCodec<>() {
+    		@Override
+    		public void encode(RegistryFriendlyByteBuf buffer, InfiniteContainerAttachment attachment) {
+    			handlerStreamCodec().encode(buffer, attachment.inventory);
+    		}
+
+    		@Override
+    		public InfiniteContainerAttachment decode(RegistryFriendlyByteBuf buffer) {
+    			return new InfiniteContainerAttachment(handlerStreamCodec().decode(buffer));
+    		}
+    	};
     }
 
     @NotNull

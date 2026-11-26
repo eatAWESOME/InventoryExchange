@@ -12,8 +12,8 @@ import eatawesome.inventoryexchange.api.mapper.arithmetic.IValueArithmetic;
 import eatawesome.inventoryexchange.api.mapper.collector.IExtendedMappingCollector;
 import eatawesome.inventoryexchange.api.nss.NSSItem;
 import eatawesome.inventoryexchange.api.nss.NormalizedSimpleStack;
-import eatawesome.inventoryexchange.config.EMCMappingConfig;
-import eatawesome.inventoryexchange.config.EMCConfig;
+import eatawesome.inventoryexchange.config.InventoryExchangeEMCMappingConfig;
+import eatawesome.inventoryexchange.config.InventoryExchangeEMCConfig;
 import eatawesome.inventoryexchange.emc.arithmetic.HiddenBigFractionArithmetic;
 import eatawesome.inventoryexchange.emc.collector.DumpToFileCollector;
 import eatawesome.inventoryexchange.emc.collector.LongToBigFractionCollector;
@@ -65,7 +65,7 @@ public final class EMCMappingHandler {
 			// This also has the side effect to make sure that we can use EMC_MAPPERS.isEmpty to check if we have attempted to initialize our cache yet
 			mappers.add(new TagMapper());
 			//Set up the config for the Mappers and processors
-			EMCMappingConfig.setup(mappers, DataComponentManager.loadProcessors());
+			InventoryExchangeEMCMappingConfig.setup(mappers, DataComponentManager.loadProcessors());
 		}
 	}
 
@@ -76,22 +76,22 @@ public final class EMCMappingHandler {
 		BigFractionToLongGenerator<NormalizedSimpleStack> valueGenerator = new BigFractionToLongGenerator<>(mapper);
 		IExtendedMappingCollector<NormalizedSimpleStack, Long, IValueArithmetic<BigFraction>> mappingCollector = new LongToBigFractionCollector<>(mapper);
 
-		if (EMCMappingConfig.dumpToFile()) {
-			mappingCollector = new DumpToFileCollector<>(EMCConfig.CONFIG_DIR.resolve("mapping_dump.json"), mappingCollector);
+		if (InventoryExchangeEMCMappingConfig.dumpToFile()) {
+			mappingCollector = new DumpToFileCollector<>(InventoryExchangeEMCConfig.CONFIG_DIR.resolve("mapping_dump.json"), mappingCollector);
 		}
 
-		boolean usePregenerated = EMCMappingConfig.usePregenerated();
-		Path pregeneratedEmcFile = EMCConfig.CONFIG_DIR.resolve("pregenerated_emc.json");
+		boolean usePregenerated = InventoryExchangeEMCMappingConfig.usePregenerated();
+		Path pregeneratedEmcFile = InventoryExchangeEMCConfig.CONFIG_DIR.resolve("pregenerated_emc.json");
 		Optional<Object2LongMap<ItemInfo>> readPregeneratedValues = PregeneratedEMC.read(registryAccess, pregeneratedEmcFile, usePregenerated);
 		if (readPregeneratedValues.isPresent()) {
 			int values = updateEmcValues(readPregeneratedValues.get());
 			InventoryExchange.debugLog("Loaded {} values from pregenerated EMC File", values);
 		} else {
-			SimpleGraphMapper.setLogFoundExploits(EMCMappingConfig.logExploits());
+			SimpleGraphMapper.setLogFoundExploits(InventoryExchangeEMCMappingConfig.logExploits());
 
 			InventoryExchange.debugLog("Starting to collect Mappings...");
 			for (IEMCMapper<NormalizedSimpleStack, Long> emcMapper : mappers) {
-				if (EMCMappingConfig.isEnabled(emcMapper)) {
+				if (InventoryExchangeEMCMappingConfig.isEnabled(emcMapper)) {
 					DumpToFileCollector.currentGroupName = emcMapper.getName();
 					try {
 						emcMapper.addMappings(mappingCollector, serverResources, registryAccess, resourceManager);

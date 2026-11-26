@@ -18,6 +18,7 @@ InventoryExchange is a Minecraft mod that extends player inventory management an
 - Ultima tool allows for vein mining.
 - Ultima watch allows for time manipulation.
 - Ultima armor set grants persistent effects (night vision, water breathing, fire resistance, speed) and invincibility.
+- Pixelmon compatability, awarding EMC for battling and catching.
 
 ---
 
@@ -111,30 +112,6 @@ Primary root aliases: `/inventoryexchange` and `/ie`
 - `inventoryexchange.command.set_emc`
 - `inventoryexchange.command.view_furnace_other`
 - `inventoryexchange.command.view_infinite_inventory_other`
-
----
-
-## Config
-
-### Common Config
-
-- `enable_debug_logs`: Enables debug logs. Default is false.
-- `infinite_container_max_rows`: Sets the max number of rows for the infinite container. Default is 500, Minimum is 10.
-- `allow_ultima_watch`: Allows time manipulation via the ultima watch.
-
-### Client Config
-
-- `limit_condensing`
-- `limit_feeding`
-- `limit_repairing`
-- `limit_smelting`
-
-When a limit is enabled, the corresponding automation stops once it can no longer be completed (e.g., feeding when hunger already high).
-Client config values are synced to the server upon login and reload.
-
-### EMC Configs
-
-EMC configuration values are from ProjectE's configs and are relevant to EMC.
 
 ---
 

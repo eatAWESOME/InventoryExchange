@@ -4,7 +4,7 @@ import java.util.function.Function;
 
 import eatawesome.inventoryexchange.InventoryExchange;
 import eatawesome.inventoryexchange.api.proxy.IEMCProxy;
-import eatawesome.inventoryexchange.config.EMCConfig;
+import eatawesome.inventoryexchange.config.InventoryExchangeEMCConfig;
 import eatawesome.inventoryexchange.utils.EMCHelper;
 import mcjty.theoneprobe.api.IProbeHitData;
 import mcjty.theoneprobe.api.IProbeInfo;

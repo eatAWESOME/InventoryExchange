@@ -4,7 +4,7 @@ import java.util.List;
 
 import eatawesome.inventoryexchange.InventoryExchange;
 import eatawesome.inventoryexchange.api.proxy.IEMCProxy;
-import eatawesome.inventoryexchange.config.EMCConfig;
+import eatawesome.inventoryexchange.config.InventoryExchangeClientConfig;
 import eatawesome.inventoryexchange.utils.EMCHelper;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
@@ -25,11 +25,11 @@ public class ToolTipEvent {
 		}
 		List<Component> tooltip = event.getToolTip();
 		
-		if (EMCConfig.client.tagToolTips.get()) {
+		if (InventoryExchangeClientConfig.showTagTooltips()) {
 			current.getTags().forEach(tag -> tooltip.add(Component.literal("#" + tag.location())));
 		}
 
-		if (EMCConfig.client.emcToolTips.get() && (!EMCConfig.client.shiftEmcToolTips.get() || Screen.hasShiftDown())) {
+		if (InventoryExchangeClientConfig.showEMCTooltips() && (!InventoryExchangeClientConfig.shiftEMCTooltips() || Screen.hasShiftDown())) {
 			long value = IEMCProxy.INSTANCE.getValue(current);
 			long projectEValue = 0;
 			if (net.neoforged.fml.ModList.get().isLoaded("projecte")) {

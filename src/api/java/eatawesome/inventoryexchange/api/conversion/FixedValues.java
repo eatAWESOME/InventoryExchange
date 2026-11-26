@@ -30,7 +30,7 @@ public record FixedValues(Object2LongSortedMap<NormalizedSimpleStack> setValueBe
 	private static final Codec<Object2LongSortedMap<NormalizedSimpleStack>> VALUE_CODEC = IInventoryExchangeCodecHelper.INSTANCE.modifiableMap(IInventoryExchangeCodecHelper.INSTANCE.lenientKeyUnboundedMap(
 			IInventoryExchangeCodecHelper.INSTANCE.nssMapCodec(),
 			NeoForgeExtraCodecs.withAlternative(
-					IInventoryExchangeCodecHelper.INSTANCE.positiveLong(),
+					IInventoryExchangeCodecHelper.INSTANCE.nonNegativeLong(),
 					Codec.stringResolver(
 							val -> val == InventoryExchangeAPI.FREE_ARITHMETIC_VALUE ? "free" : null,
 							str -> str.equalsIgnoreCase("free") ? InventoryExchangeAPI.FREE_ARITHMETIC_VALUE : null

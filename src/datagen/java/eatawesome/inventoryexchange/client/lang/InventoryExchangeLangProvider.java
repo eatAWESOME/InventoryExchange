@@ -2,7 +2,7 @@ package eatawesome.inventoryexchange.client.lang;
 
 import eatawesome.inventoryexchange.InventoryExchange;
 import eatawesome.inventoryexchange.config.InventoryExchangeConfigTranslations;
-import eatawesome.inventoryexchange.config.EMCConfig;
+import eatawesome.inventoryexchange.config.InventoryExchangeEMCConfig;
 import eatawesome.inventoryexchange.gameObjs.registries.InventoryExchangeItems;
 import eatawesome.inventoryexchange.gameObjs.registries.InventoryExchangeSoundEvents;
 import eatawesome.inventoryexchange.utils.InventoryExchangeKeybind;
@@ -121,7 +121,7 @@ public class InventoryExchangeLangProvider extends BaseLanguageProvider {
 
 		// Configs
 		addInventoryExchangeConfigs(InventoryExchangeConfigTranslations.values());
-		addInventoryExchangeConfigs(EMCConfig.getConfigs());
+		addInventoryExchangeConfigs(InventoryExchangeEMCConfig.getConfigs());
 		
 		// Transmutation
 		add(InventoryExchangeLang.TRANSMUTATION_TRANSMUTE, "Transmutation");

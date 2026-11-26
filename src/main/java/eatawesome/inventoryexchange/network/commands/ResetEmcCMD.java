@@ -8,7 +8,7 @@ import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.mojang.datafixers.util.Either;
 import eatawesome.inventoryexchange.InventoryExchangePermissions;
 import eatawesome.inventoryexchange.api.nss.NSSItem;
-import eatawesome.inventoryexchange.config.CustomEMCParser;
+import eatawesome.inventoryexchange.config.InventoryExchangeCustomEMCParser;
 import eatawesome.inventoryexchange.utils.text.InventoryExchangeLang;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
@@ -42,7 +42,7 @@ public class ResetEmcCMD {
 	}
 
 	private static int resetEmc(CommandContext<CommandSourceStack> ctx, NSSItem toReset) throws CommandSyntaxException {
-		if (CustomEMCParser.removeFromFile(toReset)) {
+		if (InventoryExchangeCustomEMCParser.removeFromFile(toReset)) {
 			ctx.getSource().sendSuccess(() -> InventoryExchangeLang.COMMAND_RESET_SUCCESS.translate(toReset), true);
 			ctx.getSource().sendSuccess(InventoryExchangeLang.RELOAD_NOTICE::translate, true);
 			return Command.SINGLE_SUCCESS;

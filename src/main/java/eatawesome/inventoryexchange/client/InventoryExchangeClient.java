@@ -55,9 +55,5 @@ public class InventoryExchangeClient {
 				}
 			});
 		}
-		InventoryExchange.debugLog("Condensing Limited = {}", InventoryExchangeClientConfig.isCondensingLimited());
-		InventoryExchange.debugLog("Feeding Limited = {}", InventoryExchangeClientConfig.isFeedingLimited());
-		InventoryExchange.debugLog("Repairing Limited = {}", InventoryExchangeClientConfig.isRepairingLimited());
-		InventoryExchange.debugLog("Smelting Limited = {}", InventoryExchangeClientConfig.isSmeltingLimited());
 	}
 }
