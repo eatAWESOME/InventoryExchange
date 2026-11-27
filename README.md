@@ -115,6 +115,10 @@ Primary root aliases: `/inventoryexchange` and `/ie`
 
 ---
 
+## 32x Resource Pack
+
+For a 32x version of InventoryExchange's textures, see [InventoryExchange32x](https://github.com/eatAWESOME/InventoryExchange32x).
+
 ## Thanks
 
 Thanks to the [Developers of ProjectE](https://github.com/sinkillerj/ProjectE?tab=readme-ov-file#current-team-members) for the EMC and knowledge systems used in this mod.
